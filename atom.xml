@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Louis</title>
+  
+  <subtitle>Louis</subtitle>
+  <link href="https://louissrliu.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://louissrliu.github.io/"/>
+  <updated>2022-08-15T09:23:50.692Z</updated>
+  <id>https://louissrliu.github.io/</id>
+  
+  <author>
+    <name>ShiRong Liu</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Welcome to Louis</title>
+    <link href="https://louissrliu.github.io/2022/08/01/Welcome-to-the-new-Tranquilpeak/"/>
+    <id>https://louissrliu.github.io/2022/08/01/Welcome-to-the-new-Tranquilpeak/</id>
+    <published>2022-07-31T16:00:00.000Z</published>
+    <updated>2022-08-15T09:23:50.692Z</updated>
+    
+    <content type="html"><![CDATA[<!-- excerpt -->]]></content>
+    
+    
+    <summary type="html">&lt;!-- Quote  --&gt;
+&lt;p class=&quot;message&quot; style=&quot;font-family:cursive&quot;&gt;&lt;q&gt;
+&quot;No amount of genius can overcome a preoccupation with detail&quot; - Marion Levy Jr.&lt;/q&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="louissrliu" scheme="https://louissrliu.github.io/categories/louissrliu/"/>
+    
+    <category term="releases" scheme="https://louissrliu.github.io/categories/louissrliu/releases/"/>
+    
+    
+    <category term="hexo theme" scheme="https://louissrliu.github.io/tags/hexo-theme/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>A Beginner&#39;s Guide - Git Handbook</title>
+    <link href="https://louissrliu.github.io/2018/10/02/Git-Handbook/"/>
+    <id>https://louissrliu.github.io/2018/10/02/Git-Handbook/</id>
+    <published>2018-10-01T16:00:00.000Z</published>
+    <updated>2022-08-15T09:23:50.692Z</updated>
+    
+    <content type="html"><![CDATA[<p>Due to the most time on my job, we need to type many git command lines. So that this article is used to sort several git commands frequently used for easily searching.</p><span id="more"></span><h2 id="Intorduction"><a href="#Intorduction" class="headerlink" title="Intorduction"></a>Intorduction</h2><p>Git is one of a distributed version control system (DVCS) commonly used for open source and commercial software development with significant benefit for individuals, teams and businesses. DVCS allows full access to every file, branches, and interation of project. Unlike once popular centralized version control system, such as perforce, DVCS don’t need a constant connection to a central repository. Developers can work anywhere and collaborate asynchronously from any time zone.</p><h2 id="Basic-Git-Commands"><a href="#Basic-Git-Commands" class="headerlink" title="Basic Git Commands"></a>Basic Git Commands</h2><h3 id="Set-your-Name-and-Email-in-Git"><a href="#Set-your-Name-and-Email-in-Git" class="headerlink" title="Set your Name and Email in Git"></a>Set your Name and Email in Git</h3><p>Before working with Git on the command line, there are some basic configurations need to be set in advance.  </p><p>By replacing {YOUR NAME} with your first and last name:</p><div ><pre class="highlight"><code class="hljs ruby"><span class="nb">$ </span><span class="nb">git config  --global user.name &#123;YOUR NAME&#125; </span></code></pre></div><p>Then, replaceing {EMAIL} with the email associated with your GitHub account:</p><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ </span><span class="nb">git config --global user.email &#123;EMAIL&#125; </span></code></pre></div><p>Now, you can see your current configurations, type:</p><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ </span><span class="nb">git config --list</span></code></pre></div><h3 id="Connect-an-existing-progect-with-github"><a href="#Connect-an-existing-progect-with-github" class="headerlink" title="Connect an existing progect with github"></a>Connect an existing progect with github</h3><p>If you have an existing progect and want to connect with github, you can do the following and start to tract with git.</p><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb"># Initialize the local directory as a Git repository.$ git init# Add the URL for the remote repository where your local repository will be pushed.$ git remote add origin < repository URL ># Verifies the new remote URL$ git remote -v# Push an existing repository$ git push -u origin master</span></code></pre></div><h3 id="High-Frequency-Git-Commands"><a href="#High-Frequency-Git-Commands" class="headerlink" title="High Frequency Git Commands"></a>High Frequency Git Commands</h3><h6><ol>    <li><a href="#ShowStatus">Show the status of the files on your branch</a></li>    <li><a href="#CreateBranch">Create a new branch</a></li>        <li><a href="#CheckoutBranch">Check out to your new branch</a></li>    <li><a href="#MergeBranch">Join two or more development histories together</a></li>    <li><a href="#CompareChange">Compare the changes</a></li>    <li><a href="#AddFile">Add your file to the staging area</a></li>    <li><a href="#HistroyCommit">See the histroy of commits</a></li>    <li><a href="#CommitFile">Commit your file and type the commit message</a></li>    <li><a href="#PushCommit">Push your commit to the remote and set a trackng branch</a></li>    <li><a href="#UpdateRepo">Update your local copy of repository</a></li>    <li><a href="#StashChange">Stash your work</a></li>    <li><a href="#Bisect">Binary search the commit</a></li></ol></h6><h4 id="Git-Commands"><a href="#Git-Commands" class="headerlink" title="Git Commands"></a>Git Commands</h4><ol><li><a name="ShowStatus"></a> Show the status of the files on your branch:</li><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git status </span></code></pre></div><li><a name="CreateBranch"></a> Create a new branch:</li><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git branch &#123;BRANCH-NAME&#125;</span></code></pre></div><li><a name="CheckoutBranch"></a> Check out to your new branch:</li><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git checkout &#123;BRANCH-NAME&#125;</span></code></pre></div><li><a name="MergeBranch"></a> Join two or more development histories together:</li><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git merge &#123;BRANCH-NAME&#125;</span></code></pre></div><div>Example:<div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb"># First, let's check out to the "master" branch$ git checkout master# Then, merge Dev to current branch$ git merge Dev</span></code></pre></div><p>Description: these two syntaxes will replay the changes made on the “Dev” into the current branch “master” since “Dev” is diverged from “master”.</p><p>Now, you can push a new commit describing the merging change, and hence the current commit is already on the top of “master”.</p></div><p></p><li><a name="CompareChange"></a> Compare the changes:</li><p></p><ul style="list-style-type:disc">  <li> Show you any uncommitted changes since the last commit, type:</li>  <div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git diff </span></code></pre></div>    <li> Compare a specific file across branches, type:</li>  <div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git diff  &#123;BRANCH-NAME&#125; &#123;OTHER-BRANCH-NAME&#125; &#123;FILE-NAME&#125; </span></code></pre></div></ul>  <li><a name="AddFile"></a>  Add your file to the staging area:</li><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb"># Preparing to become part of the next commit$ git add &#123;FILE-NAME&#125;</span></code></pre></div><li><a name="HistroyCommit"></a> See the histroy of commits:</li><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git log </span></code></pre></div><li><a name="CommitFile"></a> Commit your file and type the commit message:</li><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git commit -m "your message"</span></code> </pre></div><li><a name="PushCommit"></a> Push your commit to the remote and set a trackng branch:</li><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git push  -u origin &#123;BRANCH-NAME&#125; </span></code></pre></div><li><a name="UpdateRepo"></a> Update your local copy of repository:</li><div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git pull </span></code></pre></div><li><a name="StashChange"></a> Stash your work:</li><p></p><ul style="list-style-type:disc">   <li> Stash uncommitted changes in local repo </li>  <div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git stash </span></code></pre></div>    <li> Re-apply your stashed changes</li>  <div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb"># Reappling the changes and removing$ git stash pop# Reappling the changes and keeping$ git stash apply </span></code></pre></div>    <li> Manage multiple stashes</li>  <div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git stash list </span></code></pre></div>    <li> View stash diff</li>  <div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git stash show -p </span></code></pre></div>  </ul><li><a name="StashChange"></a> <a name="Bisect"> Binary search to find the commit: </a> </li><p></p><ul style="list-style-type:disc">   <li> Use binary search to find the commit </li>  <div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb">$ git bitsect &lt;subcommand&gt; &lt;options&gt; </span></code></pre></div>  <li> Start a bisect session </li>  <div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb" style="font-size: 100%">$ git bitsect start </span></code></pre></div>  <li> Bisect reset </li>  <div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb" style="font-size: 100%">$ git bitsect reset</span></code></pre></div>  <li> Bisect skip </li>  <div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb" style="font-size: 100%">$ git bisect skip</span></code></pre></div>  <li> Show bisect log </li>  <div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb" style="font-size: 100%">$ git bisect log# good: [72a35907200b42246fd039d495cbef8d80fdefe3] Miscellaneousgit bisect good 72a35907200b42246fd039d495cbef8d80fdefe3# good: [72a35907200b42246fd039d495cbef8d80fdefe3] Miscellaneousgit bisect good 72a35907200b42246fd039d495cbef8d80fdefe3# skip: [72a35907200b42246fd039d495cbef8d80fdefe3] Miscellaneousgit bisect skip 72a35907200b42246fd039d495cbef8d80fdefe3# bad: [72a35907200b42246fd039d495cbef8d80fdefe3] Miscellaneousgit bisect bad 72a35907200b42246fd039d495cbef8d80fdefe3  </span></code></pre></div></ul></ol><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul><li><a href="https://git-scm.com/">Git SCM</a></li></ul><p>Thanks for reading! Feel free to leave the comments below or <a href="mailto:qazqazqaz850@gmail.com">email</a> to me. Any pieces of advice or discussions are always welcome. :)</p><p>Hope this post will help! :)</p></p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;Due to the most time on my job, we need to type many git command lines. So that this article is used to sort several git commands frequently used for easily searching.&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="louissrliu" scheme="https://louissrliu.github.io/categories/louissrliu/"/>
+    
+    <category term="features" scheme="https://louissrliu.github.io/categories/louissrliu/features/"/>
+    
+    
+    <category term="git" scheme="https://louissrliu.github.io/tags/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>中文測試</title>
+    <link href="https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"/>
+    <id>https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/</id>
+    <published>2013-10-02T15:31:30.000Z</published>
+    <updated>2022-08-15T09:23:50.693Z</updated>
+    
+    <content type="html"><![CDATA[<p>This is a chinese test post to show you how chinese is displayed.</p><span id="more"></span><p>善我王上魚、產生資西員合兒臉趣論。畫衣生這著爸毛親可時，安程幾？合學作。觀經而作建。都非子作這！法如言子你關！手師也。</p><p>以也座論頭室業放。要車時地變此親不老高小是統習直麼調未，行年香一？</p><p>就竟在，是我童示讓利分和異種百路關母信過明驗有個歷洋中前合著區亮風值新底車有正結，進快保的行戰從：弟除文辦條國備當來際年每小腳識世可的的外的廣下歌洲保輪市果底天影；全氣具些回童但倒影發狀在示，數上學大法很，如要我……月品大供這起服滿老？應學傳者國：山式排只不之然清同關；細車是！停屋常間又，資畫領生，相們制在？公別的人寫教資夠。資再我我！只臉夫藝量不路政吃息緊回力之；兒足灣電空時局我怎初安。意今一子區首者微陸現際安除發連由子由而走學體區園我車當會，經時取頭，嚴了新科同？很夫營動通打，出和導一樂，查旅他。坐是收外子發物北看蘭戰坐車身做可來。道就學務。</p><p>國新故。</p><blockquote><p>工步他始能詩的，裝進分星海演意學值例道……於財型目古香亮自和這乎？化經溫詩。只賽嚴大一主價世哥受的沒有中年即病行金拉麼河。主小路了種就小為廣不？</p></blockquote><p><em>From <a href="http://www.richyli.com/tool/loremipsum/">亂數假文產生器 - Chinese Lorem Ipsum</a></em></p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;This is a chinese test post to show you how chinese is displayed.&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="louissrliu" scheme="https://louissrliu.github.io/categories/louissrliu/"/>
+    
+    <category term="features" scheme="https://louissrliu.github.io/categories/louissrliu/features/"/>
+    
+    
+    <category term="chinese" scheme="https://louissrliu.github.io/tags/chinese/"/>
+    
+  </entry>
+  
+</feed>
