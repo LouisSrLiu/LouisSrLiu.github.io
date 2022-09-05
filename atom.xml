@@ -6,7 +6,7 @@
   <link href="https://louissrliu.github.io/atom.xml" rel="self"/>
   
   <link href="https://louissrliu.github.io/"/>
-  <updated>2022-09-01T12:30:24.041Z</updated>
+  <updated>2022-09-03T19:13:46.394Z</updated>
   <id>https://louissrliu.github.io/</id>
   
   <author>
@@ -18,12 +18,12 @@
   
   <entry>
     <title>Welcome to Louis</title>
-    <link href="https://louissrliu.github.io/2022/09/01/Welcome-to-the-new-Tranquilpeak/"/>
-    <id>https://louissrliu.github.io/2022/09/01/Welcome-to-the-new-Tranquilpeak/</id>
-    <published>2022-09-01T12:30:24.041Z</published>
-    <updated>2022-09-01T12:30:24.041Z</updated>
+    <link href="https://louissrliu.github.io/2022/09/04/Welcome-to-the-new-Tranquilpeak/"/>
+    <id>https://louissrliu.github.io/2022/09/04/Welcome-to-the-new-Tranquilpeak/</id>
+    <published>2022-09-03T19:13:46.394Z</published>
+    <updated>2022-09-03T19:13:46.394Z</updated>
     
-    <content type="html"><![CDATA[<!-- excerpt -->]]></content>
+    <content type="html"><![CDATA[<!-- excerpt --><h2 id="Who-am-I"><a href="#Who-am-I" class="headerlink" title="Who am I"></a>Who am I</h2><p>My name is Shi-Rong Liu, and I am a Senior Engineer. My research and engineering interests are mainly in the area of open-source, general computer science, and user-friendly software engineering.</p><h2 id="About-This-Site"><a href="#About-This-Site" class="headerlink" title="About This Site"></a>About This Site</h2><p>This website was formally built in the Autumn of 2022, but migrating from <a href="http://louiscode00.com/" title="http://louiscode00.com/">Jekyll</a> to Hexo and changing to this style.</p><p>The main purposes of this website are list here:</p><ul><li>Discuss the technical details of user-friendly software engineering&#x2F;tool, and computer sciences</li><li>Document the implementation of algorithms for solving real problems</li><li>Present my independent side projects</li><li>Record my personal achievements, and experiences</li></ul><p>It should be noted that all the contents of this website are solely my own and do not express the views or opinions of my employer.</p><h2 id="Contact-Me"><a href="#Contact-Me" class="headerlink" title="Contact Me"></a>Contact Me</h2><p>If you have any piece of advice or critical comments regarding my blog posts, please leave your comments under the blog post. If you have any questions regarding my <a href="https://github.com/s311354" title="https://github.com/s311354">GitHub</a> open source projects, please open an issue ticket in the repository. This will be beneficial for all the readers and save our time for not answering duplicated questions. For private questions or private inquiry, please contact me via my personal <a href="#mailto:qazqazqaz850@gmail.com">Email</a>.</p>]]></content>
     
     
     <summary type="html">&lt;!-- Quote  --&gt;
@@ -46,7 +46,7 @@
     <link href="https://louissrliu.github.io/2022/09/01/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97-%E7%AA%AE%E6%9F%A5%E7%90%86%E7%9A%84%E6%99%AE%E9%80%9A%E5%B8%B8%E8%AD%98/"/>
     <id>https://louissrliu.github.io/2022/09/01/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97-%E7%AA%AE%E6%9F%A5%E7%90%86%E7%9A%84%E6%99%AE%E9%80%9A%E5%B8%B8%E8%AD%98/</id>
     <published>2022-08-31T16:00:00.000Z</published>
-    <updated>2022-09-02T02:12:34.720Z</updated>
+    <updated>2022-09-03T04:11:51.538Z</updated>
     
     <content type="html"><![CDATA[<p>“Most players gain pleasure from feeling accepted or belonging to the group. The good  player however, gains pleasure from his ability to cope with the realities of the game”</p><span id="more"></span><h2 id="書單"><a href="#書單" class="headerlink" title="書單"></a>書單</h2><p><a href="https://www.amazon.com/Poor-Charlies-Almanack-Charles-Chinese/dp/986777857X/ref=sr_1_1?crid=1948DCYL84FUG&keywords=Poor+Charlie%27s+Almanack:+The+Wit+and+Wisdom+of+Charles+T.+Munger+(Chinese+Edition)&qid=1662039083&sprefix=poor+charlie%27s+almanack+the+wit+and+wisdom+of+charles+t.+munger+chinese+edition+,aps,228&sr=8-1" title="https://www.amazon.com/Poor-Charlies-Almanack-Charles-Chinese/dp/986777857X/ref=sr_1_1?crid=1948DCYL84FUG&amp;keywords=Poor+Charlie%27s+Almanack%3A+The+Wit+and+Wisdom+of+Charles+T.+Munger+%28Chinese+Edition%29&amp;qid=1662039083&amp;sprefix=poor+charlie%27s+almanack+the+wit+and+wisdom+of+charles+t.+munger+chinese+edition+%2Caps%2C228&amp;sr=8-1">Poor Charlie’s Almanack: The Wit and Wisdom of Charles T. Munger</a> 這本書在Amazon 3.5 顆星。</p><p>此書內容收錄查理蒙格的人生哲學、學習方法、決策過程以及投資策略。查理蒙格鼓吹用逆向思維的方式來洞察問題的本質，將問題反過來想，才能得到最好的解決。例如，當年幾乎所有人都在試圖修正麥斯威爾電磁定律，使其符合牛頓的三大運動定律，然而愛因斯坦卻轉了個一百八十度大彎，修正了牛頓的定律，讓其符合麥斯威爾的定律，結果發明了相對論。致力於尋求證據來否定已有的論點，反過來想，總是反過來想，這樣反論性的思維值得反覆玩味與體會的。以下就節錄印象最深刻的幾段經典段落。</p><h2 id="紀錄與心得"><a href="#紀錄與心得" class="headerlink" title="紀錄與心得"></a>紀錄與心得</h2><p>保證生活悲慘的處方:<ol><li><a href="#毒品">為了改變心情或感受而吸食毒品</a></li><li><a href="#嫉妒">嫉妒</a></li><li><a href="#怨恨">怨恨</a></li><li><a href="#反覆無常">要反復無常，不要虔誠的做你正在做的事</a></li><li><a href="#教訓">盡可能從你自身的經驗獲得知識，盡量別從其他人成功或失敗的經驗中廣泛的吸取教訓</a></li><li><a href="#成果">別去鑽研前輩的最好成果</a></li><li><a href="#挫折">當遭遇挫折時，就請意志消沉，從此一蹶不振吧</a></li><li><a href="#故事">請忽略小時候人們告訴我那個鄉下人的故事</a></li></ol></p><p><a name="毒品">為了改變心情或感受而吸食毒品</a></p><p>每個人都有可能在一個剛開始難以察覺的細微過程中，染上毒癮，直到墮落的力量大到再也無法衝破。</p><p><a name="嫉妒">嫉妒</a></p><p>嫉妒和令人上癮的毒品一樣，也能獲得導致悲慘生活的大獎。關心別人賺錢比自己更快是一種致命的罪。嫉妒是一種愚蠢的罪，是唯一一種可能得到任何樂趣的罪行，只會讓人痛苦不堪，不會帶來任何樂趣，為何要嫉妒呢?</p><p><a name="怨恨">怨恨</a></p><p>對於想過悲慘生活的人建議別去實踐狄斯雷利的權宜之計，這是專為無法戒掉怨恨習慣的人所設計的。狄斯雷利在成為英國首相過程中，學會了不讓報復成為行為的動機，就將敵人的名字寫下來，放在抽屜裡，然後時常翻看這些名子，字得其樂的記錄下世界是怎樣無需他插手，就使他的敵人垮掉的。</p><p><a name="反覆無常">要反復無常，不要虔誠的做你正在做的事</a></p><p>只要養成反覆無常無常的習慣，就能綽綽有餘抵銷所有優點帶來的效應，不管那種效應有多大。如果你不喜歡不受信任，並且不打算成為對人類最有貢獻的一群人，那麼這帖藥最適合。如果不服用這帖藥，即使你最初的條件並不好，可能還不容易過上悲慘的生活。</p><p><a name="教訓">盡可能從你自身的經驗獲得知識，盡量別從其他人成功或失敗的經驗中廣泛的吸取教訓</a></p><p>這帖藥肯定能保證你過上悲慘的生活，取得二流的成就。拒不別人的教訓所造成的後果，通常是最沒創意的錯誤而引起的麻煩道路。如果你起步時沒成功，你的滑翔遊戲也就玩完了。我們賺錢，靠的是記住淺顯的，而不是掌握深奧的。我們從不試圖成為非常聰明的人，而是持續避免讓自己變成蠢貨，久而久之，我們這種人便能獲得非常大的優勢。</p><p><a name="成果">別去鑽研前輩的最好成果</a></p><p>這帖藥的功效在於得到盡可能少的教育。</p><p><a name="挫折">當遭遇挫折時，就請意志消沉，從此一蹶不振吧</a></p><p>即使最幸福、聰明的人，也會遇到許許多多失敗，這帖藥必定能保證你永遠深陷痛苦的泥濘中。</p><p><a name="故事">請忽略小時候人們告訴我那個鄉下人的故事</a></p><p>請忽略鄉下人的故事：曾經有鄉下人說”我只想知道我將來會死在什麼地方，這樣我就可以永遠不去那裡”。若想獲得失敗，應該將這鄉下人的方法，扁維愚蠢之極、一無用處。</p><div class="alert info"><p>“如果你在生活中唯一的成功就是透過買股票發財，那麼這是一種失敗的生活；生活不僅僅是精明的累積財富。生活和事業上的成功，大多來自你知道應該避免哪些事情；死得太早、糟糕的婚姻、或是避免邪惡之人，尤其是性感誘人的異性等等。”</p></div><h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>個人認爲查理類似說反話的思維以及人生智慧，展現了獨特的洞見。這些無與倫比的智慧以及經驗就是一本很好的教材。但願在漫長的人生中，日日以避免失敗為目標而成長。</p>]]></content>
     
