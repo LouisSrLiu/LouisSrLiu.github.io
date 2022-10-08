@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Louis">
-    <title>中文測試 - Louis</title>
+    <title>Embed MapLibre Map for Website - Louis</title>
     <meta name="author" content="ShiRong Liu">
     
         <meta name="keywords" content="hexo,javascript,">
@@ -22,18 +22,19 @@
             <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
         
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"This is a chinese test post to show you how chinese is displayed.\n\n\n善我王上魚、產生資西員合兒臉趣論。畫衣生這著爸毛親可時，安程幾？合學作。觀經而作建。都非子作這！法如言子你關！手師也。\n以也座論頭室業放。要車時地變此親不老高小是統習直麼調未，行年香一？\n就竟在，是我童示讓利分和異種百路關母信過明驗有個歷洋中前合著區亮風值新底車有正結，進快保的行戰從：弟除文辦條國備當來際年每小腳識世可的的外的廣下歌洲保輪市果底天影；全氣具些回童但倒影發狀在示，數上學大法很，如要我……月品大供這起服滿老？應學傳者國：山式排只不之然清同關；細車是！停屋常間又，資畫領生，相們制在？公別的人寫教資夠。資再我我！只臉夫藝量不路政吃息緊回力之；兒足灣電空時局我怎初安。意今一子區首者微陸現際安除發連由子由而走學體區園我車當會，經時取頭，嚴了新科同？很夫營動通打，出和導一樂，查旅他。坐是收外子發物北看蘭戰坐車身做可來。道就學務。\n國新故。\n\n工步他始能詩的，裝進分星海演意學值例道……於財型目古香亮自和這乎？化經溫詩。只賽嚴大一主價世哥受的沒有中年即病行金拉麼河。主小路了種就小為廣不？\n\nFrom 亂數假文產生器 - Chinese Lorem Ipsum\n","dateCreated":"2013-10-02T23:31:30+08:00","dateModified":"2022-08-26T17:46:17+08:00","datePublished":"2013-10-02T23:31:30+08:00","description":"This is a chinese test post to show you how chinese is displayed.","headline":"中文測試","image":["http://d1u9biwaxjngwg.cloudfront.net/chinese-test-post/vintage-140.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/","keywords":"chinese","thumbnailUrl":"http://d1u9biwaxjngwg.cloudfront.net/chinese-test-post/vintage-140.jpg"}</script>
-    <meta name="description" content="This is a chinese test post to show you how chinese is displayed.">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. \n\n\nRecently, I was looking for ways to embed a Map to my website that contains multiples of custom locations. There are varieties of technologies to choose, such as Amaxon location service, Google Map API and MapLibre GL JS, etc. In this post, I would like to discuss how to use MapLibre GL JS to embed and create custom dynamic maps on our websites mostly for free.\nMapLibre GL JSMapLibre GL JS is an open-source library for publishing maps on your websites. The maps uses vector tileset source over GeoJSON data soruces when possible and are fast rendering in browser has become possible thanks to GPU. \nQuick StartBefore begining shortly, we have to register an account in Maptiler, get an default API Key to protect which is used for accessing maps, tiles, and data from your account. Then, using the API key in code is shown below.\n1234567891011121314151617181920212223242526272829303132&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;title&gt;Add a default marker&lt;/title&gt;&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot; /&gt;&lt;script src=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js&quot;&gt;&lt;/script&gt;&lt;link href=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css&quot; rel=&quot;stylesheet&quot; /&gt;&lt;style&gt;\tbody &#123; margin: 0; padding: 0; &#125;\t#map &#123; position: absolute; top: 0; bottom: 0; width: 100%; &#125;&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=&quot;map&quot;&gt;&lt;/div&gt; &lt;script&gt;var map = new maplibregl.Map(&#123;    container: &#x27;map&#x27;,    style:    &#x27;https://api.maptiler.com/maps/streets/style.json?key=YOUR_OWN_MAPTILER_API&#x27;,    center: [12.550343, 55.665957],    zoom: 8&#125;); var marker = new maplibregl.Marker()    .setLngLat([12.550343, 55.665957])    .addTo(map);&lt;/script&gt; &lt;/body&gt;&lt;/html&gt;\n\nFuther copy the code, paste it into your favorite text editor, and save it as .html file. (remember to replace YOUR_OWN_MAPTILER_API with your actual API key). Next, we can ues iframe for integration with the post.\n123&lt;div style=&quot;overflow-x:auto;&quot;&gt;    &lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;\n\nSimple ExampleThe embedded map for this simple example looks like this.\n\n    \n\n\nCustom ExampleWe can also customize the marker to a Map. Similar to the above example, I created another custom example map with marked places where I have visited recently nearby.\n\n    \n\n\nNow, we know how to simply embed the custom dynamic maps on our websites. Hope this post will be helpful.\nReference\nGoogle Maps Platform\n\nOpen-source library - MapLibre GL JS\n\nMapbox Docs - vector tiles\n\nMapbox Docs - Improve the performance of Mapbox GL JS maps\n\n\nThanks for reading! Feel free to leave the comments below or email to me. Any pieces of advice or discussions are always welcome. :)\n","dateCreated":"2022-09-28T00:00:00+08:00","dateModified":"2022-10-09T00:38:00+08:00","datePublished":"2022-09-28T00:00:00+08:00","description":"In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. ","headline":"Embed MapLibre Map for Website","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/","keywords":"javascript, map","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"}</script>
+    <meta name="description" content="In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation.">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="中文測試">
-<meta property="og:url" content="https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/index.html">
+<meta property="og:title" content="Embed MapLibre Map for Website">
+<meta property="og:url" content="https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/index.html">
 <meta property="og:site_name" content="Louis">
-<meta property="og:description" content="This is a chinese test post to show you how chinese is displayed.">
-<meta property="og:locale" content="zh_TW">
-<meta property="article:published_time" content="2013-10-02T15:31:30.000Z">
-<meta property="article:modified_time" content="2022-08-26T09:46:17.274Z">
+<meta property="og:description" content="In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-09-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-10-08T16:38:00.612Z">
 <meta property="article:author" content="ShiRong Liu">
-<meta property="article:tag" content="chinese">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="map">
 <meta name="twitter:card" content="summary">
     
     
@@ -43,8 +44,8 @@
         <meta property="og:image" content="https://avatars.githubusercontent.com/u/26519320?v=4"/>
     
     
-        <meta property="og:image" content="http://d1u9biwaxjngwg.cloudfront.net/chinese-test-post/vintage-140.jpg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="http://d1u9biwaxjngwg.cloudfront.net/chinese-test-post/vintage-140.jpg"/>
+        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"/>
     
     
     
@@ -92,7 +93,7 @@
             <a
                 class="header-right-icon open-algolia-search"
                 href="#search"
-                aria-label="打開鏈接: /#search"
+                aria-label="Open the link: /#search"
             >
         
         
@@ -115,13 +116,13 @@
             <div class="sidebar-profile">
                 <a
                     href="/#about"
-                    aria-label="閱讀有關作者的更多信息"
+                    aria-label="Read more about the author"
                 >
-                    <img class="sidebar-profile-picture" src="https://avatars.githubusercontent.com/u/26519320?v=4" alt="作者的圖片"/>
+                    <img class="sidebar-profile-picture" src="https://avatars.githubusercontent.com/u/26519320?v=4" alt="Author&#39;s picture"/>
                 </a>
                 <h4 class="sidebar-profile-name">ShiRong Liu</h4>
                 
-                    <h5 class="sidebar-profile-bio"><p>author.bio</p>
+                    <h5 class="sidebar-profile-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub page, open-source, software development, Linux, and travels in my spare time.</p>
 </h5>
                 
             </div>
@@ -136,10 +137,10 @@
                             href="/"
                             
                             rel="noopener"
-                            title="首頁"
+                            title="Home"
                         >
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">首頁</span>
+                        <span class="sidebar-button-desc">Home</span>
                     </a>
             </li>
             
@@ -150,10 +151,10 @@
                             href="/all-categories"
                             
                             rel="noopener"
-                            title="分類"
+                            title="Categories"
                         >
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">分類</span>
+                        <span class="sidebar-button-desc">Categories</span>
                     </a>
             </li>
             
@@ -164,10 +165,10 @@
                             href="/all-tags"
                             
                             rel="noopener"
-                            title="標籤"
+                            title="Tags"
                         >
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">標籤</span>
+                        <span class="sidebar-button-desc">Tags</span>
                     </a>
             </li>
             
@@ -178,10 +179,10 @@
                             href="/all-archives"
                             
                             rel="noopener"
-                            title="所有文章"
+                            title="Archives"
                         >
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">所有文章</span>
+                        <span class="sidebar-button-desc">Archives</span>
                     </a>
             </li>
             
@@ -192,10 +193,10 @@
                             href="#search"
                             
                             rel="noopener"
-                            title="搜尋"
+                            title="Search"
                         >
                         <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">搜尋</span>
+                        <span class="sidebar-button-desc">Search</span>
                     </a>
             </li>
             
@@ -206,10 +207,10 @@
                             href="#about"
                             
                             rel="noopener"
-                            title="關於"
+                            title="About"
                         >
                         <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">關於</span>
+                        <span class="sidebar-button-desc">About</span>
                     </a>
             </li>
             
@@ -258,10 +259,10 @@
                                 target="_blank"
                             
                             rel="noopener"
-                            title="Email"
+                            title="Mail"
                         >
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Email</span>
+                        <span class="sidebar-button-desc">Mail</span>
                     </a>
             </li>
             
@@ -276,10 +277,10 @@
                             href="/atom.xml"
                             
                             rel="noopener"
-                            title="Atom"
+                            title="RSS"
                         >
                         <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
-                        <span class="sidebar-button-desc">Atom</span>
+                        <span class="sidebar-button-desc">RSS</span>
                     </a>
             </li>
             
@@ -300,18 +301,18 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            中文測試
+            Embed MapLibre Map for Website
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2013-10-02T23:31:30+08:00">
+    <time datetime="2022-09-28T00:00:00+08:00">
 	
-		    10月 02, 2013
+		    Sep 28, 2022
     	
     </time>
     
-        <span>分類 </span>
+        <span>in </span>
         
     <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/features/">features</a>
 
@@ -327,17 +328,39 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>This is a chinese test post to show you how chinese is displayed.</p>
+            <p>In our daily life, most of us usually use <a target="_blank" rel="noopener" href="https://www.google.com/maps/" title="https://www.google.com/maps/">Google Map</a> or <a target="_blank" rel="noopener" href="https://www.apple.com/maps/" title="https://www.apple.com/maps/">Apple Maps</a> to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. </p>
 <span id="more"></span>
 
-<p>善我王上魚、產生資西員合兒臉趣論。畫衣生這著爸毛親可時，安程幾？合學作。觀經而作建。都非子作這！法如言子你關！手師也。</p>
-<p>以也座論頭室業放。要車時地變此親不老高小是統習直麼調未，行年香一？</p>
-<p>就竟在，是我童示讓利分和異種百路關母信過明驗有個歷洋中前合著區亮風值新底車有正結，進快保的行戰從：弟除文辦條國備當來際年每小腳識世可的的外的廣下歌洲保輪市果底天影；全氣具些回童但倒影發狀在示，數上學大法很，如要我……月品大供這起服滿老？應學傳者國：山式排只不之然清同關；細車是！停屋常間又，資畫領生，相們制在？公別的人寫教資夠。資再我我！只臉夫藝量不路政吃息緊回力之；兒足灣電空時局我怎初安。意今一子區首者微陸現際安除發連由子由而走學體區園我車當會，經時取頭，嚴了新科同？很夫營動通打，出和導一樂，查旅他。坐是收外子發物北看蘭戰坐車身做可來。道就學務。</p>
-<p>國新故。</p>
-<blockquote>
-<p>工步他始能詩的，裝進分星海演意學值例道……於財型目古香亮自和這乎？化經溫詩。只賽嚴大一主價世哥受的沒有中年即病行金拉麼河。主小路了種就小為廣不？</p>
-</blockquote>
-<p><em>From <a target="_blank" rel="noopener" href="http://www.richyli.com/tool/loremipsum/">亂數假文產生器 - Chinese Lorem Ipsum</a></em></p>
+<p>Recently, I was looking for ways to embed a Map to my website that contains multiples of custom locations. There are varieties of technologies to choose, such as <a target="_blank" rel="noopener" href="https://aws.amazon.com/location/?nc1=h_ls" title="https://aws.amazon.com/location/?nc1=h_ls">Amaxon location service</a>, <a target="_blank" rel="noopener" href="https://developers.google.com/maps" title="https://developers.google.com/maps">Google Map API</a> and <a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js" title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a>, etc. In this post, I would like to discuss how to use <a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js" title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a> to embed and create custom dynamic maps on our websites mostly for free.</p>
+<h3 id="MapLibre-GL-JS"><a href="#MapLibre-GL-JS" class="headerlink" title="MapLibre GL JS"></a>MapLibre GL JS</h3><p><a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js" title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a> is an open-source library for publishing maps on your websites. The maps uses vector tileset source over GeoJSON data soruces when possible and are fast rendering in browser has become possible thanks to GPU. </p>
+<h3 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h3><p>Before begining shortly, we have to register an account in <a target="_blank" rel="noopener" href="https://www.maptiler.com/" title="https://www.maptiler.com/">Maptiler</a>, get an default API Key to protect which is used for accessing maps, tiles, and data from your account. Then, using the API key in code is shown below.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;utf-8&quot; /&gt;</span><br><span class="line">&lt;title&gt;Add a default marker&lt;/title&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot; /&gt;</span><br><span class="line">&lt;script src=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;link href=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css&quot; rel=&quot;stylesheet&quot; /&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">	body &#123; margin: 0; padding: 0; &#125;</span><br><span class="line">	#map &#123; position: absolute; top: 0; bottom: 0; width: 100%; &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;</span><br><span class="line"> </span><br><span class="line">&lt;script&gt;</span><br><span class="line">var map = new maplibregl.Map(&#123;</span><br><span class="line">    container: &#x27;map&#x27;,</span><br><span class="line">    style:</span><br><span class="line">    &#x27;https://api.maptiler.com/maps/streets/style.json?key=YOUR_OWN_MAPTILER_API&#x27;,</span><br><span class="line">    center: [12.550343, 55.665957],</span><br><span class="line">    zoom: 8</span><br><span class="line">&#125;);</span><br><span class="line"> </span><br><span class="line">var marker = new maplibregl.Marker()</span><br><span class="line">    .setLngLat([12.550343, 55.665957])</span><br><span class="line">    .addTo(map);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"> </span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Futher copy the code, paste it into your favorite text editor, and save it as .html file. (remember to replace YOUR_OWN_MAPTILER_API with your actual API key). Next, we can ues iframe for integration with the post.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div style=&quot;overflow-x:auto;&quot;&gt;</span><br><span class="line">    &lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Simple-Example"><a href="#Simple-Example" class="headerlink" title="Simple Example"></a>Simple Example</h3><p>The embedded map for this simple example looks like this.</p>
+<div style="overflow-x:auto;">
+    <iframe src="/javascript/maplibre/add-default-marker.html" style="width:100%; height:512px", title="add-default-marker"></iframe>
+</div>
+
+<h3 id="Custom-Example"><a href="#Custom-Example" class="headerlink" title="Custom Example"></a>Custom Example</h3><p>We can also customize the marker to a Map. Similar to the above example, I created another custom example map with marked places where I have visited recently nearby.</p>
+<div style="overflow-x:auto;">
+    <iframe src="/javascript/maplibre/add-custom-marker.html" style="width:100%; height:512px", title="add-custom-marker"></iframe>
+</div>
+
+<p>Now, we know how to simply embed the custom dynamic maps on our websites. Hope this post will be helpful.</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://developers.google.com/maps">Google Maps Platform</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js">Open-source library - MapLibre GL JS</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.mapbox.com/help/glossary/vector-tiles/">Mapbox Docs - vector tiles</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.mapbox.com/help/troubleshooting/mapbox-gl-js-performance/">Mapbox Docs - Improve the performance of Mapbox GL JS maps</a></p>
+</li>
+</ul>
+<p>Thanks for reading! Feel free to leave the comments below or <a href="mailto:qazqazqaz850@gmail.com">email</a> to me. Any pieces of advice or discussions are always welcome. :)</p>
 
             
 
@@ -347,9 +370,9 @@
     <div id="post-footer" class="post-footer main-content-wrap">
         
             <div class="post-footer-tags">
-                <span class="text-color-light text-small">標籤</span><br/>
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/chinese/" rel="tag">chinese</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/javascript/" rel="tag">javascript</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/map/" rel="tag">map</a>
 
             </div>
         
@@ -362,23 +385,26 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2018/10/02/Git-Handbook/"
-                    data-tooltip="A Beginner&#39;s Guide - Git Handbook"
-                    aria-label="上一篇: A Beginner&#39;s Guide - Git Handbook"
+                    href="/2022/10/08/%E7%94%9F%E6%B4%BB%E6%9C%AD%E8%A8%98-%E6%B5%B7%E7%B6%BF%E5%AF%B6%E5%AF%B6%E8%9F%B9%E5%A0%A1%E7%8E%8B%E9%A4%90%E5%BB%B3_SpongeBob_SquarePants/"
+                    data-tooltip="生活扎記 蟹堡王餐廳 Krusty Krab"
+                    aria-label="PREVIOUS: 生活扎記 蟹堡王餐廳 Krusty Krab"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                     </a>
             </li>
             <li class="post-action">
                 
-                    <a
-                        class="post-action-btn btn btn--disabled"
-                        aria-hidden="true"
-                    >
-                        
-                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/09/01/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97-%E7%AA%AE%E6%9F%A5%E7%90%86%E7%9A%84%E6%99%AE%E9%80%9A%E5%B8%B8%E8%AD%98/"
+                    data-tooltip="閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
+                    aria-label="NEXT: 閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                     </a>
             </li>
@@ -400,9 +426,9 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"
-                    title="分享到 Facebook"
-                    aria-label="分享到 Facebook"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
                 >
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
@@ -413,7 +439,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -476,23 +502,26 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2018/10/02/Git-Handbook/"
-                    data-tooltip="A Beginner&#39;s Guide - Git Handbook"
-                    aria-label="上一篇: A Beginner&#39;s Guide - Git Handbook"
+                    href="/2022/10/08/%E7%94%9F%E6%B4%BB%E6%9C%AD%E8%A8%98-%E6%B5%B7%E7%B6%BF%E5%AF%B6%E5%AF%B6%E8%9F%B9%E5%A0%A1%E7%8E%8B%E9%A4%90%E5%BB%B3_SpongeBob_SquarePants/"
+                    data-tooltip="生活扎記 蟹堡王餐廳 Krusty Krab"
+                    aria-label="PREVIOUS: 生活扎記 蟹堡王餐廳 Krusty Krab"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                     </a>
             </li>
             <li class="post-action">
                 
-                    <a
-                        class="post-action-btn btn btn--disabled"
-                        aria-hidden="true"
-                    >
-                        
-                        <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/09/01/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97-%E7%AA%AE%E6%9F%A5%E7%90%86%E7%9A%84%E6%99%AE%E9%80%9A%E5%B8%B8%E8%AD%98/"
+                    data-tooltip="閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
+                    aria-label="NEXT: 閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
                         <i class="fa fa-angle-right" aria-hidden="true"></i>
                     </a>
             </li>
@@ -514,9 +543,9 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"
-                    title="分享到 Facebook"
-                    aria-label="分享到 Facebook"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
                 >
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
@@ -527,7 +556,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -571,10 +600,10 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"
-                        aria-label="分享到 Facebook"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                        aria-label="Share on Facebook"
                     >
-                        <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
                     </a>
                 </li>
             
@@ -584,7 +613,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"
+                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
                         aria-label="global.share_on_Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>global.share_on_Twitter</span>
@@ -816,9 +845,9 @@
     
         <script>
           var disqus_config = function() {
-            this.page.url = 'https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/';
+            this.page.url = 'https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/';
               
-            this.page.identifier = '2013/10/02/中文測試/';
+            this.page.identifier = '2022/09/28/embed_maplibre_map_for_website/';
               
           };
           (function() {
