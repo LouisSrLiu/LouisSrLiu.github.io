@@ -1,0 +1,878 @@
+
+<!DOCTYPE html>
+<html lang="en,zh-tw,default">
+    
+<head>
+    <!-- Google Adsense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7510696744137436"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Louis">
+    <title>Drawing with Mouse Events on HTML - Louis</title>
+    <meta name="author" content="ShiRong Liu">
+    
+        <meta name="keywords" content="hexo,javascript,">
+    
+    
+        <link rel="icon" href="https://LouisSrLiu.github.io/assets/images/logo.jpg">
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this post, I would like to describe how to quickly go about implementing this.\n\n\nMouse CanvasThe mouse canvas can be used with any devices (laptop&#x2F;mobile..) that use mouse. Belowing is the simple example:\n\n    \n\n\nSource CodeThe source code was referring to Mozilla mouse drawing mousemove with clear&#x2F;line width&#x2F;color features enhancement.\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485// CSS Style&lt;style&gt;#canvas_div &#123;    text-align: center;    display: block;    margin-left: auto;    margin-right: auto;&#125;canvas &#123;  border: 2px solid black;&#125;&lt;/style&gt;&lt;div id=&quot;canvas_div&quot; style=&quot;overflow-x: auto;&quot;&gt;&lt;canvas id=&quot;canvas&quot; width=&quot;900&quot; height=&quot;360&quot;&gt;&lt;/canvas&gt;&lt;button onclick=&quot;javascript:clearArea();return false;&quot;&gt;Clear Area&lt;/button&gt;Line width : &lt;select id=&quot;selWidth&quot;&gt;    &lt;option value=&quot;11&quot;&gt;11&lt;/option&gt;    &lt;option value=&quot;13&quot; selected=&quot;selected&quot;&gt;13&lt;/option&gt;    &lt;option value=&quot;15&quot;&gt;15&lt;/option&gt;&lt;/select&gt;Color : &lt;select id=&quot;selColor&quot;&gt;    &lt;option value=&quot;black&quot;&gt;black&lt;/option&gt;    &lt;option value=&quot;blue&quot; selected=&quot;selected&quot;&gt;blue&lt;/option&gt;    &lt;option value=&quot;red&quot;&gt;red&lt;/option&gt;    &lt;option value=&quot;green&quot;&gt;green&lt;/option&gt;    &lt;option value=&quot;yellow&quot;&gt;yellow&lt;/option&gt;    &lt;option value=&quot;gray&quot;&gt;gray&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;script&gt;// When true, moving the mouse draws on the canvaslet isDrawing = false;let x = 0;let y = 0;const canvas = document.getElementById(&#x27;canvas&#x27;);const context = canvas.getContext(&#x27;2d&#x27;);// event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.// Add the event listeners for mousedown, mousemove, and mouseupcanvas.addEventListener(&#x27;mousedown&#x27;, (e) =&gt; &#123;  x = e.offsetX;  y = e.offsetY;  isDrawing = true;&#125;);canvas.addEventListener(&#x27;mousemove&#x27;, (e) =&gt; &#123;  if (isDrawing) &#123;    drawLine(context, x, y, e.offsetX, e.offsetY);    x = e.offsetX;    y = e.offsetY;  &#125;&#125;);canvas.addEventListener(&#x27;mouseup&#x27;, (e) =&gt; &#123;  if (isDrawing) &#123;    drawLine(context, x, y, e.offsetX, e.offsetY);    x = 0;    y = 0;    isDrawing = false;  &#125;&#125;);function drawLine(context, x1, y1, x2, y2) &#123;  context.beginPath();  context.strokeStyle = document.getElementById(&#x27;selColor&#x27;).value;  context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;  context.lineJoin = &quot;round&quot;;  context.moveTo(x1, y1);  context.lineTo(x2, y2);  context.closePath();  context.stroke();&#125;function clearArea() &#123;    context.setTransform(1, 0, 0, 1, 0, 0);    context.clearRect(0, 0, context.canvas.width, context.canvas.height);&#125;&lt;/script&gt;\n\nReference\nMozilla: Element: mousemove event\n\nThanks for reading! Feel free to leave the comments below or email to me. Any pieces of advice or discussions are always welcome. :)\n","dateCreated":"2022-11-06T00:00:00+08:00","dateModified":"2022-11-06T13:49:33+08:00","datePublished":"2022-11-06T00:00:00+08:00","description":"The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this post, I would like to describe how to quickly go about implementing this.","headline":"Drawing with Mouse Events on HTML","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/castle.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/","keywords":"javascript, html","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/castle.jpeg"}</script>
+    <meta name="description" content="The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this po">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="Drawing with Mouse Events on HTML">
+<meta property="og:url" content="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/index.html">
+<meta property="og:site_name" content="Louis">
+<meta property="og:description" content="The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this po">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-11-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-11-06T05:49:33.613Z">
+<meta property="article:author" content="ShiRong Liu">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="html">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://avatars.githubusercontent.com/u/26519320?v=4"/>
+    
+    
+        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/castle.jpeg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/castle.jpeg"/>
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-ld7dkxcv3mt5tppdt9ti4mj6mw9b06ixz44jq7naesmnj2w2gduhchhvh75o.min.css">
+
+    <!--STYLES END-->
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125815034-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-125815034-1');
+    </script>
+
+
+    
+
+    
+        
+    
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Louis
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-icon open-algolia-search"
+                href="#search"
+                aria-label="Open the link: /#search"
+            >
+        
+        
+            <i class="fa fa-search fa-lg"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="Read more about the author"
+                >
+                    <img class="sidebar-profile-picture" src="https://avatars.githubusercontent.com/u/26519320?v=4" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">ShiRong Liu</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub page, open-source, software development, Linux, and travels in my spare time.</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/s311354"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/in/shirongliu/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:qazqazqaz850@gmail.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            Drawing with Mouse Events on HTML
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2022-11-06T00:00:00+08:00">
+	
+		    Nov 06, 2022
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/miscellaneous/">miscellaneous</a>
+
+
+    
+    
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this post, I would like to describe how to quickly go about implementing this.</p>
+<span id="more"></span>
+
+<h2 id="Mouse-Canvas"><a href="#Mouse-Canvas" class="headerlink" title="Mouse Canvas"></a>Mouse Canvas</h2><p>The mouse canvas can be used with any devices (laptop&#x2F;mobile..) that use mouse. Belowing is the simple example:</p>
+<div style="overflow-x:auto;">
+    <iframe src="/javascript/canvas/mouse_canvas.html" style="width:100%; height:360px", title="add-default-marker"></iframe>
+</div>
+
+<h2 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h2><p>The source code was referring to <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event" title="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event">Mozilla mouse drawing mousemove</a> with clear&#x2F;line width&#x2F;color features enhancement.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">// CSS Style</span><br><span class="line">&lt;style&gt;</span><br><span class="line">#canvas_div &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">    display: block;</span><br><span class="line">    margin-left: auto;</span><br><span class="line">    margin-right: auto;</span><br><span class="line">&#125;</span><br><span class="line">canvas &#123;</span><br><span class="line">  border: 2px solid black;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br><span class="line">&lt;div id=&quot;canvas_div&quot; style=&quot;overflow-x: auto;&quot;&gt;</span><br><span class="line">&lt;canvas id=&quot;canvas&quot; width=&quot;900&quot; height=&quot;360&quot;&gt;&lt;/canvas&gt;</span><br><span class="line"></span><br><span class="line">&lt;button onclick=&quot;javascript:clearArea();return false;&quot;&gt;Clear Area&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">Line width : &lt;select id=&quot;selWidth&quot;&gt;</span><br><span class="line">    &lt;option value=&quot;11&quot;&gt;11&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;13&quot; selected=&quot;selected&quot;&gt;13&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;15&quot;&gt;15&lt;/option&gt;</span><br><span class="line">&lt;/select&gt;</span><br><span class="line"></span><br><span class="line">Color : &lt;select id=&quot;selColor&quot;&gt;</span><br><span class="line">    &lt;option value=&quot;black&quot;&gt;black&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;blue&quot; selected=&quot;selected&quot;&gt;blue&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;red&quot;&gt;red&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;green&quot;&gt;green&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;yellow&quot;&gt;yellow&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;gray&quot;&gt;gray&lt;/option&gt;</span><br><span class="line">&lt;/select&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">// When true, moving the mouse draws on the canvas</span><br><span class="line">let isDrawing = false;</span><br><span class="line">let x = 0;</span><br><span class="line">let y = 0;</span><br><span class="line"></span><br><span class="line">const canvas = document.getElementById(&#x27;canvas&#x27;);</span><br><span class="line">const context = canvas.getContext(&#x27;2d&#x27;);</span><br><span class="line"></span><br><span class="line">// event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.</span><br><span class="line"></span><br><span class="line">// Add the event listeners for mousedown, mousemove, and mouseup</span><br><span class="line">canvas.addEventListener(&#x27;mousedown&#x27;, (e) =&gt; &#123;</span><br><span class="line">  x = e.offsetX;</span><br><span class="line">  y = e.offsetY;</span><br><span class="line">  isDrawing = true;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">canvas.addEventListener(&#x27;mousemove&#x27;, (e) =&gt; &#123;</span><br><span class="line">  if (isDrawing) &#123;</span><br><span class="line">    drawLine(context, x, y, e.offsetX, e.offsetY);</span><br><span class="line">    x = e.offsetX;</span><br><span class="line">    y = e.offsetY;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">canvas.addEventListener(&#x27;mouseup&#x27;, (e) =&gt; &#123;</span><br><span class="line">  if (isDrawing) &#123;</span><br><span class="line">    drawLine(context, x, y, e.offsetX, e.offsetY);</span><br><span class="line">    x = 0;</span><br><span class="line">    y = 0;</span><br><span class="line">    isDrawing = false;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">function drawLine(context, x1, y1, x2, y2) &#123;</span><br><span class="line">  context.beginPath();</span><br><span class="line">  context.strokeStyle = document.getElementById(&#x27;selColor&#x27;).value;</span><br><span class="line">  context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;</span><br><span class="line">  context.lineJoin = &quot;round&quot;;</span><br><span class="line">  context.moveTo(x1, y1);</span><br><span class="line">  context.lineTo(x2, y2);</span><br><span class="line">  context.closePath();</span><br><span class="line">  context.stroke();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function clearArea() &#123;</span><br><span class="line">    context.setTransform(1, 0, 0, 1, 0, 0);</span><br><span class="line">    context.clearRect(0, 0, context.canvas.width, context.canvas.height);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event">Mozilla: Element: mousemove event</a></li>
+</ul>
+<p>Thanks for reading! Feel free to leave the comments below or <a href="mailto:qazqazqaz850@gmail.com">email</a> to me. Any pieces of advice or discussions are always welcome. :)</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/html/" rel="tag">html</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/javascript/" rel="tag">javascript</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/11/06/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/08/%E7%94%9F%E6%B4%BB%E6%9C%AD%E8%A8%98-%E6%B5%B7%E7%B6%BF%E5%AF%B6%E5%AF%B6%E8%9F%B9%E5%A0%A1%E7%8E%8B%E9%A4%90%E5%BB%B3_SpongeBob_SquarePants/"
+                    data-tooltip="生活扎記 蟹堡王餐廳 Krusty Krab"
+                    aria-label="NEXT: 生活扎記 蟹堡王餐廳 Krusty Krab"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
+                    title="global.share_on_Twitter"
+                    aria-label="global.share_on_Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#disqus_thread"
+                        aria-label="Leave a comment"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2022 ShiRong Liu. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/11/06/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2022/10/08/%E7%94%9F%E6%B4%BB%E6%9C%AD%E8%A8%98-%E6%B5%B7%E7%B6%BF%E5%AF%B6%E5%AF%B6%E8%9F%B9%E5%A0%A1%E7%8E%8B%E9%A4%90%E5%BB%B3_SpongeBob_SquarePants/"
+                    data-tooltip="生活扎記 蟹堡王餐廳 Krusty Krab"
+                    aria-label="NEXT: 生活扎記 蟹堡王餐廳 Krusty Krab"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
+                    title="global.share_on_Twitter"
+                    aria-label="global.share_on_Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#disqus_thread"
+                        aria-label="Leave a comment"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
+                        aria-label="global.share_on_Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>global.share_on_Twitter</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://avatars.githubusercontent.com/u/26519320?v=4" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">ShiRong Liu</h4>
+        
+            <div id="about-card-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub page, open-source, software development, Linux, and travels in my spare time.</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p> Embedded C&#x2F;C++ Software Engineer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Taiwan
+            </div>
+        
+    </div>
+</div>
+
+        
+            <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-times"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="/assets/images/logo-algolia-nebula-blue-full.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"
+                            aria-label=": 中文測試"
+                        >
+                            <h3 class="media-heading">中文測試</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Oct 2, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>This is a chinese test post to show you how chinese is displayed.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2018/10/02/Git-Handbook/"
+                            aria-label=": A Beginner&#39;s Guide - Git Handbook"
+                        >
+                            <h3 class="media-heading">A Beginner&#39;s Guide - Git Handbook</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Oct 2, 2018
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Due to the most time on my job, we need to type many git command lines. So that this article is used to sort several git commands frequently used for easily searching.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/09/01/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97-%E7%AA%AE%E6%9F%A5%E7%90%86%E7%9A%84%E6%99%AE%E9%80%9A%E5%B8%B8%E8%AD%98/"
+                            aria-label=": 閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
+                        >
+                            <h3 class="media-heading">閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Sep 1, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>“Most players gain pleasure from feeling accepted or belonging to the group. The good  player however, gains pleasure from his ability to cope with the realities of the game”</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                            aria-label=": Embed MapLibre Map for Website"
+                        >
+                            <h3 class="media-heading">Embed MapLibre Map for Website</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Sep 28, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>In our daily life, most of us usually use <a target="_blank" rel="noopener" href="https://www.google.com/maps/" title="https://www.google.com/maps/">Google Map</a> or <a target="_blank" rel="noopener" href="https://www.apple.com/maps/" title="https://www.apple.com/maps/">Apple Maps</a> to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. </p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/10/08/%E7%94%9F%E6%B4%BB%E6%9C%AD%E8%A8%98-%E6%B5%B7%E7%B6%BF%E5%AF%B6%E5%AF%B6%E8%9F%B9%E5%A0%A1%E7%8E%8B%E9%A4%90%E5%BB%B3_SpongeBob_SquarePants/"
+                            aria-label=": 生活扎記 蟹堡王餐廳 Krusty Krab"
+                        >
+                            <h3 class="media-heading">生活扎記 蟹堡王餐廳 Krusty Krab</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Oct 8, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>“After going on your life-changing journey, you now realize that you don’t want what you thought you wanted. What you really wanted was inside you all along.”</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
+                            aria-label=": Drawing with Mouse Events on HTML"
+                        >
+                            <h3 class="media-heading">Drawing with Mouse Events on HTML</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Nov 6, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this post, I would like to describe how to quickly go about implementing this.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/11/06/Welcome-to-the-new-Tranquilpeak/"
+                            aria-label=": Welcome to Louis"
+                        >
+                            <h3 class="media-heading">Welcome to Louis</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Nov 6, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><!-- Quote  -->
+<p class="message" style="font-family:cursive"><q>
+"No amount of genius can overcome a preoccupation with detail" - Marion Levy Jr.</q></p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                7 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/silvergrass.png');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-t6f18x1rzbgnekoj2fou3cufyxdgpzrg5j60h6uumo17vtt7j0q6ms7ueaf2.min.js"></script>
+
+<!--SCRIPTS END-->
+<script src="/assets/js/lazysizes.js"></script>
+
+
+    
+        <script>
+          var disqus_config = function() {
+            this.page.url = 'https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/';
+              
+            this.page.identifier = '2022/11/06/Drawing_with_mouse_events_on_html/';
+              
+          };
+          (function() {
+            var d = document, s = d.createElement('script');
+            var disqus_shortname = 'shirongliu';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+          })();
+        </script>
+    
+
+
+
+    <script>
+      var appId = 'N2INP4C5YH'
+      var apiKey = 'a254c6a4e95825bd7c2c6eb46f8e9bc3'
+      var indexName = 'dev_louissriiu'
+    </script>
+
+
+    </body>
+</html>
