@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Louis">
-    <title>Embed MapLibre Map for Website - Louis</title>
+    <title>Drawing with Mouse and Touch Events on HTML - Louis</title>
     <meta name="author" content="ShiRong Liu">
     
         <meta name="keywords" content="hexo,javascript,">
@@ -22,19 +22,19 @@
             <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
         
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. \n\n\nRecently, I was looking for ways to embed a Map to my website that contains multiples of custom locations. There are varieties of technologies to choose, such as Amaxon location service, Google Map API and MapLibre GL JS, etc. In this post, I would like to discuss how to use MapLibre GL JS to embed and create custom dynamic maps on our websites mostly for free.\nMapLibre GL JSMapLibre GL JS is an open-source library for publishing maps on your websites. The maps uses vector tileset source over GeoJSON data soruces when possible and are fast rendering in browser has become possible thanks to GPU. \nQuick StartBefore begining shortly, we have to register an account in Maptiler, get an default API Key to protect which is used for accessing maps, tiles, and data from your account. Then, using the API key in code is shown below.\n1234567891011121314151617181920212223242526272829303132&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;title&gt;Add a default marker&lt;/title&gt;&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot; /&gt;&lt;script src=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js&quot;&gt;&lt;/script&gt;&lt;link href=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css&quot; rel=&quot;stylesheet&quot; /&gt;&lt;style&gt;\tbody &#123; margin: 0; padding: 0; &#125;\t#map &#123; position: absolute; top: 0; bottom: 0; width: 100%; &#125;&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=&quot;map&quot;&gt;&lt;/div&gt; &lt;script&gt;var map = new maplibregl.Map(&#123;    container: &#x27;map&#x27;,    style:    &#x27;https://api.maptiler.com/maps/streets/style.json?key=YOUR_OWN_MAPTILER_API&#x27;,    center: [12.550343, 55.665957],    zoom: 8&#125;); var marker = new maplibregl.Marker()    .setLngLat([12.550343, 55.665957])    .addTo(map);&lt;/script&gt; &lt;/body&gt;&lt;/html&gt;\n\nFuther copy the code, paste it into your favorite text editor, and save it as .html file. (remember to replace YOUR_OWN_MAPTILER_API with your actual API key). Next, we can ues iframe for integration with the post.\n123&lt;div style=&quot;overflow-x:auto;&quot;&gt;    &lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;\n\nSimple ExampleThe embedded map for this simple example looks like this.\n\n    \n\n\nCustom ExampleWe can also customize the marker to a Map. Similar to the above example, I created another custom example map with marked places where I have visited recently nearby.\n\n    \n\n\nNow, we know how to simply embed the custom dynamic maps on our websites. Hope this post will be helpful.\nReference\nGoogle Maps Platform\n\nOpen-source library - MapLibre GL JS\n\nMapbox Docs - vector tiles\n\nMapbox Docs - Improve the performance of Mapbox GL JS maps\n\n\nThanks for reading! Feel free to leave the comments below or email to me. Any pieces of advice or discussions are always welcome. :)\n","dateCreated":"2022-09-28T00:00:00+08:00","dateModified":"2022-11-06T11:48:11+08:00","datePublished":"2022-09-28T00:00:00+08:00","description":"In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. ","headline":"Embed MapLibre Map for Website","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/","keywords":"javascript, map","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"}</script>
-    <meta name="description" content="In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation.">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"The HTML canvas can be used for sketching&#x2F;drawing either by mouse or by touch. In the previous post, I quickly discuss how to use Canvas API to implement a canvas with mouse sketching. In this post, I would like to describe how go about implementing for sketching&#x2F;drawing by mouse and touch.\n\n\nMouse and Touch CanvasThe belowing canvas can be used with any devices that use mouse or touch screen:\n\n    \n\n\nSource CodeThe source code was referring to Mozilla touch-based drawing and was slightly modified with some feature enhancement.\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164&lt;style&gt;#canvas_div &#123;    text-align: center;    display: block;    margin-left: auto;    margin-right: auto;&#125;canvas &#123;  border: 2px solid black;&#125;&lt;/style&gt;&lt;div id=&quot;canvas_div&quot; style=&quot;overflow-x: auto;&quot;&gt;&lt;canvas id=&quot;canvas&quot; width=&quot;700&quot; height=&quot;360&quot;&gt;&lt;/canvas&gt;&lt;button onclick=&quot;javascript:clearArea();return false;&quot;&gt;Clear Area&lt;/button&gt;Line width : &lt;select id=&quot;selWidth&quot;&gt;    &lt;option value=&quot;5&quot; selected=&quot;selected&quot;&gt;5&lt;/option&gt;    &lt;option value=&quot;7&quot;&gt;7&lt;/option&gt;    &lt;option value=&quot;9&quot;&gt;9&lt;/option&gt;    &lt;option value=&quot;11&quot;&gt;11&lt;/option&gt;    &lt;option value=&quot;13&quot;&gt;13&lt;/option&gt;    &lt;option value=&quot;15&quot;&gt;15&lt;/option&gt;&lt;/select&gt;Color : &lt;select id=&quot;selColor&quot;&gt;    &lt;option value=&quot;black&quot;&gt;black&lt;/option&gt;    &lt;option value=&quot;blue&quot; selected=&quot;selected&quot;&gt;blue&lt;/option&gt;    &lt;option value=&quot;red&quot;&gt;red&lt;/option&gt;    &lt;option value=&quot;green&quot;&gt;green&lt;/option&gt;    &lt;option value=&quot;yellow&quot;&gt;yellow&lt;/option&gt;    &lt;option value=&quot;gray&quot;&gt;gray&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;script&gt;// When true, moving the mouse draws on the canvaslet isDrawing = false;let x = 0;let y = 0;var offsetX;var offsetY;const canvas = document.getElementById(&#x27;canvas&#x27;);const context = canvas.getContext(&#x27;2d&#x27;);function startup() &#123;  canvas.addEventListener(&#x27;touchstart&#x27;, handleStart);  canvas.addEventListener(&#x27;touchend&#x27;, handleEnd);  canvas.addEventListener(&#x27;touchcancel&#x27;, handleCancel);  canvas.addEventListener(&#x27;touchmove&#x27;, handleMove);  canvas.addEventListener(&#x27;mousedown&#x27;, (e) =&gt; &#123;    x = e.offsetX;    y = e.offsetY;    isDrawing = true;  &#125;);  canvas.addEventListener(&#x27;mousemove&#x27;, (e) =&gt; &#123;    if (isDrawing) &#123;      drawLine(context, x, y, e.offsetX, e.offsetY);      x = e.offsetX;      y = e.offsetY;    &#125;  &#125;);  canvas.addEventListener(&#x27;mouseup&#x27;, (e) =&gt; &#123;    if(isDrawing) &#123;      drawLine(context, x, y, e.offsetX, e.offsetY);      x = 0;      y = 0;      isDrawing = false;    &#125;  &#125;);&#125;document.addEventListener(&quot;DOMContentLoaded&quot;, startup);const ongoingTouches = [];function handleStart(evt) &#123;  evt.preventDefault();  const touches = evt.changedTouches;  offsetX = canvas.getBoundingClientRect().left;  offsetY = canvas.getBoundingClientRect().top;  for (let i = 0; i &lt; touches.length; i++) &#123;    ongoingTouches.push(copyTouch(touches[i]));  &#125;&#125;function handleMove(evt) &#123;  evt.preventDefault();  const touches = evt.changedTouches;  for (let i = 0; i &lt; touches.length; i++) &#123;    const color = document.getElementById(&#x27;selColor&#x27;).value;    const idx = ongoingTouchIndexById(touches[i].identifier);    if (idx &gt;= 0) &#123;      context.beginPath();      context.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);      context.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);      context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;      context.strokeStyle = color;      context.lineJoin = &quot;round&quot;;      context.closePath();      context.stroke();      ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record    &#125;  &#125;&#125;function handleEnd(evt) &#123;  evt.preventDefault();  const touches = evt.changedTouches;  for (let i = 0; i &lt; touches.length; i++) &#123;    const color = document.getElementById(&#x27;selColor&#x27;).value;    let idx = ongoingTouchIndexById(touches[i].identifier);    if (idx &gt;= 0) &#123;      context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;      context.fillStyle = color;      ongoingTouches.splice(idx, 1); // remove it; we&#x27;re done    &#125;  &#125;&#125;function handleCancel(evt) &#123;  evt.preventDefault();  const touches = evt.changedTouches;  for (let i = 0; i &lt; touches.length; i++) &#123;    let idx = ongoingTouchIndexById(touches[i].identifier);    ongoingTouches.splice(idx, 1); // remove it; we&#x27;re done  &#125;&#125;function copyTouch(&#123; identifier, clientX, clientY &#125;) &#123;  return &#123; identifier, clientX, clientY &#125;;&#125;function ongoingTouchIndexById(idToFind) &#123;  for (let i = 0; i &lt; ongoingTouches.length; i++) &#123;    const id = ongoingTouches[i].identifier;    if (id === idToFind) &#123;      return i;    &#125;  &#125;  return -1; // not found&#125;function drawLine(context, x1, y1, x2, y2) &#123;  context.beginPath();  context.strokeStyle = document.getElementById(&#x27;selColor&#x27;).value;  context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;  context.lineJoin = &quot;round&quot;;  context.moveTo(x1, y1);  context.lineTo(x2, y2);  context.closePath();  context.stroke();&#125;function clearArea() &#123;    context.setTransform(1, 0, 0, 1, 0, 0);    context.clearRect(0, 0, context.canvas.width, context.canvas.height);&#125;&lt;/script&gt;\n\nNote:Touch events are similar to mouse events except they support simultaneous touches and at different locations on the touch surface. This example was extended the functionality of mouse events with touch events, which uses ongoingTouches array for the track of the touches in-progress. When a touchstrat event occurs, indicating that a new touch on the surface has occurred. After drawing the line, we call the array.splice() to replace the previous information about the touchpoint with the current information into ongoingTouches array.\nRefereence\nGithub: Touch events API\n\nMozilla Touch events\n\n\nThanks for reading! Feel free to leave the comments below or email to me. Any pieces of advice or discussions are always welcome. :)\n","dateCreated":"2022-12-04T00:00:00+08:00","dateModified":"2022-12-04T10:21:53+08:00","datePublished":"2022-12-04T00:00:00+08:00","description":"The HTML canvas can be used for sketching&#x2F;drawing either by mouse or by touch. In the previous post, I quickly discuss how to use Canvas API to implement a canvas with mouse sketching. In this post, I would like to describe how go about implementing for sketching&#x2F;drawing by mouse and touch.","headline":"Drawing with Mouse and Touch Events on HTML","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/dock.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/","keywords":"html, javascript","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/dock.jpeg"}</script>
+    <meta name="description" content="The HTML canvas can be used for sketching&#x2F;drawing either by mouse or by touch. In the previous post, I quickly discuss how to use Canvas API to implement a canvas with mouse sketching. In this po">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="Embed MapLibre Map for Website">
-<meta property="og:url" content="https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/index.html">
+<meta property="og:title" content="Drawing with Mouse and Touch Events on HTML">
+<meta property="og:url" content="https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/index.html">
 <meta property="og:site_name" content="Louis">
-<meta property="og:description" content="In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation.">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-09-27T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-11-06T03:48:11.005Z">
+<meta property="og:description" content="The HTML canvas can be used for sketching&#x2F;drawing either by mouse or by touch. In the previous post, I quickly discuss how to use Canvas API to implement a canvas with mouse sketching. In this po">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-12-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-12-04T02:21:53.280Z">
 <meta property="article:author" content="ShiRong Liu">
+<meta property="article:tag" content="html">
 <meta property="article:tag" content="javascript">
-<meta property="article:tag" content="map">
 <meta name="twitter:card" content="summary">
     
     
@@ -44,8 +44,8 @@
         <meta property="og:image" content="https://avatars.githubusercontent.com/u/26519320?v=4"/>
     
     
-        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"/>
+        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/dock.jpeg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/dock.jpeg"/>
     
     
     
@@ -301,20 +301,20 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            Embed MapLibre Map for Website
+            Drawing with Mouse and Touch Events on HTML
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2022-09-28T00:00:00+08:00">
+    <time datetime="2022-12-04T00:00:00+08:00">
 	
-		    Sep 28, 2022
+		    Dec 04, 2022
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/features/">features</a>
+    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/miscellaneous/">miscellaneous</a>
 
 
     
@@ -328,36 +328,22 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>In our daily life, most of us usually use <a target="_blank" rel="noopener" href="https://www.google.com/maps/" title="https://www.google.com/maps/">Google Map</a> or <a target="_blank" rel="noopener" href="https://www.apple.com/maps/" title="https://www.apple.com/maps/">Apple Maps</a> to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. </p>
+            <p>The HTML canvas can be used for sketching&#x2F;drawing either by mouse or by touch. In the <a href="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/" title="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/">previous post</a>, I quickly discuss how to use Canvas API to implement a canvas with mouse sketching. In this post, I would like to describe how go about implementing for sketching&#x2F;drawing by mouse and touch.</p>
 <span id="more"></span>
 
-<p>Recently, I was looking for ways to embed a Map to my website that contains multiples of custom locations. There are varieties of technologies to choose, such as <a target="_blank" rel="noopener" href="https://aws.amazon.com/location/?nc1=h_ls" title="https://aws.amazon.com/location/?nc1=h_ls">Amaxon location service</a>, <a target="_blank" rel="noopener" href="https://developers.google.com/maps" title="https://developers.google.com/maps">Google Map API</a> and <a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js" title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a>, etc. In this post, I would like to discuss how to use <a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js" title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a> to embed and create custom dynamic maps on our websites mostly for free.</p>
-<h3 id="MapLibre-GL-JS"><a href="#MapLibre-GL-JS" class="headerlink" title="MapLibre GL JS"></a>MapLibre GL JS</h3><p><a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js" title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a> is an open-source library for publishing maps on your websites. The maps uses vector tileset source over GeoJSON data soruces when possible and are fast rendering in browser has become possible thanks to GPU. </p>
-<h3 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h3><p>Before begining shortly, we have to register an account in <a target="_blank" rel="noopener" href="https://www.maptiler.com/" title="https://www.maptiler.com/">Maptiler</a>, get an default API Key to protect which is used for accessing maps, tiles, and data from your account. Then, using the API key in code is shown below.</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;utf-8&quot; /&gt;</span><br><span class="line">&lt;title&gt;Add a default marker&lt;/title&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot; /&gt;</span><br><span class="line">&lt;script src=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;link href=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css&quot; rel=&quot;stylesheet&quot; /&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">	body &#123; margin: 0; padding: 0; &#125;</span><br><span class="line">	#map &#123; position: absolute; top: 0; bottom: 0; width: 100%; &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;</span><br><span class="line"> </span><br><span class="line">&lt;script&gt;</span><br><span class="line">var map = new maplibregl.Map(&#123;</span><br><span class="line">    container: &#x27;map&#x27;,</span><br><span class="line">    style:</span><br><span class="line">    &#x27;https://api.maptiler.com/maps/streets/style.json?key=YOUR_OWN_MAPTILER_API&#x27;,</span><br><span class="line">    center: [12.550343, 55.665957],</span><br><span class="line">    zoom: 8</span><br><span class="line">&#125;);</span><br><span class="line"> </span><br><span class="line">var marker = new maplibregl.Marker()</span><br><span class="line">    .setLngLat([12.550343, 55.665957])</span><br><span class="line">    .addTo(map);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"> </span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-<p>Futher copy the code, paste it into your favorite text editor, and save it as .html file. (remember to replace YOUR_OWN_MAPTILER_API with your actual API key). Next, we can ues iframe for integration with the post.</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div style=&quot;overflow-x:auto;&quot;&gt;</span><br><span class="line">    &lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Simple-Example"><a href="#Simple-Example" class="headerlink" title="Simple Example"></a>Simple Example</h3><p>The embedded map for this simple example looks like this.</p>
+<h2 id="Mouse-and-Touch-Canvas"><a href="#Mouse-and-Touch-Canvas" class="headerlink" title="Mouse and Touch Canvas"></a>Mouse and Touch Canvas</h2><p>The belowing canvas can be used with any devices that use mouse or touch screen:</p>
 <div style="overflow-x:auto;">
-    <iframe src="/javascript/maplibre/add-default-marker.html" style="width:100%; height:512px", title="add-default-marker"></iframe>
+    <iframe src="/javascript/canvas/mouse_touch_canvas.html" style="width:100%; height:360px", title="add-default-marker"></iframe>
 </div>
 
-<h3 id="Custom-Example"><a href="#Custom-Example" class="headerlink" title="Custom Example"></a>Custom Example</h3><p>We can also customize the marker to a Map. Similar to the above example, I created another custom example map with marked places where I have visited recently nearby.</p>
-<div style="overflow-x:auto;">
-    <iframe src="/javascript/maplibre/add-custom-marker.html" style="width:100%; height:512px", title="add-custom-marker"></iframe>
-</div>
+<h2 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h2><p>The source code was referring to <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Touch_events" title="https://developer.mozilla.org/en-US/docs/Web/API/Touch_events">Mozilla touch-based drawing</a> and was slightly modified with some feature enhancement.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">#canvas_div &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">    display: block;</span><br><span class="line">    margin-left: auto;</span><br><span class="line">    margin-right: auto;</span><br><span class="line">&#125;</span><br><span class="line">canvas &#123;</span><br><span class="line">  border: 2px solid black;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br><span class="line">&lt;div id=&quot;canvas_div&quot; style=&quot;overflow-x: auto;&quot;&gt;</span><br><span class="line">&lt;canvas id=&quot;canvas&quot; width=&quot;700&quot; height=&quot;360&quot;&gt;&lt;/canvas&gt;</span><br><span class="line">&lt;button onclick=&quot;javascript:clearArea();return false;&quot;&gt;Clear Area&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">Line width : &lt;select id=&quot;selWidth&quot;&gt;</span><br><span class="line">    &lt;option value=&quot;5&quot; selected=&quot;selected&quot;&gt;5&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;7&quot;&gt;7&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;9&quot;&gt;9&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;11&quot;&gt;11&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;13&quot;&gt;13&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;15&quot;&gt;15&lt;/option&gt;</span><br><span class="line">&lt;/select&gt;</span><br><span class="line"></span><br><span class="line">Color : &lt;select id=&quot;selColor&quot;&gt;</span><br><span class="line">    &lt;option value=&quot;black&quot;&gt;black&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;blue&quot; selected=&quot;selected&quot;&gt;blue&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;red&quot;&gt;red&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;green&quot;&gt;green&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;yellow&quot;&gt;yellow&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;gray&quot;&gt;gray&lt;/option&gt;</span><br><span class="line">&lt;/select&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">// When true, moving the mouse draws on the canvas</span><br><span class="line">let isDrawing = false;</span><br><span class="line">let x = 0;</span><br><span class="line">let y = 0;</span><br><span class="line">var offsetX;</span><br><span class="line">var offsetY;</span><br><span class="line"></span><br><span class="line">const canvas = document.getElementById(&#x27;canvas&#x27;);</span><br><span class="line">const context = canvas.getContext(&#x27;2d&#x27;);</span><br><span class="line"></span><br><span class="line">function startup() &#123;</span><br><span class="line">  canvas.addEventListener(&#x27;touchstart&#x27;, handleStart);</span><br><span class="line">  canvas.addEventListener(&#x27;touchend&#x27;, handleEnd);</span><br><span class="line">  canvas.addEventListener(&#x27;touchcancel&#x27;, handleCancel);</span><br><span class="line">  canvas.addEventListener(&#x27;touchmove&#x27;, handleMove);</span><br><span class="line">  canvas.addEventListener(&#x27;mousedown&#x27;, (e) =&gt; &#123;</span><br><span class="line">    x = e.offsetX;</span><br><span class="line">    y = e.offsetY;</span><br><span class="line">    isDrawing = true;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  canvas.addEventListener(&#x27;mousemove&#x27;, (e) =&gt; &#123;</span><br><span class="line">    if (isDrawing) &#123;</span><br><span class="line">      drawLine(context, x, y, e.offsetX, e.offsetY);</span><br><span class="line">      x = e.offsetX;</span><br><span class="line">      y = e.offsetY;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  canvas.addEventListener(&#x27;mouseup&#x27;, (e) =&gt; &#123;</span><br><span class="line">    if(isDrawing) &#123;</span><br><span class="line">      drawLine(context, x, y, e.offsetX, e.offsetY);</span><br><span class="line">      x = 0;</span><br><span class="line">      y = 0;</span><br><span class="line">      isDrawing = false;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">document.addEventListener(&quot;DOMContentLoaded&quot;, startup);</span><br><span class="line"></span><br><span class="line">const ongoingTouches = [];</span><br><span class="line"></span><br><span class="line">function handleStart(evt) &#123;</span><br><span class="line">  evt.preventDefault();</span><br><span class="line">  const touches = evt.changedTouches;</span><br><span class="line">  offsetX = canvas.getBoundingClientRect().left;</span><br><span class="line">  offsetY = canvas.getBoundingClientRect().top;</span><br><span class="line">  for (let i = 0; i &lt; touches.length; i++) &#123;</span><br><span class="line">    ongoingTouches.push(copyTouch(touches[i]));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function handleMove(evt) &#123;</span><br><span class="line">  evt.preventDefault();</span><br><span class="line">  const touches = evt.changedTouches;</span><br><span class="line">  for (let i = 0; i &lt; touches.length; i++) &#123;</span><br><span class="line">    const color = document.getElementById(&#x27;selColor&#x27;).value;</span><br><span class="line">    const idx = ongoingTouchIndexById(touches[i].identifier);</span><br><span class="line">    if (idx &gt;= 0) &#123;</span><br><span class="line">      context.beginPath();</span><br><span class="line">      context.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);</span><br><span class="line">      context.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);</span><br><span class="line">      context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;</span><br><span class="line">      context.strokeStyle = color;</span><br><span class="line">      context.lineJoin = &quot;round&quot;;</span><br><span class="line">      context.closePath();</span><br><span class="line">      context.stroke();</span><br><span class="line">      ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function handleEnd(evt) &#123;</span><br><span class="line">  evt.preventDefault();</span><br><span class="line">  const touches = evt.changedTouches;</span><br><span class="line">  for (let i = 0; i &lt; touches.length; i++) &#123;</span><br><span class="line">    const color = document.getElementById(&#x27;selColor&#x27;).value;</span><br><span class="line">    let idx = ongoingTouchIndexById(touches[i].identifier);</span><br><span class="line"></span><br><span class="line">    if (idx &gt;= 0) &#123;</span><br><span class="line">      context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;</span><br><span class="line">      context.fillStyle = color;</span><br><span class="line">      ongoingTouches.splice(idx, 1); // remove it; we&#x27;re done</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function handleCancel(evt) &#123;</span><br><span class="line">  evt.preventDefault();</span><br><span class="line">  const touches = evt.changedTouches;</span><br><span class="line">  for (let i = 0; i &lt; touches.length; i++) &#123;</span><br><span class="line">    let idx = ongoingTouchIndexById(touches[i].identifier);</span><br><span class="line">    ongoingTouches.splice(idx, 1); // remove it; we&#x27;re done</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function copyTouch(&#123; identifier, clientX, clientY &#125;) &#123;</span><br><span class="line">  return &#123; identifier, clientX, clientY &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function ongoingTouchIndexById(idToFind) &#123;</span><br><span class="line">  for (let i = 0; i &lt; ongoingTouches.length; i++) &#123;</span><br><span class="line">    const id = ongoingTouches[i].identifier;</span><br><span class="line">    if (id === idToFind) &#123;</span><br><span class="line">      return i;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return -1; // not found</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function drawLine(context, x1, y1, x2, y2) &#123;</span><br><span class="line">  context.beginPath();</span><br><span class="line">  context.strokeStyle = document.getElementById(&#x27;selColor&#x27;).value;</span><br><span class="line">  context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;</span><br><span class="line">  context.lineJoin = &quot;round&quot;;</span><br><span class="line">  context.moveTo(x1, y1);</span><br><span class="line">  context.lineTo(x2, y2);</span><br><span class="line">  context.closePath();</span><br><span class="line">  context.stroke();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function clearArea() &#123;</span><br><span class="line">    context.setTransform(1, 0, 0, 1, 0, 0);</span><br><span class="line">    context.clearRect(0, 0, context.canvas.width, context.canvas.height);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 
-<p>Now, we know how to simply embed the custom dynamic maps on our websites. Hope this post will be helpful.</p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://developers.google.com/maps">Google Maps Platform</a></p>
+<p>Note:<br>Touch events are similar to mouse events except they support simultaneous touches and at different locations on the touch surface. This example was extended the functionality of mouse events with touch events, which uses ongoingTouches array for the track of the touches in-progress. When a touchstrat event occurs, indicating that a new touch on the surface has occurred. After drawing the line, we call the array.splice() to replace the previous information about the touchpoint with the current information into ongoingTouches array.</p>
+<h2 id="Refereence"><a href="#Refereence" class="headerlink" title="Refereence"></a>Refereence</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/mdn/content/blob/main/files/en-us/web/api/touch_events/index.md?plain=1">Github: Touch events API</a></p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js">Open-source library - MapLibre GL JS</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://docs.mapbox.com/help/glossary/vector-tiles/">Mapbox Docs - vector tiles</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://docs.mapbox.com/help/troubleshooting/mapbox-gl-js-performance/">Mapbox Docs - Improve the performance of Mapbox GL JS maps</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Touch_events">Mozilla Touch events</a></p>
 </li>
 </ul>
 <p>Thanks for reading! Feel free to leave the comments below or <a href="mailto:qazqazqaz850@gmail.com">email</a> to me. Any pieces of advice or discussions are always welcome. :)</p>
@@ -372,7 +358,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">TAGGED IN</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/javascript/" rel="tag">javascript</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/map/" rel="tag">map</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/html/" rel="tag">html</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/javascript/" rel="tag">javascript</a>
 
             </div>
         
@@ -382,14 +368,11 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/08/%E7%94%9F%E6%B4%BB%E6%9C%AD%E8%A8%98-%E6%B5%B7%E7%B6%BF%E5%AF%B6%E5%AF%B6%E8%9F%B9%E5%A0%A1%E7%8E%8B%E9%A4%90%E5%BB%B3_SpongeBob_SquarePants/"
-                    data-tooltip="生活扎記 蟹堡王餐廳 Krusty Krab"
-                    aria-label="PREVIOUS: 生活扎記 蟹堡王餐廳 Krusty Krab"
-                >
-                    
+                    <a
+                        class="post-action-btn btn btn--disabled"
+                        aria-hidden="true"
+                    >
+                        
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
                         <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                     </a>
@@ -399,9 +382,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/09/01/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97-%E7%AA%AE%E6%9F%A5%E7%90%86%E7%9A%84%E6%99%AE%E9%80%9A%E5%B8%B8%E8%AD%98/"
-                    data-tooltip="閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
-                    aria-label="NEXT: 閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
+                    href="/2022/11/19/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="NEXT: Welcome to Louis"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -426,7 +409,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -439,7 +422,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -499,14 +482,11 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/08/%E7%94%9F%E6%B4%BB%E6%9C%AD%E8%A8%98-%E6%B5%B7%E7%B6%BF%E5%AF%B6%E5%AF%B6%E8%9F%B9%E5%A0%A1%E7%8E%8B%E9%A4%90%E5%BB%B3_SpongeBob_SquarePants/"
-                    data-tooltip="生活扎記 蟹堡王餐廳 Krusty Krab"
-                    aria-label="PREVIOUS: 生活扎記 蟹堡王餐廳 Krusty Krab"
-                >
-                    
+                    <a
+                        class="post-action-btn btn btn--disabled"
+                        aria-hidden="true"
+                    >
+                        
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
                         <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                     </a>
@@ -516,9 +496,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/09/01/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97-%E7%AA%AE%E6%9F%A5%E7%90%86%E7%9A%84%E6%99%AE%E9%80%9A%E5%B8%B8%E8%AD%98/"
-                    data-tooltip="閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
-                    aria-label="NEXT: 閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
+                    href="/2022/11/19/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="NEXT: Welcome to Louis"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -543,7 +523,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -556,7 +536,7 @@
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -600,7 +580,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -613,7 +593,7 @@
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
                         aria-label="global.share_on_Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>global.share_on_Twitter</span>
@@ -911,9 +891,9 @@
     
         <script>
           var disqus_config = function() {
-            this.page.url = 'https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/';
+            this.page.url = 'https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/';
               
-            this.page.identifier = '2022/09/28/embed_maplibre_map_for_website/';
+            this.page.identifier = '2022/12/04/Drawing_with_mouse_and_touch_events_on_html/';
               
           };
           (function() {
