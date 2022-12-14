@@ -22,16 +22,16 @@
             <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
         
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this post, I would like to describe how to quickly go about implementing this.\n\n\nMouse CanvasThe mouse canvas can be used with any devices (desktop computer&#x2F;laptop..) that use mouse. Belowing is the simple example:\n\n    \n\n\nSource CodeThe source code was referring to Mozilla mouse drawing mousemove with clear&#x2F;line width&#x2F;color features enhancement.\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485// CSS Style&lt;style&gt;#canvas_div &#123;    text-align: center;    display: block;    margin-left: auto;    margin-right: auto;&#125;canvas &#123;  border: 2px solid black;&#125;&lt;/style&gt;&lt;div id=&quot;canvas_div&quot; style=&quot;overflow-x: auto;&quot;&gt;&lt;canvas id=&quot;canvas&quot; width=&quot;900&quot; height=&quot;360&quot;&gt;&lt;/canvas&gt;&lt;button onclick=&quot;javascript:clearArea();return false;&quot;&gt;Clear Area&lt;/button&gt;Line width : &lt;select id=&quot;selWidth&quot;&gt;    &lt;option value=&quot;11&quot;&gt;11&lt;/option&gt;    &lt;option value=&quot;13&quot; selected=&quot;selected&quot;&gt;13&lt;/option&gt;    &lt;option value=&quot;15&quot;&gt;15&lt;/option&gt;&lt;/select&gt;Color : &lt;select id=&quot;selColor&quot;&gt;    &lt;option value=&quot;black&quot;&gt;black&lt;/option&gt;    &lt;option value=&quot;blue&quot; selected=&quot;selected&quot;&gt;blue&lt;/option&gt;    &lt;option value=&quot;red&quot;&gt;red&lt;/option&gt;    &lt;option value=&quot;green&quot;&gt;green&lt;/option&gt;    &lt;option value=&quot;yellow&quot;&gt;yellow&lt;/option&gt;    &lt;option value=&quot;gray&quot;&gt;gray&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;script&gt;// When true, moving the mouse draws on the canvaslet isDrawing = false;let x = 0;let y = 0;const canvas = document.getElementById(&#x27;canvas&#x27;);const context = canvas.getContext(&#x27;2d&#x27;);// event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.// Add the event listeners for mousedown, mousemove, and mouseupcanvas.addEventListener(&#x27;mousedown&#x27;, (e) =&gt; &#123;  x = e.offsetX;  y = e.offsetY;  isDrawing = true;&#125;);canvas.addEventListener(&#x27;mousemove&#x27;, (e) =&gt; &#123;  if (isDrawing) &#123;    drawLine(context, x, y, e.offsetX, e.offsetY);    x = e.offsetX;    y = e.offsetY;  &#125;&#125;);canvas.addEventListener(&#x27;mouseup&#x27;, (e) =&gt; &#123;  if (isDrawing) &#123;    drawLine(context, x, y, e.offsetX, e.offsetY);    x = 0;    y = 0;    isDrawing = false;  &#125;&#125;);function drawLine(context, x1, y1, x2, y2) &#123;  context.beginPath();  context.strokeStyle = document.getElementById(&#x27;selColor&#x27;).value;  context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;  context.lineJoin = &quot;round&quot;;  context.moveTo(x1, y1);  context.lineTo(x2, y2);  context.closePath();  context.stroke();&#125;function clearArea() &#123;    context.setTransform(1, 0, 0, 1, 0, 0);    context.clearRect(0, 0, context.canvas.width, context.canvas.height);&#125;&lt;/script&gt;\n\nReference\nMozilla: Element: mousemove event\n\nThanks for reading! Feel free to leave the comments below or email to me. Any pieces of advice or discussions are always welcome. :)\n","dateCreated":"2022-11-06T00:00:00+08:00","dateModified":"2022-12-03T18:12:06+08:00","datePublished":"2022-11-06T00:00:00+08:00","description":"The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this post, I would like to describe how to quickly go about implementing this.","headline":"Drawing with Mouse Events on HTML","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/castle.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/","keywords":"html, javascript","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/castle.jpeg"}</script>
-    <meta name="description" content="The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this po">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"The HTML canvas can be used for sketching/drawing by mouse. The\ncanvas API provides a means for drawing graphics via JavaScript and the\nHTML element. It largely focuses on 2D graphics. In this post, I would\nlike to describe how to quickly go about implementing this.\n\nMouse Canvas\nThe mouse canvas can be used with any devices (desktop\ncomputer/laptop..) that use mouse. Belowing is the simple example:\n\n&lt;iframe src=&quot;/javascript/canvas/mouse_canvas.html&quot; style=&quot;width:100%; height:360px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;\n\nSource Code\nThe source code was referring to Mozilla\nmouse drawing mousemove with clear/line width/color features\nenhancement.\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485// CSS Style&lt;style&gt;#canvas_div &#123;    text-align: center;    display: block;    margin-left: auto;    margin-right: auto;&#125;canvas &#123;  border: 2px solid black;&#125;&lt;/style&gt;&lt;div id=&quot;canvas_div&quot; style=&quot;overflow-x: auto;&quot;&gt;&lt;canvas id=&quot;canvas&quot; width=&quot;900&quot; height=&quot;360&quot;&gt;&lt;/canvas&gt;&lt;button onclick=&quot;javascript:clearArea();return false;&quot;&gt;Clear Area&lt;/button&gt;Line width : &lt;select id=&quot;selWidth&quot;&gt;    &lt;option value=&quot;11&quot;&gt;11&lt;/option&gt;    &lt;option value=&quot;13&quot; selected=&quot;selected&quot;&gt;13&lt;/option&gt;    &lt;option value=&quot;15&quot;&gt;15&lt;/option&gt;&lt;/select&gt;Color : &lt;select id=&quot;selColor&quot;&gt;    &lt;option value=&quot;black&quot;&gt;black&lt;/option&gt;    &lt;option value=&quot;blue&quot; selected=&quot;selected&quot;&gt;blue&lt;/option&gt;    &lt;option value=&quot;red&quot;&gt;red&lt;/option&gt;    &lt;option value=&quot;green&quot;&gt;green&lt;/option&gt;    &lt;option value=&quot;yellow&quot;&gt;yellow&lt;/option&gt;    &lt;option value=&quot;gray&quot;&gt;gray&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;script&gt;// When true, moving the mouse draws on the canvaslet isDrawing = false;let x = 0;let y = 0;const canvas = document.getElementById(&#x27;canvas&#x27;);const context = canvas.getContext(&#x27;2d&#x27;);// event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.// Add the event listeners for mousedown, mousemove, and mouseupcanvas.addEventListener(&#x27;mousedown&#x27;, (e) =&gt; &#123;  x = e.offsetX;  y = e.offsetY;  isDrawing = true;&#125;);canvas.addEventListener(&#x27;mousemove&#x27;, (e) =&gt; &#123;  if (isDrawing) &#123;    drawLine(context, x, y, e.offsetX, e.offsetY);    x = e.offsetX;    y = e.offsetY;  &#125;&#125;);canvas.addEventListener(&#x27;mouseup&#x27;, (e) =&gt; &#123;  if (isDrawing) &#123;    drawLine(context, x, y, e.offsetX, e.offsetY);    x = 0;    y = 0;    isDrawing = false;  &#125;&#125;);function drawLine(context, x1, y1, x2, y2) &#123;  context.beginPath();  context.strokeStyle = document.getElementById(&#x27;selColor&#x27;).value;  context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;  context.lineJoin = &quot;round&quot;;  context.moveTo(x1, y1);  context.lineTo(x2, y2);  context.closePath();  context.stroke();&#125;function clearArea() &#123;    context.setTransform(1, 0, 0, 1, 0, 0);    context.clearRect(0, 0, context.canvas.width, context.canvas.height);&#125;&lt;/script&gt;\nReference\n\nMozilla:\nElement: mousemove event\n\n\nThanks for reading! Feel free to leave the comments below or\nemail to me. Any pieces of\nadvice or discussions are always welcome. :)\n\n","dateCreated":"2022-11-06T00:00:00+08:00","dateModified":"2022-12-14T16:16:16+08:00","datePublished":"2022-11-06T00:00:00+08:00","description":"The HTML canvas can be used for sketching/drawing by mouse. The\ncanvas API provides a means for drawing graphics via JavaScript and the\nHTML element. It largely focuses on 2D graphics. In this post, I would\nlike to describe how to quickly go about implementing this.","headline":"Drawing with Mouse Events on HTML","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/castle.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/","keywords":"html, javascript","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/castle.jpeg"}</script>
+    <meta name="description" content="The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this post, I">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="Drawing with Mouse Events on HTML">
 <meta property="og:url" content="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/index.html">
 <meta property="og:site_name" content="Louis">
-<meta property="og:description" content="The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this po">
+<meta property="og:description" content="The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this post, I">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-11-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-12-03T10:12:06.932Z">
+<meta property="article:modified_time" content="2022-12-14T08:16:16.945Z">
 <meta property="article:author" content="ShiRong Liu">
 <meta property="article:tag" content="html">
 <meta property="article:tag" content="javascript">
@@ -332,21 +332,35 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this post, I would like to describe how to quickly go about implementing this.</p>
+            <p>The HTML canvas can be used for sketching/drawing by mouse. The
+canvas API provides a means for drawing graphics via JavaScript and the
+HTML element. It largely focuses on 2D graphics. In this post, I would
+like to describe how to quickly go about implementing this.</p>
 <span id="more"></span>
-
-<h2 id="Mouse-Canvas"><a href="#Mouse-Canvas" class="headerlink" title="Mouse Canvas"></a>Mouse Canvas</h2><p>The mouse canvas can be used with any devices (desktop computer&#x2F;laptop..) that use mouse. Belowing is the simple example:</p>
+<h2 id="mouse-canvas">Mouse Canvas</h2>
+<p>The mouse canvas can be used with any devices (desktop
+computer/laptop..) that use mouse. Belowing is the simple example:</p>
 <div style="overflow-x:auto;">
-    <iframe src="/javascript/canvas/mouse_canvas.html" style="width:100%; height:360px", title="add-default-marker"></iframe>
+<pre><code>&lt;iframe src=&quot;/javascript/canvas/mouse_canvas.html&quot; style=&quot;width:100%; height:360px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;</code></pre>
 </div>
-
-<h2 id="Source-Code"><a href="#Source-Code" class="headerlink" title="Source Code"></a>Source Code</h2><p>The source code was referring to <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event" title="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event">Mozilla mouse drawing mousemove</a> with clear&#x2F;line width&#x2F;color features enhancement.</p>
+<h2 id="source-code">Source Code</h2>
+<p>The source code was referring to <a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event"
+title="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event">Mozilla
+mouse drawing mousemove</a> with clear/line width/color features
+enhancement.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">// CSS Style</span><br><span class="line">&lt;style&gt;</span><br><span class="line">#canvas_div &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">    display: block;</span><br><span class="line">    margin-left: auto;</span><br><span class="line">    margin-right: auto;</span><br><span class="line">&#125;</span><br><span class="line">canvas &#123;</span><br><span class="line">  border: 2px solid black;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br><span class="line">&lt;div id=&quot;canvas_div&quot; style=&quot;overflow-x: auto;&quot;&gt;</span><br><span class="line">&lt;canvas id=&quot;canvas&quot; width=&quot;900&quot; height=&quot;360&quot;&gt;&lt;/canvas&gt;</span><br><span class="line"></span><br><span class="line">&lt;button onclick=&quot;javascript:clearArea();return false;&quot;&gt;Clear Area&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">Line width : &lt;select id=&quot;selWidth&quot;&gt;</span><br><span class="line">    &lt;option value=&quot;11&quot;&gt;11&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;13&quot; selected=&quot;selected&quot;&gt;13&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;15&quot;&gt;15&lt;/option&gt;</span><br><span class="line">&lt;/select&gt;</span><br><span class="line"></span><br><span class="line">Color : &lt;select id=&quot;selColor&quot;&gt;</span><br><span class="line">    &lt;option value=&quot;black&quot;&gt;black&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;blue&quot; selected=&quot;selected&quot;&gt;blue&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;red&quot;&gt;red&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;green&quot;&gt;green&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;yellow&quot;&gt;yellow&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;gray&quot;&gt;gray&lt;/option&gt;</span><br><span class="line">&lt;/select&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">// When true, moving the mouse draws on the canvas</span><br><span class="line">let isDrawing = false;</span><br><span class="line">let x = 0;</span><br><span class="line">let y = 0;</span><br><span class="line"></span><br><span class="line">const canvas = document.getElementById(&#x27;canvas&#x27;);</span><br><span class="line">const context = canvas.getContext(&#x27;2d&#x27;);</span><br><span class="line"></span><br><span class="line">// event.offsetX, event.offsetY gives the (x,y) offset from the edge of the canvas.</span><br><span class="line"></span><br><span class="line">// Add the event listeners for mousedown, mousemove, and mouseup</span><br><span class="line">canvas.addEventListener(&#x27;mousedown&#x27;, (e) =&gt; &#123;</span><br><span class="line">  x = e.offsetX;</span><br><span class="line">  y = e.offsetY;</span><br><span class="line">  isDrawing = true;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">canvas.addEventListener(&#x27;mousemove&#x27;, (e) =&gt; &#123;</span><br><span class="line">  if (isDrawing) &#123;</span><br><span class="line">    drawLine(context, x, y, e.offsetX, e.offsetY);</span><br><span class="line">    x = e.offsetX;</span><br><span class="line">    y = e.offsetY;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">canvas.addEventListener(&#x27;mouseup&#x27;, (e) =&gt; &#123;</span><br><span class="line">  if (isDrawing) &#123;</span><br><span class="line">    drawLine(context, x, y, e.offsetX, e.offsetY);</span><br><span class="line">    x = 0;</span><br><span class="line">    y = 0;</span><br><span class="line">    isDrawing = false;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">function drawLine(context, x1, y1, x2, y2) &#123;</span><br><span class="line">  context.beginPath();</span><br><span class="line">  context.strokeStyle = document.getElementById(&#x27;selColor&#x27;).value;</span><br><span class="line">  context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;</span><br><span class="line">  context.lineJoin = &quot;round&quot;;</span><br><span class="line">  context.moveTo(x1, y1);</span><br><span class="line">  context.lineTo(x2, y2);</span><br><span class="line">  context.closePath();</span><br><span class="line">  context.stroke();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function clearArea() &#123;</span><br><span class="line">    context.setTransform(1, 0, 0, 1, 0, 0);</span><br><span class="line">    context.clearRect(0, 0, context.canvas.width, context.canvas.height);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event">Mozilla: Element: mousemove event</a></li>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a
+target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event">Mozilla:
+Element: mousemove event</a></li>
 </ul>
-<p>Thanks for reading! Feel free to leave the comments below or <a href="mailto:qazqazqaz850@gmail.com">email</a> to me. Any pieces of advice or discussions are always welcome. :)</p>
+<p>
+Thanks for reading! Feel free to leave the comments below or
+<a href="mailto:shirong0419@icloud.com">email</a> to me. Any pieces of
+advice or discussions are always welcome. :)
+</p>
 
             
 
@@ -686,7 +700,7 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>This is a chinese test post to show you how chinese is displayed.</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>This is a chinese test post to show you how chinese is displayed.</div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -708,7 +722,9 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>Due to the most time on my job, we need to type many git command lines. So that this article is used to sort several git commands frequently used for easily searching.</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>Due to the most time on my job, we need to type many git command
+lines. So that this article is used to sort several git commands
+frequently used for easily searching.</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -730,7 +746,9 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>“Most players gain pleasure from feeling accepted or belonging to the group. The good  player however, gains pleasure from his ability to cope with the realities of the game”</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>"Most players gain pleasure from feeling accepted or belonging to the
+group. The good player however, gains pleasure from his ability to cope
+with the realities of the game"</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -752,7 +770,13 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>In our daily life, most of us usually use <a target="_blank" rel="noopener" href="https://www.google.com/maps/" title="https://www.google.com/maps/">Google Map</a> or <a target="_blank" rel="noopener" href="https://www.apple.com/maps/" title="https://www.apple.com/maps/">Apple Maps</a> to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. </p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>In our daily life, most of us usually use <a
+target="_blank" rel="noopener" href="https://www.google.com/maps/"
+title="https://www.google.com/maps/">Google Map</a> or <a
+target="_blank" rel="noopener" href="https://www.apple.com/maps/"
+title="https://www.apple.com/maps/">Apple Maps</a> to help us to
+navigate to a place. We can see traffic info, public transit and also
+choose our mode of transportation.</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -774,7 +798,9 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>“After going on your life-changing journey, you now realize that you don’t want what you thought you wanted. What you really wanted was inside you all along.”</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>"After going on your life-changing journey, you now realize that you
+don’t want what you thought you wanted. What you really wanted was
+inside you all along."</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -796,7 +822,10 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this post, I would like to describe how to quickly go about implementing this.</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching/drawing by mouse. The
+canvas API provides a means for drawing graphics via JavaScript and the
+HTML element. It largely focuses on 2D graphics. In this post, I would
+like to describe how to quickly go about implementing this.</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -818,7 +847,9 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>這週末來到位於新竹縣新埔鎮的<a target="_blank" rel="noopener" href="https://hiking.biji.co/index.php?q=trail&act=detail&id=1663" title="https://hiking.biji.co/index.php?q=trail&amp;act=detail&amp;id=1663">飛龍池登山步道</a>輕鬆健行。這區域內的步道蜿蜒圍繞著山區，古道串連著龍頭公園、忘憂谷、運動公園、三聖宮、採茶古道….。從新竹高鐵區開車到這，距離不遠，人潮也沒有很多，幽靜宜人，而且該區域並不需要申請以及預約即可進入，所以適合週末安排的時段前來健行。</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>這週末來到位於新竹縣新埔鎮的<a
+target="_blank" rel="noopener" href="https://hiking.biji.co/index.php?q=trail&amp;act=detail&amp;id=1663"
+title="https://hiking.biji.co/index.php?q=trail&amp;act=detail&amp;id=1663">飛龍池登山步道</a>輕鬆健行。這區域內的步道蜿蜒圍繞著山區，古道串連著龍頭公園、忘憂谷、運動公園、三聖宮、採茶古道....。從新竹高鐵區開車到這，距離不遠，人潮也沒有很多，幽靜宜人，而且該區域並不需要申請以及預約即可進入，所以適合週末安排的時段前來健行。</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -840,7 +871,13 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching&#x2F;drawing either by mouse or by touch. In the <a href="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/" title="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/">previous post</a>, I quickly discuss how to use Canvas API to implement a canvas with mouse sketching. In this post, I would like to describe how go about implementing for sketching&#x2F;drawing by mouse and touch.</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching/drawing either by mouse or
+by touch. In the <a
+href="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
+title="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/">previous
+post</a>, I quickly discuss how to use Canvas API to implement a canvas
+with mouse sketching. In this post, I would like to describe how go
+about implementing for sketching/drawing by mouse and touch.</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -878,23 +915,24 @@ correct it, the information might be lost forever.</p></div>
                     <div class="media-body">
                         <a
                             class="link-unstyled"
-                            href="https://louissrliu.github.io/2022/12/13/Welcome-to-the-new-Tranquilpeak/"
-                            aria-label=": Welcome to Louis"
+                            href="https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/"
+                            aria-label=": Overview of Basic Graph Traversal Algorithm"
                         >
-                            <h3 class="media-heading">Welcome to Louis</h3>
+                            <h3 class="media-heading">Overview of Basic Graph Traversal Algorithm</h3>
                         </a>
                         <span class="media-meta">
                             <span class="media-date text-small">
                                 
-                                    Dec 13, 2022
+                                    Dec 14, 2022
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><!-- Quote  -->
-<p class="message" style="font-family:cursive">
-<q> "No amount of genius can overcome a preoccupation with detail" -
-Marion Levy Jr.</q>
-</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>"Graph theory is the study of graphs, which are mathematical
+structures used to model pairwise relations between objects. A graph in
+this context is made up of vertices (also called nodes or points) which
+are connected by edges (also called links or lines). Graphs are one of
+the principal objects of study in discrete mathematics." ... from Wiki
+page.</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -907,7 +945,7 @@ Marion Levy Jr.</q>
                 data-message-zero="no post found"
                 data-message-one="1 post found"
                 data-message-other="{n} posts found">
-                10 posts found
+                11 posts found
             </p>
         </div>
     </div>

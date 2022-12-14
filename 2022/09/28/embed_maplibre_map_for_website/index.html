@@ -22,7 +22,7 @@
             <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
         
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. \n\n\nRecently, I was looking for ways to embed a Map to my website that contains multiples of custom locations. There are varieties of technologies to choose, such as Amaxon location service, Google Map API and MapLibre GL JS, etc. In this post, I would like to discuss how to use MapLibre GL JS to embed and create custom dynamic maps on our websites mostly for free.\nMapLibre GL JSMapLibre GL JS is an open-source library for publishing maps on your websites. The maps uses vector tileset source over GeoJSON data soruces when possible and are fast rendering in browser has become possible thanks to GPU. \nQuick StartBefore begining shortly, we have to register an account in Maptiler, get an default API Key to protect which is used for accessing maps, tiles, and data from your account. Then, using the API key in code is shown below.\n1234567891011121314151617181920212223242526272829303132&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;title&gt;Add a default marker&lt;/title&gt;&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot; /&gt;&lt;script src=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js&quot;&gt;&lt;/script&gt;&lt;link href=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css&quot; rel=&quot;stylesheet&quot; /&gt;&lt;style&gt;\tbody &#123; margin: 0; padding: 0; &#125;\t#map &#123; position: absolute; top: 0; bottom: 0; width: 100%; &#125;&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=&quot;map&quot;&gt;&lt;/div&gt; &lt;script&gt;var map = new maplibregl.Map(&#123;    container: &#x27;map&#x27;,    style:    &#x27;https://api.maptiler.com/maps/streets/style.json?key=YOUR_OWN_MAPTILER_API&#x27;,    center: [12.550343, 55.665957],    zoom: 8&#125;); var marker = new maplibregl.Marker()    .setLngLat([12.550343, 55.665957])    .addTo(map);&lt;/script&gt; &lt;/body&gt;&lt;/html&gt;\n\nFuther copy the code, paste it into your favorite text editor, and save it as .html file. (remember to replace YOUR_OWN_MAPTILER_API with your actual API key). Next, we can ues iframe for integration with the post.\n123&lt;div style=&quot;overflow-x:auto;&quot;&gt;    &lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;\n\nSimple ExampleThe embedded map for this simple example looks like this.\n\n    \n\n\nCustom ExampleWe can also customize the marker to a Map. Similar to the above example, I created another custom example map with marked places where I have visited recently nearby.\n\n    \n\n\nNow, we know how to simply embed the custom dynamic maps on our websites. Hope this post will be helpful.\nReference\nGoogle Maps Platform\n\nOpen-source library - MapLibre GL JS\n\nMapbox Docs - vector tiles\n\nMapbox Docs - Improve the performance of Mapbox GL JS maps\n\n\nThanks for reading! Feel free to leave the comments below or email to me. Any pieces of advice or discussions are always welcome. :)\n","dateCreated":"2022-09-28T00:00:00+08:00","dateModified":"2022-11-06T11:48:11+08:00","datePublished":"2022-09-28T00:00:00+08:00","description":"In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. ","headline":"Embed MapLibre Map for Website","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/","keywords":"javascript, map","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"In our daily life, most of us usually use Google Map or Apple Maps to help us to\nnavigate to a place. We can see traffic info, public transit and also\nchoose our mode of transportation.\n\nRecently, I was looking for ways to embed a Map to my website that\ncontains multiples of custom locations. There are varieties of\ntechnologies to choose, such as Amaxon location\nservice, Google Map API and MapLibre GL JS,\netc. In this post, I would like to discuss how to use MapLibre GL JS to\nembed and create custom dynamic maps on our websites mostly for\nfree.\nMapLibre GL JS\nMapLibre GL JS is\nan open-source library for publishing maps on your websites. The maps\nuses vector tileset source over GeoJSON data soruces when possible and\nare fast rendering in browser has become possible thanks to GPU.\nQuick Start\nBefore begining shortly, we have to register an account in Maptiler, get an default API Key\nto protect which is used for accessing maps, tiles, and data from your\naccount. Then, using the API key in code is shown below.\n1234567891011121314151617181920212223242526272829303132&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;title&gt;Add a default marker&lt;/title&gt;&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot; /&gt;&lt;script src=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js&quot;&gt;&lt;/script&gt;&lt;link href=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css&quot; rel=&quot;stylesheet&quot; /&gt;&lt;style&gt;\tbody &#123; margin: 0; padding: 0; &#125;\t#map &#123; position: absolute; top: 0; bottom: 0; width: 100%; &#125;&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=&quot;map&quot;&gt;&lt;/div&gt; &lt;script&gt;var map = new maplibregl.Map(&#123;    container: &#x27;map&#x27;,    style:    &#x27;https://api.maptiler.com/maps/streets/style.json?key=YOUR_OWN_MAPTILER_API&#x27;,    center: [12.550343, 55.665957],    zoom: 8&#125;); var marker = new maplibregl.Marker()    .setLngLat([12.550343, 55.665957])    .addTo(map);&lt;/script&gt; &lt;/body&gt;&lt;/html&gt;\nFuther copy the code, paste it into your favorite text editor, and\nsave it as .html file. (remember to replace YOUR_OWN_MAPTILER_API with\nyour actual API key). Next, we can ues iframe for integration with the\npost.\n123&lt;div style=&quot;overflow-x:auto;&quot;&gt;    &lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;\nSimple Example\nThe embedded map for this simple example looks like this.\n\n&lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;\n\nCustom Example\nWe can also customize the marker to a Map. Similar to the above\nexample, I created another custom example map with marked places where I\nhave visited recently nearby.\n\n&lt;iframe src=&quot;/javascript/maplibre/add-custom-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-custom-marker&quot;&gt;&lt;/iframe&gt;\n\nNow, we know how to simply embed the custom dynamic maps on our\nwebsites. Hope this post will be helpful.\nReference\n\nGoogle Maps\nPlatform\nOpen-source\nlibrary - MapLibre GL JS\nMapbox Docs -\nvector tiles\nMapbox\nDocs - Improve the performance of Mapbox GL JS maps\n\n\nThanks for reading! Feel free to leave the comments below or\nemail to me. Any pieces of\nadvice or discussions are always welcome. :)\n\n","dateCreated":"2022-09-28T00:00:00+08:00","dateModified":"2022-12-14T16:16:16+08:00","datePublished":"2022-09-28T00:00:00+08:00","description":"In our daily life, most of us usually use Google Map or Apple Maps to help us to\nnavigate to a place. We can see traffic info, public transit and also\nchoose our mode of transportation.","headline":"Embed MapLibre Map for Website","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/","keywords":"javascript, map","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"}</script>
     <meta name="description" content="In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation.">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="Embed MapLibre Map for Website">
@@ -31,7 +31,7 @@
 <meta property="og:description" content="In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation.">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-09-27T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-11-06T03:48:11.005Z">
+<meta property="article:modified_time" content="2022-12-14T08:16:16.963Z">
 <meta property="article:author" content="ShiRong Liu">
 <meta property="article:tag" content="javascript">
 <meta property="article:tag" content="map">
@@ -332,39 +332,78 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>In our daily life, most of us usually use <a target="_blank" rel="noopener" href="https://www.google.com/maps/" title="https://www.google.com/maps/">Google Map</a> or <a target="_blank" rel="noopener" href="https://www.apple.com/maps/" title="https://www.apple.com/maps/">Apple Maps</a> to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. </p>
+            <p>In our daily life, most of us usually use <a
+target="_blank" rel="noopener" href="https://www.google.com/maps/"
+title="https://www.google.com/maps/">Google Map</a> or <a
+target="_blank" rel="noopener" href="https://www.apple.com/maps/"
+title="https://www.apple.com/maps/">Apple Maps</a> to help us to
+navigate to a place. We can see traffic info, public transit and also
+choose our mode of transportation.</p>
 <span id="more"></span>
-
-<p>Recently, I was looking for ways to embed a Map to my website that contains multiples of custom locations. There are varieties of technologies to choose, such as <a target="_blank" rel="noopener" href="https://aws.amazon.com/location/?nc1=h_ls" title="https://aws.amazon.com/location/?nc1=h_ls">Amaxon location service</a>, <a target="_blank" rel="noopener" href="https://developers.google.com/maps" title="https://developers.google.com/maps">Google Map API</a> and <a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js" title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a>, etc. In this post, I would like to discuss how to use <a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js" title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a> to embed and create custom dynamic maps on our websites mostly for free.</p>
-<h3 id="MapLibre-GL-JS"><a href="#MapLibre-GL-JS" class="headerlink" title="MapLibre GL JS"></a>MapLibre GL JS</h3><p><a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js" title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a> is an open-source library for publishing maps on your websites. The maps uses vector tileset source over GeoJSON data soruces when possible and are fast rendering in browser has become possible thanks to GPU. </p>
-<h3 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h3><p>Before begining shortly, we have to register an account in <a target="_blank" rel="noopener" href="https://www.maptiler.com/" title="https://www.maptiler.com/">Maptiler</a>, get an default API Key to protect which is used for accessing maps, tiles, and data from your account. Then, using the API key in code is shown below.</p>
+<p>Recently, I was looking for ways to embed a Map to my website that
+contains multiples of custom locations. There are varieties of
+technologies to choose, such as <a
+target="_blank" rel="noopener" href="https://aws.amazon.com/location/?nc1=h_ls"
+title="https://aws.amazon.com/location/?nc1=h_ls">Amaxon location
+service</a>, <a target="_blank" rel="noopener" href="https://developers.google.com/maps"
+title="https://developers.google.com/maps">Google Map API</a> and <a
+target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js"
+title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a>,
+etc. In this post, I would like to discuss how to use <a
+target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js"
+title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a> to
+embed and create custom dynamic maps on our websites mostly for
+free.</p>
+<h3 id="maplibre-gl-js">MapLibre GL JS</h3>
+<p><a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js"
+title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a> is
+an open-source library for publishing maps on your websites. The maps
+uses vector tileset source over GeoJSON data soruces when possible and
+are fast rendering in browser has become possible thanks to GPU.</p>
+<h3 id="quick-start">Quick Start</h3>
+<p>Before begining shortly, we have to register an account in <a
+target="_blank" rel="noopener" href="https://www.maptiler.com/"
+title="https://www.maptiler.com/">Maptiler</a>, get an default API Key
+to protect which is used for accessing maps, tiles, and data from your
+account. Then, using the API key in code is shown below.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;utf-8&quot; /&gt;</span><br><span class="line">&lt;title&gt;Add a default marker&lt;/title&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot; /&gt;</span><br><span class="line">&lt;script src=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;link href=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css&quot; rel=&quot;stylesheet&quot; /&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">	body &#123; margin: 0; padding: 0; &#125;</span><br><span class="line">	#map &#123; position: absolute; top: 0; bottom: 0; width: 100%; &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;</span><br><span class="line"> </span><br><span class="line">&lt;script&gt;</span><br><span class="line">var map = new maplibregl.Map(&#123;</span><br><span class="line">    container: &#x27;map&#x27;,</span><br><span class="line">    style:</span><br><span class="line">    &#x27;https://api.maptiler.com/maps/streets/style.json?key=YOUR_OWN_MAPTILER_API&#x27;,</span><br><span class="line">    center: [12.550343, 55.665957],</span><br><span class="line">    zoom: 8</span><br><span class="line">&#125;);</span><br><span class="line"> </span><br><span class="line">var marker = new maplibregl.Marker()</span><br><span class="line">    .setLngLat([12.550343, 55.665957])</span><br><span class="line">    .addTo(map);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"> </span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-<p>Futher copy the code, paste it into your favorite text editor, and save it as .html file. (remember to replace YOUR_OWN_MAPTILER_API with your actual API key). Next, we can ues iframe for integration with the post.</p>
+<p>Futher copy the code, paste it into your favorite text editor, and
+save it as .html file. (remember to replace YOUR_OWN_MAPTILER_API with
+your actual API key). Next, we can ues iframe for integration with the
+post.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div style=&quot;overflow-x:auto;&quot;&gt;</span><br><span class="line">    &lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="Simple-Example"><a href="#Simple-Example" class="headerlink" title="Simple Example"></a>Simple Example</h3><p>The embedded map for this simple example looks like this.</p>
+<h3 id="simple-example">Simple Example</h3>
+<p>The embedded map for this simple example looks like this.</p>
 <div style="overflow-x:auto;">
-    <iframe src="/javascript/maplibre/add-default-marker.html" style="width:100%; height:512px", title="add-default-marker"></iframe>
+<pre><code>&lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;</code></pre>
 </div>
-
-<h3 id="Custom-Example"><a href="#Custom-Example" class="headerlink" title="Custom Example"></a>Custom Example</h3><p>We can also customize the marker to a Map. Similar to the above example, I created another custom example map with marked places where I have visited recently nearby.</p>
+<h3 id="custom-example">Custom Example</h3>
+<p>We can also customize the marker to a Map. Similar to the above
+example, I created another custom example map with marked places where I
+have visited recently nearby.</p>
 <div style="overflow-x:auto;">
-    <iframe src="/javascript/maplibre/add-custom-marker.html" style="width:100%; height:512px", title="add-custom-marker"></iframe>
+<pre><code>&lt;iframe src=&quot;/javascript/maplibre/add-custom-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-custom-marker&quot;&gt;&lt;/iframe&gt;</code></pre>
 </div>
-
-<p>Now, we know how to simply embed the custom dynamic maps on our websites. Hope this post will be helpful.</p>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://developers.google.com/maps">Google Maps Platform</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js">Open-source library - MapLibre GL JS</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://docs.mapbox.com/help/glossary/vector-tiles/">Mapbox Docs - vector tiles</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://docs.mapbox.com/help/troubleshooting/mapbox-gl-js-performance/">Mapbox Docs - Improve the performance of Mapbox GL JS maps</a></p>
-</li>
+<p>Now, we know how to simply embed the custom dynamic maps on our
+websites. Hope this post will be helpful.</p>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://developers.google.com/maps">Google Maps
+Platform</a></p></li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js">Open-source
+library - MapLibre GL JS</a></p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://docs.mapbox.com/help/glossary/vector-tiles/">Mapbox Docs -
+vector tiles</a></p></li>
+<li><p><a
+target="_blank" rel="noopener" href="https://docs.mapbox.com/help/troubleshooting/mapbox-gl-js-performance/">Mapbox
+Docs - Improve the performance of Mapbox GL JS maps</a></p></li>
 </ul>
-<p>Thanks for reading! Feel free to leave the comments below or <a href="mailto:qazqazqaz850@gmail.com">email</a> to me. Any pieces of advice or discussions are always welcome. :)</p>
+<p>
+Thanks for reading! Feel free to leave the comments below or
+<a href="mailto:shirong0419@icloud.com">email</a> to me. Any pieces of
+advice or discussions are always welcome. :)
+</p>
 
             
 
@@ -704,7 +743,7 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>This is a chinese test post to show you how chinese is displayed.</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>This is a chinese test post to show you how chinese is displayed.</div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -726,7 +765,9 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>Due to the most time on my job, we need to type many git command lines. So that this article is used to sort several git commands frequently used for easily searching.</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>Due to the most time on my job, we need to type many git command
+lines. So that this article is used to sort several git commands
+frequently used for easily searching.</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -748,7 +789,9 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>“Most players gain pleasure from feeling accepted or belonging to the group. The good  player however, gains pleasure from his ability to cope with the realities of the game”</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>"Most players gain pleasure from feeling accepted or belonging to the
+group. The good player however, gains pleasure from his ability to cope
+with the realities of the game"</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -770,7 +813,13 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>In our daily life, most of us usually use <a target="_blank" rel="noopener" href="https://www.google.com/maps/" title="https://www.google.com/maps/">Google Map</a> or <a target="_blank" rel="noopener" href="https://www.apple.com/maps/" title="https://www.apple.com/maps/">Apple Maps</a> to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation. </p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>In our daily life, most of us usually use <a
+target="_blank" rel="noopener" href="https://www.google.com/maps/"
+title="https://www.google.com/maps/">Google Map</a> or <a
+target="_blank" rel="noopener" href="https://www.apple.com/maps/"
+title="https://www.apple.com/maps/">Apple Maps</a> to help us to
+navigate to a place. We can see traffic info, public transit and also
+choose our mode of transportation.</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -792,7 +841,9 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>“After going on your life-changing journey, you now realize that you don’t want what you thought you wanted. What you really wanted was inside you all along.”</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>"After going on your life-changing journey, you now realize that you
+don’t want what you thought you wanted. What you really wanted was
+inside you all along."</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -814,7 +865,10 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching&#x2F;drawing by mouse. The canvas API provides a means for drawing graphics via JavaScript and the HTML element. It largely focuses on 2D graphics. In this post, I would like to describe how to quickly go about implementing this.</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching/drawing by mouse. The
+canvas API provides a means for drawing graphics via JavaScript and the
+HTML element. It largely focuses on 2D graphics. In this post, I would
+like to describe how to quickly go about implementing this.</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -836,7 +890,9 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>這週末來到位於新竹縣新埔鎮的<a target="_blank" rel="noopener" href="https://hiking.biji.co/index.php?q=trail&act=detail&id=1663" title="https://hiking.biji.co/index.php?q=trail&amp;act=detail&amp;id=1663">飛龍池登山步道</a>輕鬆健行。這區域內的步道蜿蜒圍繞著山區，古道串連著龍頭公園、忘憂谷、運動公園、三聖宮、採茶古道….。從新竹高鐵區開車到這，距離不遠，人潮也沒有很多，幽靜宜人，而且該區域並不需要申請以及預約即可進入，所以適合週末安排的時段前來健行。</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>這週末來到位於新竹縣新埔鎮的<a
+target="_blank" rel="noopener" href="https://hiking.biji.co/index.php?q=trail&amp;act=detail&amp;id=1663"
+title="https://hiking.biji.co/index.php?q=trail&amp;act=detail&amp;id=1663">飛龍池登山步道</a>輕鬆健行。這區域內的步道蜿蜒圍繞著山區，古道串連著龍頭公園、忘憂谷、運動公園、三聖宮、採茶古道....。從新竹高鐵區開車到這，距離不遠，人潮也沒有很多，幽靜宜人，而且該區域並不需要申請以及預約即可進入，所以適合週末安排的時段前來健行。</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -858,7 +914,13 @@
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching&#x2F;drawing either by mouse or by touch. In the <a href="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/" title="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/">previous post</a>, I quickly discuss how to use Canvas API to implement a canvas with mouse sketching. In this post, I would like to describe how go about implementing for sketching&#x2F;drawing by mouse and touch.</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching/drawing either by mouse or
+by touch. In the <a
+href="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
+title="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/">previous
+post</a>, I quickly discuss how to use Canvas API to implement a canvas
+with mouse sketching. In this post, I would like to describe how go
+about implementing for sketching/drawing by mouse and touch.</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -896,23 +958,24 @@ correct it, the information might be lost forever.</p></div>
                     <div class="media-body">
                         <a
                             class="link-unstyled"
-                            href="https://louissrliu.github.io/2022/12/13/Welcome-to-the-new-Tranquilpeak/"
-                            aria-label=": Welcome to Louis"
+                            href="https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/"
+                            aria-label=": Overview of Basic Graph Traversal Algorithm"
                         >
-                            <h3 class="media-heading">Welcome to Louis</h3>
+                            <h3 class="media-heading">Overview of Basic Graph Traversal Algorithm</h3>
                         </a>
                         <span class="media-meta">
                             <span class="media-date text-small">
                                 
-                                    Dec 13, 2022
+                                    Dec 14, 2022
                                 
                             </span>
                         </span>
-                        <div class="media-content hide-xs font-merryweather"><!-- Quote  -->
-<p class="message" style="font-family:cursive">
-<q> "No amount of genius can overcome a preoccupation with detail" -
-Marion Levy Jr.</q>
-</p></div>
+                        <div class="media-content hide-xs font-merryweather"><p>"Graph theory is the study of graphs, which are mathematical
+structures used to model pairwise relations between objects. A graph in
+this context is made up of vertices (also called nodes or points) which
+are connected by edges (also called links or lines). Graphs are one of
+the principal objects of study in discrete mathematics." ... from Wiki
+page.</p></div>
                     </div>
                     <div style="clear:both;"></div>
                     <hr>
@@ -925,7 +988,7 @@ Marion Levy Jr.</q>
                 data-message-zero="no post found"
                 data-message-one="1 post found"
                 data-message-other="{n} posts found">
-                10 posts found
+                11 posts found
             </p>
         </div>
     </div>
