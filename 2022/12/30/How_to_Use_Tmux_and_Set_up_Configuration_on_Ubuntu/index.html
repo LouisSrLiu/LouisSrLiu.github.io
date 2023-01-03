@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Louis">
-    <title>How to Use Tmux and Set up Configuration - Louis</title>
+    <title>How to Use Tmux and Set up Configuration on Ubuntu - Louis</title>
     <meta name="author" content="ShiRong Liu">
     
         <meta name="keywords" content="hexo,javascript,">
@@ -22,17 +22,17 @@
             <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
         
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"Tmux is an open-source terminal multiplexr for Unix-like operating\nsystems. It allows multiple terminal sessions to be accessed\nsimultaneously in a single window.\n\nIntorduction\nWhen you program on the Unix-like terminal, you might not feel\ncomfortable to mess around with multi-windows, especially more than 5\nwindows. It is quite difficult to operate with multi-windows. In this\nsituation, we can use tmux terminal multiplexer to allows us to access\nmultiple terminal sessions simultaneously.\nIn this short post, I am sorting out some basic concept, related\nconfiguration and commands for Tmux and how to use a Tmux. I hope these\ninformations will be helpful to anyone who is interested in Tmux. :)\nPrerequistes\nMake sure your Unix-like terminal have been installed Tmux.\nCurrently, the latest release version of tmux is 3.2a and could run on\nLinux, OS X and Solars, etc.\nInstall Tmux From\nGitHub Version Control\n123456# Clone Tmux Repo:$ git clone https://github.com/tmux/tmux.git# Auto Build Tmux Source Code and Installation:$ cd tmux$ sh autogen.sh$ ./configure &amp; make\nThe Concept of Tmux\nTmux has sessions, windows, and panes. The hierarchy is that Tmux\ncould have multiple sesions, a session could have multiple windows, a\nwindow could have multiple panes. User could follow certain conventions\nor rules to customize Tmux on your Unix-like terminal. For example, we\ncould create one session for lanuching the long-running process. In this\nsession, we could create multiple windows, and each window would be used\nfor each specific task for the long-running process. In the windows, in\norder to improve to be more efficient, we could also create muiltiple\npanes for purpose such as editting the relevant configurations and\nlaunching the process, and process mointoring.\n\nHere is the window with three panes operating on Ubuntu:\n\n\n\n\nTmux Cheatsheet and\nShortcuts\nThere are three ways to issue commands to tmux:\n\n\nCommand-line: directly enter the command line\nthat prefaced by tmux within tmux session\n\n\nShortcuts: use prefix key, which is\nCTRL-b by default and then interpret the keystroke following\nthe prefix as a tmux shortcut\n\n\nCommand-mode: enter command mode by pressing\nthe prefix followed by :\n\n\nCommon Tmux\nCommand-Line\nTo start the Tmux, you could simply type the following commands in\nyour console.\n12345678910111213141516171819202122Create a new session:$ tmux new -s &lt;SessionName&gt;List sessions:$ tmux lsKill session:$ tmux kill-session -t &lt;SessionName&gt;Kill all sessions but keep the current:$ tmux kill-session -aAttach to a specific session:$ tmux attach -t &lt;SessionName&gt;Attach the last session:$ tmux attach$ tmux aDetach from the session:$ tmux detach$ tmux -d\nFor example, to get a list of all tmux sessions that you created\nbefore, you could just type \"$ tmux ls\" and check all the session name,\nwhen to be created, and how many windows be created in the session.\nCommon Tmux\nShortcuts\nIn tmux session, hit the prefix \"CTRL+b\". Tmux will\ninterpret the keystroke following the prefix as a tmux shortcut. You\ncould simply type following keystrokes.\n\n\n\n\nFunction\n\n\nShortcut\n\n\n\n\nDisplay an interactive session list\n\n\nPrefix + s\n\n\n\n\nSwitch to the previous session\n\n\nPrefix + (\n\n\n\n\nSwitch to the next session\n\n\nPrefix + )\n\n\n\n\nDetach from the current session\n\n\nprefix + d\n\n\n\n\nRename a session in tmux\n\n\nprefix + $\n\n\n\n\nCreate a new window\n\n\nPrefix + c\n\n\n\n\nRename a window\n\n\nPrefix + ,\n\n\n\n\nSplit windows horizontally\n\n\nPrefix + %\n\n\n\n\nSplit windows vertically\n\n\nPrefix + \"\n\n\n\n\nZoom in on the active pane\n\n\nPrefix + z\n\n\n\n\nSwitch to another pane\n\n\nPrefix + arrow key\n\n\n\n\nForce to kill an unresponsive process in a pane\n\n\nPrefix + x\n\n\n\n\nSwitch to another layout\n\n\nPrefix + space\n\n\n\n\nMove the pane out of current window\n\n\nPrefix + !\n\n\n\n\nSwap current pane with the page from the left\n\n\nPrefix + {\n\n\n\n\nSwap current pane with the page from the right\n\n\nPrefix + }\n\n\n\n\nList shortcuts\n\n\nPrefix + ?\n\n\n\n\nCommon Tmux\nCommand-Mode\nIn tmux session, hit the prefix \"CTRL+b\" and also\nfollows with :. Tmux will open a command prompt at the bottom\nof the screen, which accept tmux commands. You could simply type\nfollowing tmux commands.\n\n\n\n\nFunction\n\n\nTmux Command\n\n\n\n\nStart new session with the name\n\n\nnew-session -s SessionName\n\n\n\n\nDisplay an interactive window list\n\n\nlist-windows\n\n\n\n\nSplit windows horizontally\n\n\nsplit-window -h\n\n\n\n\nSplit windows vertically\n\n\nsplit-window -v\n\n\n\n\nSynchronize all the panes in a window\n\n\nsetw synchronize-panes\n\n\n\n\nYou may find and learn more information from OpenBSD:\ntmux\nTmux Configuration\nThe basic tmux could be configured to personalize the tmux experience\nthat supercharges your tmux and builds comfortable terminal environment.\nI'm sharing my simple .tmux.conf\nfile as template. These uses remapping, mouse-mode, and bind command,\netc. You can try this as your .tmux.conf after backing up yours or as\nthe reference. The configuration file should be located under the home\ndirectory.\n\n\n.tmux.conf\n\n\n# reload config file (change file location to your the tmux.conf you want to use)\nbind r source-file ~/.tmux.conf\n\n# remap prefix from 'C-b' to 'C-a'\nunbind C-b\nset-option -g prefix C-q\nbind-key C-q send-prefix\n\n# split panes using | and - \nunbind '\"'\nunbind %\nbind | split-window -h \nbind - split-window -v \n\n# switch panes using Alt-arrow without prefix\nbind -n M-Left select-pane -L\nbind -n M-Right select-pane -R\nbind -n M-Up select-pane -U\nbind -n M-Down select-pane -D\n\n# Enable mouse mode (tmux 2.1 and above)\nset -g mouse on\n\n# Shift arrow to switch windows\nbind -n S-Left  previous-window\nbind -n S-Right next-window\n\n# Use Alt-arrow keys without prefix key to switch panes\nbind -n M-Left select-pane -L\nbind -n M-Right select-pane -R\nbind -n M-Up select-pane -U\nbind -n M-Down select-pane -D\n\n# Copy-Paste\nsetw -g mode-keys vi\n\n#  modes\nsetw -g clock-mode-colour colour5\nsetw -g mode-style 'fg=colour1 bg=colour18 bold'\n\n# panes\nset -g pane-border-style 'fg=colour19 bg=colour0'\nset -g pane-active-border-style 'bg=colour0 fg=colour9'\n\n# statusbar\nset -g status-position bottom\nset -g status-justify left\nset -g status-left ''\nset -g status-right '#[fg=colour233,bg=colour10] %m/%d/%y #[fg=colour230,bg=colour8] %H:%M:%S '\nset -g status-right-length 50\nset -g status-left-length 20\n\n# No delay for escape key press\nset -sg escape-time 0\n\n# Activity Monitoring\nsetw -g monitor-activity on\nset -g visual-activity on\n\n\nYou may find and learn more information from OpenBSD:\ntmux\nTmux Plugins and Tools\nLike Vim, to add new tmux plugins, we can either manually install\nthemes to employ a pluging manager. It is recommended to install Tmux Plugin Manager and\nfurther add new plugins. There are two tmux plugins that can help with\nrestart tmux which running programs when you shut down your computer: Tmux\nResurrect\nFirst, we need to clone TPM repo: 1$ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm\nThen we configure new plugins to .tmux.conf,\n\n\n.tmux.conf\n\n\n#--------------\n# Install Tmux plugins\n#--------------\n# List of plugins\nset -g @plugin 'tmux-plugins/tpm'\nset -g @plugin 'tmux-plugins/tmux-resurrect'\n\n# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)\nrun -b '~/.tmux/plugins/tpm/tpm'\n...\n\n\nFinally, reloading tmux config to install the plugins by Command-Mode\n(:source-file ~/.tmux.conf) or Shortcut (Prefix + I). If the\ninstallation of plugin was successful, we would see the following\ninformation.\n\n\ndisplay statement\n\n\nTMUX environment reloaded.\nDone, press ENTER to continue.\n\n\nSave and Restore Tmux\nEnvironment\nTmux Resurrect supports to save and restore all the details from your\ntmux environment. The shortcut of saving is Prefix + Ctrl + s and the\nshortcut of restoring is Prefix + Ctrl + r.\nYou can find more information about this feature on Tmux\nResurrect.\n=========== To be continued… ==========\nReference\n\nTmux\nTutorial\nWiki\nTmux\n\n\nFeel free to leave the comments below or\nemail to me. Any other\npieces of advice are always welcome. :)\n","dateCreated":"2022-12-30T00:00:00+08:00","dateModified":"2022-12-30T10:57:15+08:00","datePublished":"2022-12-30T00:00:00+08:00","description":"Tmux is an open-source terminal multiplexr for Unix-like operating\nsystems. It allows multiple terminal sessions to be accessed\nsimultaneously in a single window.","headline":"How to Use Tmux and Set up Configuration","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/sunshine.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration/","keywords":"tools","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/sunshine.jpeg"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"Tmux is an open-source terminal multiplexr for Unix-like operating\nsystems. It allows multiple terminal sessions to be accessed\nsimultaneously in a single window.\n\nIntorduction\nWhen you program on the Unix-like terminal, you might not feel\ncomfortable to mess around with multi-windows, especially more than 5\nwindows. It is quite difficult to operate with multi-windows. In this\nsituation, we can use tmux terminal multiplexer to allows us to access\nmultiple terminal sessions simultaneously.\nIn this short post, I am sorting out some basic concept, related\nconfiguration and commands for Tmux and how to use a Tmux. I hope these\ninformations will be helpful to anyone who is interested in Tmux. :)\nPrerequistes\nMake sure your Unix-like terminal have been installed Tmux.\nCurrently, the latest release version of tmux is 3.2a and could run on\nLinux, OS X and Solars, etc.\nInstall Tmux From\nGitHub Version Control\n123456# Clone Tmux Repo:$ git clone https://github.com/tmux/tmux.git# Auto Build Tmux Source Code and Installation:$ cd tmux$ sh autogen.sh$ ./configure &amp; make\nThe Concept of Tmux\nTmux has sessions, windows, and panes. The hierarchy is that Tmux\ncould have multiple sesions, a session could have multiple windows, a\nwindow could have multiple panes. User could follow certain conventions\nor rules to customize Tmux on your Unix-like terminal. For example, we\ncould create one session for lanuching the long-running process. In this\nsession, we could create multiple windows, and each window would be used\nfor each specific task for the long-running process. In the windows, in\norder to improve to be more efficient, we could also create muiltiple\npanes for purpose such as editting the relevant configurations and\nlaunching the process, and process mointoring.\n\nHere is the window with three panes operating on Ubuntu:\n\n\n\n\nTmux Cheatsheet and\nShortcuts\nThere are three ways to issue commands to tmux:\n\n\nCommand-line: directly enter the command line\nthat prefaced by tmux within tmux session\n\n\nShortcuts: use prefix key, which is\nCTRL-b by default and then interpret the keystroke following\nthe prefix as a tmux shortcut\n\n\nCommand-mode: enter command mode by pressing\nthe prefix followed by :\n\n\nCommon Tmux\nCommand-Line\nTo start the Tmux, you could simply type the following commands in\nyour console.\n12345678910111213141516171819202122Create a new session:$ tmux new -s &lt;SessionName&gt;List sessions:$ tmux lsKill session:$ tmux kill-session -t &lt;SessionName&gt;Kill all sessions but keep the current:$ tmux kill-session -aAttach to a specific session:$ tmux attach -t &lt;SessionName&gt;Attach the last session:$ tmux attach$ tmux aDetach from the session:$ tmux detach$ tmux -d\nFor example, to get a list of all tmux sessions that you created\nbefore, you could just type \"$ tmux ls\" and check all the session name,\nwhen to be created, and how many windows be created in the session.\nCommon Tmux\nShortcuts\nIn tmux session, hit the prefix \"CTRL+b\". Tmux will\ninterpret the keystroke following the prefix as a tmux shortcut. You\ncould simply type following keystrokes.\n\n\n\n\nFunction\n\n\nShortcut\n\n\n\n\nDisplay an interactive session list\n\n\nPrefix + s\n\n\n\n\nSwitch to the previous session\n\n\nPrefix + (\n\n\n\n\nSwitch to the next session\n\n\nPrefix + )\n\n\n\n\nDetach from the current session\n\n\nprefix + d\n\n\n\n\nRename a session in tmux\n\n\nprefix + $\n\n\n\n\nCreate a new window\n\n\nPrefix + c\n\n\n\n\nRename a window\n\n\nPrefix + ,\n\n\n\n\nSplit windows horizontally\n\n\nPrefix + %\n\n\n\n\nSplit windows vertically\n\n\nPrefix + \"\n\n\n\n\nZoom in on the active pane\n\n\nPrefix + z\n\n\n\n\nSwitch to another pane\n\n\nPrefix + arrow key\n\n\n\n\nForce to kill an unresponsive process in a pane\n\n\nPrefix + x\n\n\n\n\nSwitch to another layout\n\n\nPrefix + space\n\n\n\n\nMove the pane out of current window\n\n\nPrefix + !\n\n\n\n\nSwap current pane with the page from the left\n\n\nPrefix + {\n\n\n\n\nSwap current pane with the page from the right\n\n\nPrefix + }\n\n\n\n\nList shortcuts\n\n\nPrefix + ?\n\n\n\n\nCommon Tmux\nCommand-Mode\nIn tmux session, hit the prefix \"CTRL+b\" and also\nfollows with :. Tmux will open a command prompt at the bottom\nof the screen, which accept tmux commands. You could simply type\nfollowing tmux commands.\n\n\n\n\nFunction\n\n\nTmux Command\n\n\n\n\nStart new session with the name\n\n\nnew-session -s SessionName\n\n\n\n\nDisplay an interactive window list\n\n\nlist-windows\n\n\n\n\nSplit windows horizontally\n\n\nsplit-window -h\n\n\n\n\nSplit windows vertically\n\n\nsplit-window -v\n\n\n\n\nSynchronize all the panes in a window\n\n\nsetw synchronize-panes\n\n\n\n\nYou may find and learn more information from OpenBSD:\ntmux\nTmux Configuration\nThe basic tmux could be configured to personalize the tmux experience\nthat supercharges your tmux and builds comfortable terminal environment.\nI'm sharing my simple .tmux.conf\nfile as template. These uses remapping, mouse-mode, and bind command,\netc. You can try this as your .tmux.conf after backing up yours or as\nthe reference. The configuration file should be located under the home\ndirectory.\n\n\n.tmux.conf\n\n\n# reload config file (change file location to your the tmux.conf you want to use)\nbind r source-file ~/.tmux.conf\n\n# remap prefix from 'C-b' to 'C-a'\nunbind C-b\nset-option -g prefix C-q\nbind-key C-q send-prefix\n\n# split panes using | and - \nunbind '\"'\nunbind %\nbind | split-window -h \nbind - split-window -v \n\n# switch panes using Alt-arrow without prefix\nbind -n M-Left select-pane -L\nbind -n M-Right select-pane -R\nbind -n M-Up select-pane -U\nbind -n M-Down select-pane -D\n\n# Enable mouse mode (tmux 2.1 and above)\nset -g mouse on\n\n# Shift arrow to switch windows\nbind -n S-Left  previous-window\nbind -n S-Right next-window\n\n# Use Alt-arrow keys without prefix key to switch panes\nbind -n M-Left select-pane -L\nbind -n M-Right select-pane -R\nbind -n M-Up select-pane -U\nbind -n M-Down select-pane -D\n\n# Copy-Paste\nsetw -g mode-keys vi\n\n#  modes\nsetw -g clock-mode-colour colour5\nsetw -g mode-style 'fg=colour1 bg=colour18 bold'\n\n# panes\nset -g pane-border-style 'fg=colour19 bg=colour0'\nset -g pane-active-border-style 'bg=colour0 fg=colour9'\n\n# statusbar\nset -g status-position bottom\nset -g status-justify left\nset -g status-left ''\nset -g status-right '#[fg=colour233,bg=colour10] %m/%d/%y #[fg=colour230,bg=colour8] %H:%M:%S '\nset -g status-right-length 50\nset -g status-left-length 20\n\n# No delay for escape key press\nset -sg escape-time 0\n\n# Activity Monitoring\nsetw -g monitor-activity on\nset -g visual-activity on\n\n\nYou may find and learn more information from OpenBSD:\ntmux\nTmux Plugins and Tools\nLike Vim, to add new tmux plugins, we can either manually install\nthemes to employ a pluging manager. It is recommended to install Tmux Plugin Manager and\nfurther add new plugins. There are two tmux plugins that can help with\nrestart tmux which running programs when you shut down your computer: Tmux\nResurrect\nFirst, we need to clone TPM repo: 1$ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm\nThen we configure new plugins to .tmux.conf,\n\n\n.tmux.conf\n\n\n#--------------\n# Install Tmux plugins\n#--------------\n# List of plugins\nset -g @plugin 'tmux-plugins/tpm'\nset -g @plugin 'tmux-plugins/tmux-resurrect'\n\n# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)\nrun -b '~/.tmux/plugins/tpm/tpm'\n...\n\n\nFinally, reloading tmux config to install the plugins by Command-Mode\n(:source-file ~/.tmux.conf) or Shortcut (Prefix + I). If the\ninstallation of plugin was successful, we would see the following\ninformation.\n\n\ndisplay statement\n\n\nTMUX environment reloaded.\nDone, press ENTER to continue.\n\n\nSave and Restore Tmux\nEnvironment\nTmux Resurrect supports to save and restore all the details from your\ntmux environment. The shortcut of saving is Prefix + Ctrl + s and the\nshortcut of restoring is Prefix + Ctrl + r.\nYou can find more information about this feature on Tmux\nResurrect.\n=========== To be continued… ==========\nReference\n\nTmux\nTutorial\nWiki\nTmux\n\n\nFeel free to leave the comments below or\nemail to me. Any other\npieces of advice are always welcome. :)\n","dateCreated":"2022-12-30T00:00:00+08:00","dateModified":"2023-01-03T14:38:16+08:00","datePublished":"2022-12-30T00:00:00+08:00","description":"Tmux is an open-source terminal multiplexr for Unix-like operating\nsystems. It allows multiple terminal sessions to be accessed\nsimultaneously in a single window.","headline":"How to Use Tmux and Set up Configuration on Ubuntu","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/sunshine.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/","keywords":"tools","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/sunshine.jpeg"}</script>
     <meta name="description" content="Tmux is an open-source terminal multiplexr for Unix-like operating systems. It allows multiple terminal sessions to be accessed simultaneously in a single window.">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="How to Use Tmux and Set up Configuration">
-<meta property="og:url" content="https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration/index.html">
+<meta property="og:title" content="How to Use Tmux and Set up Configuration on Ubuntu">
+<meta property="og:url" content="https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/index.html">
 <meta property="og:site_name" content="Louis">
 <meta property="og:description" content="Tmux is an open-source terminal multiplexr for Unix-like operating systems. It allows multiple terminal sessions to be accessed simultaneously in a single window.">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://louissrliu.github.io/picture/ubuntu_screenshot.png">
 <meta property="article:published_time" content="2022-12-29T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-12-30T02:57:15.259Z">
+<meta property="article:modified_time" content="2023-01-03T06:38:16.885Z">
 <meta property="article:author" content="ShiRong Liu">
 <meta property="article:tag" content="tools">
 <meta name="twitter:card" content="summary">
@@ -127,9 +127,7 @@
                 </a>
                 <h4 class="sidebar-profile-name">ShiRong Liu</h4>
                 
-                    <h5 class="sidebar-profile-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub
-page, open-source, software development, Linux, and travels in my spare
-time.</p>
+                    <h5 class="sidebar-profile-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub page, open-source, software development, Linux, and travels in my spare time.</p>
 </h5>
                 
             </div>
@@ -308,7 +306,7 @@ time.</p>
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            How to Use Tmux and Set up Configuration
+            How to Use Tmux and Set up Configuration on Ubuntu
         </h1>
     
     
@@ -777,9 +775,9 @@ pieces of advice are always welcome. :)</p>
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2023/01/01/Cpp_assignment_overloading_and_valgrind_memcheck/"
-                    data-tooltip="C++ Assignment Overloading and Valgrind Memcheck"
-                    aria-label="PREVIOUS: C++ Assignment Overloading and Valgrind Memcheck"
+                    href="/2023/01/01/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -818,7 +816,7 @@ pieces of advice are always welcome. :)</p>
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -831,7 +829,7 @@ pieces of advice are always welcome. :)</p>
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -894,9 +892,9 @@ pieces of advice are always welcome. :)</p>
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2023/01/01/Cpp_assignment_overloading_and_valgrind_memcheck/"
-                    data-tooltip="C++ Assignment Overloading and Valgrind Memcheck"
-                    aria-label="PREVIOUS: C++ Assignment Overloading and Valgrind Memcheck"
+                    href="/2023/01/01/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -935,7 +933,7 @@ pieces of advice are always welcome. :)</p>
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -948,7 +946,7 @@ pieces of advice are always welcome. :)</p>
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -992,7 +990,7 @@ pieces of advice are always welcome. :)</p>
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -1005,7 +1003,7 @@ pieces of advice are always welcome. :)</p>
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration/"
+                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/"
                         aria-label="global.share_on_Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>global.share_on_Twitter</span>
@@ -1035,16 +1033,14 @@ pieces of advice are always welcome. :)</p>
         
             <h4 id="about-card-name">ShiRong Liu</h4>
         
-            <div id="about-card-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub
-page, open-source, software development, Linux, and travels in my spare
-time.</p>
+            <div id="about-card-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub page, open-source, software development, Linux, and travels in my spare time.</p>
 </div>
         
         
             <div id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p>Embedded C/C++ Software Engineer</p>
+                <p> Embedded C/C++ Software Engineer</p>
 
             </div>
         
@@ -1339,7 +1335,7 @@ page.</p></div>
                 data-message-zero="no post found"
                 data-message-one="1 post found"
                 data-message-other="{n} posts found">
-                14 posts found
+                13 posts found
             </p>
         </div>
     </div>
@@ -1359,9 +1355,9 @@ page.</p></div>
     
         <script>
           var disqus_config = function() {
-            this.page.url = 'https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration/';
+            this.page.url = 'https://louissrliu.github.io/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/';
               
-            this.page.identifier = '2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration/';
+            this.page.identifier = '2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/';
               
           };
           (function() {
