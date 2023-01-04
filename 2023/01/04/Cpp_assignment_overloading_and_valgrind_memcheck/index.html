@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Louis">
-    <title>Overview of Basic Graph Traversal Algorithm - Louis</title>
+    <title>C++ Assignment Overloading and Valgrind Memcheck - Louis</title>
     <meta name="author" content="ShiRong Liu">
     
         <meta name="keywords" content="hexo,javascript,">
@@ -22,26 +22,20 @@
             <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
         
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"\"Graph theory is the study of graphs, which are mathematical\nstructures used to model pairwise relations between objects. A graph in\nthis context is made up of vertices (also called nodes or points) which\nare connected by edges (also called links or lines). Graphs are one of\nthe principal objects of study in discrete mathematics.\" ... from Wiki\npage.\n\nBrief\nRecently, I explored the basic implementation of graphs, BFS/DFS\nsearch, shortest path problem, and discovered its algorithm. It should\nbe grateful that I have learned the fundamentals of mathematics and\nprogramming in college, so that I could learn and get a basic\nunderstanding of how the graph traversal algorithm work, and further\nmake the computer do it. In this post, I would like to discuss the basic\nconcepts, practice the simple implementation of BFS and DFS with the\ndirected graph and undirected graph.\nGraph Search Algorithm\nIn computer science, a graph is an abstract data type that is meant\nto implement the undirected grpah and directed graph concept from the\nfield of a graph theory. A graph data structure consists of a finite set\nof vertices, together with a set of unordered or ordered paired of these\nvertices. The graph search (also known as graph traversal) algorithm\nuses a recursion and linked list based stack to determine a route from a\nsingle point on a graph to another single point on a graph. In addition\nto the structure, there are two basic types of graph search:\nbreadth-first search (BFS) and depth-first search (DFS). The major\ndifference between those type is that the data structure requires a\nqueue (BFS) or stack (DFS).\nDirected Graph\nI recapped and practiced the simple\nC++ BFS/DFS implementation with directed graph initially inspired by\nPractice\nDirected Graph then reworked.\n\n\n Ordered\npaired, Unweight and Directed Graph Database\n\n\nThe basic functions for the directed graph implementation are as\nfollows:\n\nBFS (Breadth-first search): use queue and traversal all the\nconnected nodes\nDFS (Depth-first search): use stack and traversal all the connected\nnodes\nDetect Cycle in a Directed Graph: check whether the graph contains a\ncycle or not\nIterate in a Directed Graph: pointing to all of vertices in the\ndirected graph\n\nHere is the python/cpp interface of directed graph traversing:\nThe interface of directed graph traversingpythoncpp123456789101112131415def main():    dg = DirectedGraph()    dg.add_edge(0, 1)    dg.add_edge(0, 5)    dg.add_edge(1, 2)    dg.add_edge(2, 4)    dg.add_edge(2, 6)    dg.add_edge(3, 2)    dg.add_edge(5, 8)    dg.add_edge(6, 5)    dg.add_edge(7, 5)    p1 = dg.bfs()if __name__ == '__main__':    main()123456789101112131415int main(int argc, char *argv[]){    auto graph_node = new GraphDirected(GraphRepresentation::kRepresentationTypeList);    graph_node-&gt;AddEdge(0, 1);    graph_node-&gt;AddEdge(0, 5);    graph_node-&gt;AddEdge(1, 2);    graph_node-&gt;AddEdge(2, 4);    graph_node-&gt;AddEdge(2, 6);    graph_node-&gt;AddEdge(3, 2);    graph_node-&gt;AddEdge(5, 8);    graph_node-&gt;AddEdge(6, 5);    graph_node-&gt;AddEdge(7, 5);    graph_node-&gt;DFS();    graph_node-&gt;BFS();}\nBreadth-first Search (BFS)\nBreadth-first search is traversing algorithm where you should start\ntraversing from a selected node (source or parnet node) and traverse the\ngraph layerwise thus exploring the neighbor nodes. In other words, it\nstarts at the tree root and explors all nodes at the present depth prior\nto moving on to the nodes at the next depth level. In addition to the\ntraverse, BFS might be the easiest one to understand because the only\ndata structure it requires is a queue.\nDepth-first Search (DFS)\nDepth-first search is recursive algorithm that uses the idea of\nbacktracking. It involves searches of all the nodes by going ahead if\npossible, else by backtracking. In order words, it starts at the root\n(select in some arbitrary node) and explores as far as possbile along\neach branch before backtracking.\nUndirected Graph\nI also recapped and practiced the basic BFS/DFS implemenation with\nundirected graph matrix initially inspired by Practice\nUndirected Graph Matrix then reworked.\n\n\nOrdered\npaired, Unweight and Undirected Graph Database\n\n\nThe basic functions for the understand graph are as follows:\n\nBFS (Breadth-first search): use queue and recrusively traversal all\nthe connected nodes\nDFS (Depth-first search): use stack and recrusively traversal all\nthe connected nodes\n\nHere is the python interface of graph traversing:\nThe interface of undirected graph traversingpython1234567891011121314151617def main():    udg = UndirectedGraph()    udg.add_edge(0, 1)    udg.add_edge(1, 2)    udg.add_edge(2, 3)    udg.add_edge(1, 7)    udg.add_edge(3, 7)    udg.add_edge(7, 8)    udg.add_edge(3, 4)    udg.add_edge(3, 5)    udg.add_edge(4, 5)    udg.add_edge(5, 6)    udg.add_edge(6, 7)    udg.add_edge(6, 8)if __name__ == '__main__':    main()\nShortest Path Problem\nIn graph theory, the shortest path problem is the problem of finding\na path between two vertices (or nodes) in a graph such that the sum of\nthe weights of it consitiuent edges is minimized.\nThe problem of finding the shortest path between two intersections on\na road map may be modeled as a special case of the shortest path problem\nin graphs, where the vertices correspond to intersections and the edges\ncorrespond to road segments, each weights by the length of the\nsegments.\nThe most important algorithms for solving this problem are: +\nDijkstra's algorithm: solves the single-source shortest path problem\nwith non-negative edge weight. + Bellman-Ford algorithm: solves the\nsingle-source problem if edge weight may be negative.\nHere, I only come up through the Dijkstra's algorithm with undirected\ngraph initially, which inspired by then learned how it implements.\n\n\n\n\n\nThe basic functions for the undirected graph are as follows:\n\nAdd edges in the graph and iterally get vertex: pointing out all of\nvertices in the undirected graph\nDijkstra's algorithm: use priority queue and traversal all the\nconnected nodes\n\nDijkstra's Algorithm\nDijkstra's algorithm initially starts with infinite distances and\nthen try to improve them step to find the shortest path from a single\nsource to the closest of a set of target nodes on finite graph. Continue\nthis process of updating the neighbor intersections with the shortest\ndistance, making the current intersection as visited, and moving onto a\ncloset unvisited intersection until you have marked the destination as\nvisited.\nConclusions\nGraph databases are eﬃcient with respects to local data analysis. We\nshould always be aware of that many search and traversal applications in\npractice are implemented using modified breadth-first and depth-first\nsearch algorithm.\nReference\n\nWiki: Graph\ntheory\nWiki:\nBreadth-first search\nWiki:\nDepth-first search\n\n\nThanks for reading! Feel free to leave the comments below or\nemail to me. Any pieces of\nadvice or discussions are always welcome. :)\n\n","dateCreated":"2022-12-14T00:00:00+08:00","dateModified":"2022-12-16T17:41:38+08:00","datePublished":"2022-12-14T00:00:00+08:00","description":"\"Graph theory is the study of graphs, which are mathematical\nstructures used to model pairwise relations between objects. A graph in\nthis context is made up of vertices (also called nodes or points) which\nare connected by edges (also called links or lines). Graphs are one of\nthe principal objects of study in discrete mathematics.\" ... from Wiki\npage.","headline":"Overview of Basic Graph Traversal Algorithm","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/sunrise.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/","keywords":"programming, cpp, algorithm, python","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/sunrise.jpeg"}</script>
-    <meta name="description" content="&quot;Graph theory is the study of graphs, which are mathematical structures used to model pairwise relations between objects. A graph in this context is made up of vertices (also called nodes or points) w">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"“Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you improve your programs.”… from Wiki page.\n\nIntroductionValgrind tools supports to automatically detect memory issues and threading bugs, and show the profile of programs in detail. Some of the most difficult C/C++ bugs come from mismanagement of memory: allocating the wrong size, using an uninitialized pointer, accessing memory at the misstep in procedure, overrunging a buffer, and so on. These types of errors are tricky, as they can provide little debugging information, such as “Segmentation fault”, and tracking the observed problem back to underlying root.\nMemcheckMemcheck is the default tool on the Valgrind command line, specifes “—tool=memcheck”, a memory detector. It assists us to detect the memory issues that are common in C/C++ programs. There are two types of issues on memory errors and memory leaks.\nMemory ErrorsThe memory error is a red alert and should never be treated casually or ignored. We should keep in mind that errors are the primary concern. The most common memory errors are:\n\nAccessing memory you shouldn’t, e.g. overrunging and underrunning heap blocks, overrunging the top of the stack, and accessing memory after it has been freed.\n\nUsing undefined values, i.e. values that have not been initialised, or that have derived from other undefined values.\n\nIncorrect freeing of heap memory, such as double-freeing blocks, or mismatched use of malloc/new/new[] versus free/delete/delete[].\n\nOverlapping src and dst points in memcpy and related function\n\nPassing a fishy (presumably negative) value to the size parameter of memory allocation function.\n\n\nMemory LeaksThe memory leaks occur when you allocate heap memory (with new or malloc/calloc) but don’t free it. Valgrind categories leaks using these terms:\n\ndefinitely lost: this means that no pointer to the block can be found. The block is classidied as “lost”, because the programmer could not possibly have freed it at program exit, since no pointer to it exists. This is likely a symptom of having lost the pointer at some earlier point in the program. Such cases should be fixed!\n\nindirectly lost: this means that the block is lost, not because there no pointers to it, but rather because all the blocks that point to it are themselves lost. The problem will disappear if the definitely lost blcok that point to it are themselves lost.\n\npossibly lost: this means that a chain of one or more pointers to the block has been found, but at least one of the pointers is an interior-pointer. This could just be a random value in memory that happens to point into a block.\n\nstill reachable: a start-pointer or chain of start-pointers to the block is found. Since the block is still pointed at, you could have freed it before program exit.\n\n\nPractice An Exception Safe Assignment Operator1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253#include &lt;cstddef&gt;#include &lt;cstring&gt;#include &lt;iostream&gt;class String&#123;public:    String(const char* s = &quot;&quot;) : String(s, std::strlen(s) + 1) &#123;&#125;    String(const String&amp; other) : String(other.cstring) &#123;&#125;    ~String() &#123; delete [] cstring; &#125;    // Copy Assignment Operator    String&amp; operator=(const String&amp; other)    &#123;        if (this == &amp;other) return *this;        // non-static data member with default member initializer        std::size_t n &#123; std::strlen(other.cstring) + 1 &#125;;        char * new_cstring = new char[n];           // allocate        std::memcpy(new_cstring, other.cstring, n); // populate array        delete[] cstring;                           // deallocate        cstring = new_cstring;        return *this;    &#125;    // Comparison operators    bool operator==(const String&amp; other) const    &#123;        if (std::strlen(cstring) != std::strlen(other.cstring)) return false;        for (std::size_t i = 0; i &lt; std::strlen(cstring); ++i)        &#123;            if (cstring[i] != other.cstring[i]) return false;        &#125;        return true;    &#125;    operator const char *() const &#123; return cstring; &#125;private:    String(const char* s, std::size_t n) : cstring(new char[n])    &#123;        std::memcpy(cstring, s, n);    &#125;    char * cstring;&#125;;int main()&#123;    String str_1&#123;&quot;abcd&quot;&#125;;    String str_2&#123;&quot;def&quot;&#125;;    str_1 = str_2;&#125;\nHere is using Valgrind to check memory usage:\nlouis@louis-VirtualBox:~/GitHub/Exeception_Saft_assignment$ valgrind --leak-check=full ./a.out\n==1186914== Memcheck, a memory error detector\n==1186914== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.\n==1186914== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info\n==1186914== Command: ./a.out\n==1186914==\n==1186914==\n==1186914== HEAP SUMMARY:\n==1186914==     in use at exit: 0 bytes in 0 blocks\n==1186914==   total heap usage: 4 allocs, 4 frees, 72,717 bytes allocated\n==1186914==\n==1186914== All heap blocks were freed -- no leaks are possible\n==1186914==\n==1186914== For lists of detected and suppressed errors, rerun with: -s\n==1186914== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)\n\n\n\nReference\nValgrind Developers\n\nWiki: Rule of three (C++ Programming)\n\n\n","dateCreated":"2023-01-04T00:00:00+08:00","dateModified":"2023-01-04T16:17:57+08:00","datePublished":"2023-01-04T00:00:00+08:00","description":"“Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you improve your programs.”… from Wiki page.","headline":"C++ Assignment Overloading and Valgrind Memcheck","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/flight.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/","keywords":"programming, cpp","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/flight.jpeg"}</script>
+    <meta name="description" content="“Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you imp">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="Overview of Basic Graph Traversal Algorithm">
-<meta property="og:url" content="https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/index.html">
+<meta property="og:title" content="C++ Assignment Overloading and Valgrind Memcheck">
+<meta property="og:url" content="https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/index.html">
 <meta property="og:site_name" content="Louis">
-<meta property="og:description" content="&quot;Graph theory is the study of graphs, which are mathematical structures used to model pairwise relations between objects. A graph in this context is made up of vertices (also called nodes or points) w">
+<meta property="og:description" content="“Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you imp">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://louissrliu.github.io/picture/graph_search.png">
-<meta property="og:image" content="https://louissrliu.github.io/picture/undirected_graph_matrix.png">
-<meta property="og:image" content="https://louissrliu.github.io/picture/dijkstra.png">
-<meta property="article:published_time" content="2022-12-13T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-12-16T09:41:38.265Z">
+<meta property="article:published_time" content="2023-01-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-04T08:17:57.045Z">
 <meta property="article:author" content="ShiRong Liu">
 <meta property="article:tag" content="programming">
 <meta property="article:tag" content="cpp">
-<meta property="article:tag" content="algorithm">
-<meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://louissrliu.github.io/picture/graph_search.png">
     
     
         
@@ -50,8 +44,8 @@
         <meta property="og:image" content="https://avatars.githubusercontent.com/u/26519320?v=4"/>
     
     
-        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/sunrise.jpeg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/sunrise.jpeg"/>
+        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/flight.jpeg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/flight.jpeg"/>
     
     
     
@@ -311,14 +305,14 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            Overview of Basic Graph Traversal Algorithm
+            C++ Assignment Overloading and Valgrind Memcheck
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2022-12-14T00:00:00+08:00">
+    <time datetime="2023-01-04T00:00:00+08:00">
 	
-		    Dec 14, 2022
+		    Jan 04, 2023
     	
     </time>
     
@@ -338,152 +332,60 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>"Graph theory is the study of graphs, which are mathematical
-structures used to model pairwise relations between objects. A graph in
-this context is made up of vertices (also called nodes or points) which
-are connected by edges (also called links or lines). Graphs are one of
-the principal objects of study in discrete mathematics." ... from Wiki
-page.</p>
+            <p>“Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you improve your programs.”… from Wiki page.</p>
 <span id="more"></span>
-<h2 id="brief">Brief</h2>
-<p>Recently, I explored the basic implementation of graphs, BFS/DFS
-search, shortest path problem, and discovered its algorithm. It should
-be grateful that I have learned the fundamentals of mathematics and
-programming in college, so that I could learn and get a basic
-understanding of how the graph traversal algorithm work, and further
-make the computer do it. In this post, I would like to discuss the basic
-concepts, practice the simple implementation of BFS and DFS with the
-directed graph and undirected graph.</p>
-<h2 id="graph-search-algorithm">Graph Search Algorithm</h2>
-<p>In computer science, a graph is an abstract data type that is meant
-to implement the undirected grpah and directed graph concept from the
-field of a graph theory. A graph data structure consists of a finite set
-of vertices, together with a set of unordered or ordered paired of these
-vertices. The graph search (also known as graph traversal) algorithm
-uses a recursion and linked list based stack to determine a route from a
-single point on a graph to another single point on a graph. In addition
-to the structure, there are two basic types of graph search:
-breadth-first search (BFS) and depth-first search (DFS). The major
-difference between those type is that the data structure requires a
-queue (BFS) or stack (DFS).</p>
-<h3 id="directed-graph">Directed Graph</h3>
-<p>I recapped and practiced the <a
-target="_blank" rel="noopener" href="https://github.com/s311354/practice_common_alogrithm/tree/Master/graphs"
-title="https://github.com/s311354/practice_common_alogrithm/tree/Master/graphs">simple
-C++ BFS/DFS implementation</a> with directed graph initially inspired by
-<a target="_blank" rel="noopener" href="https://github.com/jwasham/practice-cpp/tree/master/graphs"
-title="https://github.com/jwasham/practice-cpp/tree/master/graphs">Practice
-Directed Graph</a> then reworked.</p>
-<figure>
-<center>
-<img src="/picture/graph_search.png" width="20%"> Ordered
-paired, Unweight and Directed Graph Database
-</center>
-</figure>
-<p>The basic functions for the directed graph implementation are as
-follows:</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Valgrind tools supports to automatically detect memory issues and threading bugs, and show the profile of programs in detail. Some of the most difficult C/C++ bugs come from mismanagement of memory: allocating the wrong size, using an uninitialized pointer, accessing memory at the misstep in procedure, overrunging a buffer, and so on. These types of errors are tricky, as they can provide little debugging information, such as “Segmentation fault”, and tracking the observed problem back to underlying root.</p>
+<h2 id="Memcheck"><a href="#Memcheck" class="headerlink" title="Memcheck"></a>Memcheck</h2><p>Memcheck is the default tool on the Valgrind command line, specifes “—tool=memcheck”, a memory detector. It assists us to detect the memory issues that are common in C/C++ programs. There are two types of issues on memory errors and memory leaks.</p>
+<h3 id="Memory-Errors"><a href="#Memory-Errors" class="headerlink" title="Memory Errors"></a>Memory Errors</h3><p>The memory error is a red alert and should never be treated casually or ignored. We should keep in mind that errors are the primary concern. The most common memory errors are:</p>
 <ul>
-<li>BFS (Breadth-first search): use queue and traversal all the
-connected nodes</li>
-<li>DFS (Depth-first search): use stack and traversal all the connected
-nodes</li>
-<li>Detect Cycle in a Directed Graph: check whether the graph contains a
-cycle or not</li>
-<li>Iterate in a Directed Graph: pointing to all of vertices in the
-directed graph</li>
+<li><p>Accessing memory you shouldn’t, e.g. overrunging and underrunning heap blocks, overrunging the top of the stack, and accessing memory after it has been freed.</p>
+</li>
+<li><p>Using undefined values, i.e. values that have not been initialised, or that have derived from other undefined values.</p>
+</li>
+<li><p>Incorrect freeing of heap memory, such as double-freeing blocks, or mismatched use of malloc/new/new[] versus free/delete/delete[].</p>
+</li>
+<li><p>Overlapping src and dst points in memcpy and related function</p>
+</li>
+<li><p>Passing a fishy (presumably negative) value to the size parameter of memory allocation function.</p>
+</li>
 </ul>
-<p>Here is the python/cpp interface of directed graph traversing:</p>
-<figure class="codeblock codeblock--tabbed"><figcaption><span>The interface of directed graph traversing</span><ul class="tabs"><li class="tab active">python</li><li class="tab">cpp</li></ul></figcaption><div class="tabs-content"><figure class="highlight python" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    dg = DirectedGraph()</span><br><span class="line">    dg.add_edge(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">    dg.add_edge(<span class="number">0</span>, <span class="number">5</span>)</span><br><span class="line">    dg.add_edge(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    dg.add_edge(<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line">    dg.add_edge(<span class="number">2</span>, <span class="number">6</span>)</span><br><span class="line">    dg.add_edge(<span class="number">3</span>, <span class="number">2</span>)</span><br><span class="line">    dg.add_edge(<span class="number">5</span>, <span class="number">8</span>)</span><br><span class="line">    dg.add_edge(<span class="number">6</span>, <span class="number">5</span>)</span><br><span class="line">    dg.add_edge(<span class="number">7</span>, <span class="number">5</span>)</span><br><span class="line">    p1 = dg.bfs()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></tbody></table></figure><figure class="highlight cpp" style="display: none;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="keyword">auto</span> graph_node = <span class="keyword">new</span> <span class="built_in">GraphDirected</span>(GraphRepresentation::kRepresentationTypeList);</span><br><span class="line">    graph_node-&gt;<span class="built_in">AddEdge</span>(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    graph_node-&gt;<span class="built_in">AddEdge</span>(<span class="number">0</span>, <span class="number">5</span>);</span><br><span class="line">    graph_node-&gt;<span class="built_in">AddEdge</span>(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line">    graph_node-&gt;<span class="built_in">AddEdge</span>(<span class="number">2</span>, <span class="number">4</span>);</span><br><span class="line">    graph_node-&gt;<span class="built_in">AddEdge</span>(<span class="number">2</span>, <span class="number">6</span>);</span><br><span class="line">    graph_node-&gt;<span class="built_in">AddEdge</span>(<span class="number">3</span>, <span class="number">2</span>);</span><br><span class="line">    graph_node-&gt;<span class="built_in">AddEdge</span>(<span class="number">5</span>, <span class="number">8</span>);</span><br><span class="line">    graph_node-&gt;<span class="built_in">AddEdge</span>(<span class="number">6</span>, <span class="number">5</span>);</span><br><span class="line">    graph_node-&gt;<span class="built_in">AddEdge</span>(<span class="number">7</span>, <span class="number">5</span>);</span><br><span class="line">    graph_node-&gt;<span class="built_in">DFS</span>();</span><br><span class="line">    graph_node-&gt;<span class="built_in">BFS</span>();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></div></figure>
-<h4 id="breadth-first-search-bfs">Breadth-first Search (BFS)</h4>
-<p>Breadth-first search is traversing algorithm where you should start
-traversing from a selected node (source or parnet node) and traverse the
-graph layerwise thus exploring the neighbor nodes. In other words, it
-starts at the tree root and explors all nodes at the present depth prior
-to moving on to the nodes at the next depth level. In addition to the
-traverse, BFS might be the easiest one to understand because the only
-data structure it requires is a queue.</p>
-<h4 id="depth-first-search-dfs">Depth-first Search (DFS)</h4>
-<p>Depth-first search is recursive algorithm that uses the idea of
-backtracking. It involves searches of all the nodes by going ahead if
-possible, else by backtracking. In order words, it starts at the root
-(select in some arbitrary node) and explores as far as possbile along
-each branch before backtracking.</p>
-<h3 id="undirected-graph">Undirected Graph</h3>
-<p>I also recapped and practiced the basic BFS/DFS implemenation with
-undirected graph matrix initially inspired by <a
-target="_blank" rel="noopener" href="https://github.com/jwasham/practice-cpp/tree/master/graphs"
-title="https://github.com/jwasham/practice-cpp/tree/master/graphs">Practice
-Undirected Graph Matrix</a> then reworked.</p>
-<figure>
-<center>
-<img src="/picture/undirected_graph_matrix.png" width="20%">Ordered
-paired, Unweight and Undirected Graph Database
-</center>
-</figure>
-<p>The basic functions for the understand graph are as follows:</p>
+<h3 id="Memory-Leaks"><a href="#Memory-Leaks" class="headerlink" title="Memory Leaks"></a>Memory Leaks</h3><p>The memory leaks occur when you allocate heap memory (with new or malloc/calloc) but don’t free it. Valgrind categories leaks using these terms:</p>
 <ul>
-<li>BFS (Breadth-first search): use queue and recrusively traversal all
-the connected nodes</li>
-<li>DFS (Depth-first search): use stack and recrusively traversal all
-the connected nodes</li>
+<li><p><strong>definitely lost</strong>: this means that no pointer to the block can be found. The block is classidied as “lost”, because the programmer could not possibly have freed it at program exit, since no pointer to it exists. This is likely a symptom of having lost the pointer at some earlier point in the program. Such cases should be fixed!</p>
+</li>
+<li><p><strong>indirectly lost</strong>: this means that the block is lost, not because there no pointers to it, but rather because all the blocks that point to it are themselves lost. The problem will disappear if the definitely lost blcok that point to it are themselves lost.</p>
+</li>
+<li><p><strong>possibly lost</strong>: this means that a chain of one or more pointers to the block has been found, but at least one of the pointers is an interior-pointer. This could just be a random value in memory that happens to point into a block.</p>
+</li>
+<li><p><strong>still reachable</strong>: a start-pointer or chain of start-pointers to the block is found. Since the block is still pointed at, you could have freed it before program exit.</p>
+</li>
 </ul>
-<p>Here is the python interface of graph traversing:</p>
-<figure class="codeblock codeblock--tabbed"><figcaption><span>The interface of undirected graph traversing</span><ul class="tabs"><li class="tab active">python</li></ul></figcaption><div class="tabs-content"><figure class="highlight python" style="display: block;"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    udg = UndirectedGraph()</span><br><span class="line">    udg.add_edge(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line">    udg.add_edge(<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">    udg.add_edge(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">    udg.add_edge(<span class="number">1</span>, <span class="number">7</span>)</span><br><span class="line">    udg.add_edge(<span class="number">3</span>, <span class="number">7</span>)</span><br><span class="line">    udg.add_edge(<span class="number">7</span>, <span class="number">8</span>)</span><br><span class="line">    udg.add_edge(<span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">    udg.add_edge(<span class="number">3</span>, <span class="number">5</span>)</span><br><span class="line">    udg.add_edge(<span class="number">4</span>, <span class="number">5</span>)</span><br><span class="line">    udg.add_edge(<span class="number">5</span>, <span class="number">6</span>)</span><br><span class="line">    udg.add_edge(<span class="number">6</span>, <span class="number">7</span>)</span><br><span class="line">    udg.add_edge(<span class="number">6</span>, <span class="number">8</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></tbody></table></figure></div></figure>
-<h3 id="shortest-path-problem">Shortest Path Problem</h3>
-<p>In graph theory, the shortest path problem is the problem of finding
-a path between two vertices (or nodes) in a graph such that the sum of
-the weights of it consitiuent edges is minimized.</p>
-<p>The problem of finding the shortest path between two intersections on
-a road map may be modeled as a special case of the shortest path problem
-in graphs, where the vertices correspond to intersections and the edges
-correspond to road segments, each weights by the length of the
-segments.</p>
-<p>The most important algorithms for solving this problem are: +
-Dijkstra's algorithm: solves the single-source shortest path problem
-with non-negative edge weight. + Bellman-Ford algorithm: solves the
-single-source problem if edge weight may be negative.</p>
-<p>Here, I only come up through the Dijkstra's algorithm with undirected
-graph initially, which inspired by then learned how it implements.</p>
-<figure>
-<center>
-<img src="/picture/dijkstra.png" width="30%">
-</center>
-</figure>
-<p>The basic functions for the undirected graph are as follows:</p>
-<ul>
-<li>Add edges in the graph and iterally get vertex: pointing out all of
-vertices in the undirected graph</li>
-<li>Dijkstra's algorithm: use priority queue and traversal all the
-connected nodes</li>
+<h3 id="Practice-An-Exception-Safe-Assignment-Operator"><a href="#Practice-An-Exception-Safe-Assignment-Operator" class="headerlink" title="Practice An Exception Safe Assignment Operator"></a>Practice An Exception Safe Assignment Operator</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;cstddef&gt;</span><br><span class="line">#include &lt;cstring&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">class String</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    String(const char* s = &quot;&quot;) : String(s, std::strlen(s) + 1) &#123;&#125;</span><br><span class="line">    String(const String&amp; other) : String(other.cstring) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    ~String() &#123; delete [] cstring; &#125;</span><br><span class="line"></span><br><span class="line">    // Copy Assignment Operator</span><br><span class="line">    String&amp; operator=(const String&amp; other)</span><br><span class="line">    &#123;</span><br><span class="line">        if (this == &amp;other) return *this;</span><br><span class="line"></span><br><span class="line">        // non-static data member with default member initializer</span><br><span class="line">        std::size_t n &#123; std::strlen(other.cstring) + 1 &#125;;</span><br><span class="line">        char * new_cstring = new char[n];           // allocate</span><br><span class="line">        std::memcpy(new_cstring, other.cstring, n); // populate array</span><br><span class="line">        delete[] cstring;                           // deallocate</span><br><span class="line">        cstring = new_cstring;</span><br><span class="line">        return *this;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Comparison operators</span><br><span class="line">    bool operator==(const String&amp; other) const</span><br><span class="line">    &#123;</span><br><span class="line">        if (std::strlen(cstring) != std::strlen(other.cstring)) return false;</span><br><span class="line">        for (std::size_t i = 0; i &lt; std::strlen(cstring); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            if (cstring[i] != other.cstring[i]) return false;</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    operator const char *() const &#123; return cstring; &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    String(const char* s, std::size_t n) : cstring(new char[n])</span><br><span class="line">    &#123;</span><br><span class="line">        std::memcpy(cstring, s, n);</span><br><span class="line">    &#125;</span><br><span class="line">    char * cstring;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    String str_1&#123;&quot;abcd&quot;&#125;;</span><br><span class="line">    String str_2&#123;&quot;def&quot;&#125;;</span><br><span class="line">    str_1 = str_2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Here is using Valgrind to check memory usage:</p>
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb" style="font-size: 80%">louis@louis-VirtualBox:~/GitHub/Exeception_Saft_assignment$ valgrind --leak-check=full ./a.out
+==1186914== Memcheck, a memory error detector
+==1186914== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==1186914== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==1186914== Command: ./a.out
+==1186914==
+==1186914==
+==1186914== HEAP SUMMARY:
+==1186914==     in use at exit: 0 bytes in 0 blocks
+==1186914==   total heap usage: 4 allocs, 4 frees, 72,717 bytes allocated
+==1186914==
+==1186914== All heap blocks were freed -- no leaks are possible
+==1186914==
+==1186914== For lists of detected and suppressed errors, rerun with: -s
+==1186914== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)</span></code></pre></div>
+
+
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://valgrind.org/">Valgrind Developers</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Rule_of_three_%28C%2B%2B_programming%29">Wiki: Rule of three (C++ Programming)</a></p>
+</li>
 </ul>
-<h4 id="dijkstras-algorithm">Dijkstra's Algorithm</h4>
-<p>Dijkstra's algorithm initially starts with infinite distances and
-then try to improve them step to find the shortest path from a single
-source to the closest of a set of target nodes on finite graph. Continue
-this process of updating the neighbor intersections with the shortest
-distance, making the current intersection as visited, and moving onto a
-closet unvisited intersection until you have marked the destination as
-visited.</p>
-<h2 id="conclusions">Conclusions</h2>
-<p>Graph databases are eﬃcient with respects to local data analysis. We
-should always be aware of that many search and traversal applications in
-practice are implemented using modified breadth-first and depth-first
-search algorithm.</p>
-<h2 id="reference">Reference</h2>
-<ul>
-<li><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Graph_theory">Wiki: Graph
-theory</a></p></li>
-<li><p><a
-target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Breadth-first_search">Wiki:
-Breadth-first search</a></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Depth-first_search">Wiki:
-Depth-first search</a></p></li>
-</ul>
-<p>
-Thanks for reading! Feel free to leave the comments below or
-<a href="mailto:shirong0419@icloud.com">email</a> to me. Any pieces of
-advice or discussions are always welcome. :)
-</p>
 
             
 
@@ -495,7 +397,7 @@ advice or discussions are always welcome. :)
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">TAGGED IN</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/algorithm/" rel="tag">algorithm</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/cpp/" rel="tag">cpp</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/programming/" rel="tag">programming</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/python/" rel="tag">python</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/cpp/" rel="tag">cpp</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/programming/" rel="tag">programming</a>
 
             </div>
         
@@ -505,14 +407,11 @@ advice or discussions are always welcome. :)
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/12/16/Graph_Search_and_Traversal_Notes/"
-                    data-tooltip="Notes of Graph Search and Traversal Implementation"
-                    aria-label="PREVIOUS: Notes of Graph Search and Traversal Implementation"
-                >
-                    
+                    <a
+                        class="post-action-btn btn btn--disabled"
+                        aria-hidden="true"
+                    >
+                        
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
                         <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                     </a>
@@ -522,9 +421,9 @@ advice or discussions are always welcome. :)
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/12/12/Introduction_of_Hamming_Code/"
-                    data-tooltip="Introduction of Hamming Code"
-                    aria-label="NEXT: Introduction of Hamming Code"
+                    href="/2023/01/01/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="NEXT: Welcome to Louis"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -549,7 +448,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -562,7 +461,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -622,14 +521,11 @@ advice or discussions are always welcome. :)
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/12/16/Graph_Search_and_Traversal_Notes/"
-                    data-tooltip="Notes of Graph Search and Traversal Implementation"
-                    aria-label="PREVIOUS: Notes of Graph Search and Traversal Implementation"
-                >
-                    
+                    <a
+                        class="post-action-btn btn btn--disabled"
+                        aria-hidden="true"
+                    >
+                        
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
                         <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                     </a>
@@ -639,9 +535,9 @@ advice or discussions are always welcome. :)
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/12/12/Introduction_of_Hamming_Code/"
-                    data-tooltip="Introduction of Hamming Code"
-                    aria-label="NEXT: Introduction of Hamming Code"
+                    href="/2023/01/01/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="NEXT: Welcome to Louis"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -666,7 +562,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -679,7 +575,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -723,7 +619,7 @@ advice or discussions are always welcome. :)
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -736,7 +632,7 @@ advice or discussions are always welcome. :)
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/"
+                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/"
                         aria-label="global.share_on_Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>global.share_on_Twitter</span>
@@ -1088,9 +984,9 @@ page.</p></div>
     
         <script>
           var disqus_config = function() {
-            this.page.url = 'https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/';
+            this.page.url = 'https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/';
               
-            this.page.identifier = '2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/';
+            this.page.identifier = '2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/';
               
           };
           (function() {
