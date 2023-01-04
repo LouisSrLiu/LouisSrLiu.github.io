@@ -22,16 +22,16 @@
             <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
         
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"“Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you improve your programs.”… from Wiki page.\n\nIntroductionValgrind tools supports to automatically detect memory issues and threading bugs, and show the profile of programs in detail. Some of the most difficult C/C++ bugs come from mismanagement of memory: allocating the wrong size, using an uninitialized pointer, accessing memory at the misstep in procedure, overrunging a buffer, and so on. These types of errors are tricky, as they can provide little debugging information, such as “Segmentation fault”, and tracking the observed problem back to underlying root.\nMemcheckMemcheck is the default tool on the Valgrind command line, specifes “—tool=memcheck”, a memory detector. It assists us to detect the memory issues that are common in C/C++ programs. There are two types of issues on memory errors and memory leaks.\nMemory ErrorsThe memory error is a red alert and should never be treated casually or ignored. We should keep in mind that errors are the primary concern. The most common memory errors are:\n\nAccessing memory you shouldn’t, e.g. overrunging and underrunning heap blocks, overrunging the top of the stack, and accessing memory after it has been freed.\n\nUsing undefined values, i.e. values that have not been initialised, or that have derived from other undefined values.\n\nIncorrect freeing of heap memory, such as double-freeing blocks, or mismatched use of malloc/new/new[] versus free/delete/delete[].\n\nOverlapping src and dst points in memcpy and related function\n\nPassing a fishy (presumably negative) value to the size parameter of memory allocation function.\n\n\nMemory LeaksThe memory leaks occur when you allocate heap memory (with new or malloc/calloc) but don’t free it. Valgrind categories leaks using these terms:\n\ndefinitely lost: this means that no pointer to the block can be found. The block is classidied as “lost”, because the programmer could not possibly have freed it at program exit, since no pointer to it exists. This is likely a symptom of having lost the pointer at some earlier point in the program. Such cases should be fixed!\n\nindirectly lost: this means that the block is lost, not because there no pointers to it, but rather because all the blocks that point to it are themselves lost. The problem will disappear if the definitely lost blcok that point to it are themselves lost.\n\npossibly lost: this means that a chain of one or more pointers to the block has been found, but at least one of the pointers is an interior-pointer. This could just be a random value in memory that happens to point into a block.\n\nstill reachable: a start-pointer or chain of start-pointers to the block is found. Since the block is still pointed at, you could have freed it before program exit.\n\n\nPractice An Exception Safe Assignment Operator1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253#include &lt;cstddef&gt;#include &lt;cstring&gt;#include &lt;iostream&gt;class String&#123;public:    String(const char* s = &quot;&quot;) : String(s, std::strlen(s) + 1) &#123;&#125;    String(const String&amp; other) : String(other.cstring) &#123;&#125;    ~String() &#123; delete [] cstring; &#125;    // Copy Assignment Operator    String&amp; operator=(const String&amp; other)    &#123;        if (this == &amp;other) return *this;        // non-static data member with default member initializer        std::size_t n &#123; std::strlen(other.cstring) + 1 &#125;;        char * new_cstring = new char[n];           // allocate        std::memcpy(new_cstring, other.cstring, n); // populate array        delete[] cstring;                           // deallocate        cstring = new_cstring;        return *this;    &#125;    // Comparison operators    bool operator==(const String&amp; other) const    &#123;        if (std::strlen(cstring) != std::strlen(other.cstring)) return false;        for (std::size_t i = 0; i &lt; std::strlen(cstring); ++i)        &#123;            if (cstring[i] != other.cstring[i]) return false;        &#125;        return true;    &#125;    operator const char *() const &#123; return cstring; &#125;private:    String(const char* s, std::size_t n) : cstring(new char[n])    &#123;        std::memcpy(cstring, s, n);    &#125;    char * cstring;&#125;;int main()&#123;    String str_1&#123;&quot;abcd&quot;&#125;;    String str_2&#123;&quot;def&quot;&#125;;    str_1 = str_2;&#125;\nHere is using Valgrind to check memory usage:\nlouis@louis-VirtualBox:~/GitHub/Exeception_Saft_assignment$ valgrind --leak-check=full ./a.out\n==1186914== Memcheck, a memory error detector\n==1186914== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.\n==1186914== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info\n==1186914== Command: ./a.out\n==1186914==\n==1186914==\n==1186914== HEAP SUMMARY:\n==1186914==     in use at exit: 0 bytes in 0 blocks\n==1186914==   total heap usage: 4 allocs, 4 frees, 72,717 bytes allocated\n==1186914==\n==1186914== All heap blocks were freed -- no leaks are possible\n==1186914==\n==1186914== For lists of detected and suppressed errors, rerun with: -s\n==1186914== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)\n\n\n\nReference\nValgrind Developers\n\nWiki: Rule of three (C++ Programming)\n\n\n","dateCreated":"2023-01-04T00:00:00+08:00","dateModified":"2023-01-04T16:17:57+08:00","datePublished":"2023-01-04T00:00:00+08:00","description":"“Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you improve your programs.”… from Wiki page.","headline":"C++ Assignment Overloading and Valgrind Memcheck","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/flight.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/","keywords":"programming, cpp","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/flight.jpeg"}</script>
-    <meta name="description" content="“Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you imp">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"\"Valgrind is an instrumentation framework for building dynamic\nanalysis tools. It comes with a set of tools each of which performs some\nkind of debugging, profiling, or similar task that helps you improve\nyour programs.\"... from Wiki page.\n\nIntroduction\nValgrind tools supports to automatically detect memory issues and\nthreading bugs, and show the profile of programs in detail. Some of the\nmost difficult C/C++ bugs come from mismanagement of memory: allocating\nthe wrong size, using an uninitialized pointer, accessing memory at the\nmisstep in procedure, overrunging a buffer, and so on. These types of\nerrors are tricky, as they can provide little debugging information,\nsuch as \"Segmentation fault\", and tracking the observed problem back to\nunderlying root.\nMemcheck\nMemcheck is the default tool on the Valgrind command line, specifes\n\"--tool=memcheck\", a memory detector. It assists us to detect the memory\nissues that are common in C/C++ programs. There are two types of issues\non memory errors and memory leaks.\nMemory Errors\nThe memory error is a red alert and should never be treated casually\nor ignored. We should keep in mind that errors are the primary concern.\nThe most common memory errors are:\n\nAccessing memory you shouldn't, e.g. overrunging and underrunning\nheap blocks, overrunging the top of the stack, and accessing memory\nafter it has been freed.\nUsing undefined values, i.e. values that have not been\ninitialised, or that have derived from other undefined values.\nIncorrect freeing of heap memory, such as double-freeing blocks,\nor mismatched use of malloc/new/new[] versus\nfree/delete/delete[].\nOverlapping src and dst points in memcpy and related\nfunction\nPassing a fishy (presumably negative) value to the size parameter\nof memory allocation function.\n\nMemory Leaks\nThe memory leaks occur when you allocate heap memory (with new or\nmalloc/calloc) but don't free it. Valgrind categories leaks using these\nterms:\n\ndefinitely lost: this means that no pointer to\nthe block can be found. The block is classidied as \"lost\", because the\nprogrammer could not possibly have freed it at program exit, since no\npointer to it exists. This is likely a symptom of having lost the\npointer at some earlier point in the program. Such cases should be\nfixed!\nindirectly lost: this means that the block is\nlost, not because there no pointers to it, but rather because all the\nblocks that point to it are themselves lost. The problem will disappear\nif the definitely lost blcok that point to it are themselves\nlost.\npossibly lost: this means that a chain of one or\nmore pointers to the block has been found, but at least one of the\npointers is an interior-pointer. This could just be a random value in\nmemory that happens to point into a block.\nstill reachable: a start-pointer or chain of\nstart-pointers to the block is found. Since the block is still pointed\nat, you could have freed it before program exit.\n\nPractice An\nException Safe Assignment Operator\nIn the following practice, we strictly follow allocate, populate and\ndeallocate in the copy assignment operator to avoid heap blocks were not\nfreed error.\n1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253#include &lt;cstddef&gt;#include &lt;cstring&gt;#include &lt;iostream&gt;class String&#123;public:    String(const char* s = &quot;&quot;) : String(s, std::strlen(s) + 1) &#123;&#125;    String(const String&amp; other) : String(other.cstring) &#123;&#125;    ~String() &#123; delete [] cstring; &#125;    // Copy Assignment Operator    String&amp; operator=(const String&amp; other)    &#123;        if (this == &amp;other) return *this;        // non-static data member with default member initializer        std::size_t n &#123; std::strlen(other.cstring) + 1 &#125;;        char * new_cstring = new char[n];           // allocate        std::memcpy(new_cstring, other.cstring, n); // populate array        delete[] cstring;                           // deallocate        cstring = new_cstring;        return *this;    &#125;    // Comparison operators    bool operator==(const String&amp; other) const    &#123;        if (std::strlen(cstring) != std::strlen(other.cstring)) return false;        for (std::size_t i = 0; i &lt; std::strlen(cstring); ++i)        &#123;            if (cstring[i] != other.cstring[i]) return false;        &#125;        return true;    &#125;    operator const char *() const &#123; return cstring; &#125;private:    String(const char* s, std::size_t n) : cstring(new char[n])    &#123;        std::memcpy(cstring, s, n);    &#125;    char * cstring;&#125;;int main()&#123;    String str_1&#123;&quot;abcd&quot;&#125;;    String str_2&#123;&quot;def&quot;&#125;;    str_1 = str_2;&#125;\nHere is using Valgrind to check memory usage:\n\nlouis@louis-VirtualBox:~/GitHub/Exeception_Saft_assignment$ valgrind --leak-check=full ./a.out\n==1186914== Memcheck, a memory error detector\n==1186914== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.\n==1186914== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info\n==1186914== Command: ./a.out\n==1186914==\n==1186914==\n==1186914== HEAP SUMMARY:\n==1186914==     in use at exit: 0 bytes in 0 blocks\n==1186914==   total heap usage: 4 allocs, 4 frees, 72,717 bytes allocated\n==1186914==\n==1186914== All heap blocks were freed -- no leaks are possible\n==1186914==\n==1186914== For lists of detected and suppressed errors, rerun with: -s\n==1186914== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)\n\nReference\n\nValgrind Developers\n\n","dateCreated":"2023-01-04T00:00:00+08:00","dateModified":"2023-01-04T17:03:24+08:00","datePublished":"2023-01-04T00:00:00+08:00","description":"\"Valgrind is an instrumentation framework for building dynamic\nanalysis tools. It comes with a set of tools each of which performs some\nkind of debugging, profiling, or similar task that helps you improve\nyour programs.\"... from Wiki page.","headline":"C++ Assignment Overloading and Valgrind Memcheck","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/flight.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/","keywords":"programming, cpp","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/flight.jpeg"}</script>
+    <meta name="description" content="&quot;Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you imp">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="C++ Assignment Overloading and Valgrind Memcheck">
 <meta property="og:url" content="https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/index.html">
 <meta property="og:site_name" content="Louis">
-<meta property="og:description" content="“Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you imp">
+<meta property="og:description" content="&quot;Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you imp">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-01-03T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-01-04T08:17:57.045Z">
+<meta property="article:modified_time" content="2023-01-04T09:03:24.904Z">
 <meta property="article:author" content="ShiRong Liu">
 <meta property="article:tag" content="programming">
 <meta property="article:tag" content="cpp">
@@ -126,7 +126,9 @@
                 </a>
                 <h4 class="sidebar-profile-name">ShiRong Liu</h4>
                 
-                    <h5 class="sidebar-profile-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub page, open-source, software development, Linux, and travels in my spare time.</p>
+                    <h5 class="sidebar-profile-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub
+page, open-source, software development, Linux, and travels in my spare
+time.</p>
 </h5>
                 
             </div>
@@ -332,37 +334,76 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>“Valgrind is an instrumentation framework for building dynamic analysis tools. It comes with a set of tools each of which performs some kind of debugging, profiling, or similar task that helps you improve your programs.”… from Wiki page.</p>
+            <p>"Valgrind is an instrumentation framework for building dynamic
+analysis tools. It comes with a set of tools each of which performs some
+kind of debugging, profiling, or similar task that helps you improve
+your programs."... from Wiki page.</p>
 <span id="more"></span>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Valgrind tools supports to automatically detect memory issues and threading bugs, and show the profile of programs in detail. Some of the most difficult C/C++ bugs come from mismanagement of memory: allocating the wrong size, using an uninitialized pointer, accessing memory at the misstep in procedure, overrunging a buffer, and so on. These types of errors are tricky, as they can provide little debugging information, such as “Segmentation fault”, and tracking the observed problem back to underlying root.</p>
-<h2 id="Memcheck"><a href="#Memcheck" class="headerlink" title="Memcheck"></a>Memcheck</h2><p>Memcheck is the default tool on the Valgrind command line, specifes “—tool=memcheck”, a memory detector. It assists us to detect the memory issues that are common in C/C++ programs. There are two types of issues on memory errors and memory leaks.</p>
-<h3 id="Memory-Errors"><a href="#Memory-Errors" class="headerlink" title="Memory Errors"></a>Memory Errors</h3><p>The memory error is a red alert and should never be treated casually or ignored. We should keep in mind that errors are the primary concern. The most common memory errors are:</p>
+<h2 id="introduction">Introduction</h2>
+<p>Valgrind tools supports to automatically detect memory issues and
+threading bugs, and show the profile of programs in detail. Some of the
+most difficult C/C++ bugs come from mismanagement of memory: allocating
+the wrong size, using an uninitialized pointer, accessing memory at the
+misstep in procedure, overrunging a buffer, and so on. These types of
+errors are tricky, as they can provide little debugging information,
+such as "Segmentation fault", and tracking the observed problem back to
+underlying root.</p>
+<h2 id="memcheck">Memcheck</h2>
+<p>Memcheck is the default tool on the Valgrind command line, specifes
+"--tool=memcheck", a memory detector. It assists us to detect the memory
+issues that are common in C/C++ programs. There are two types of issues
+on memory errors and memory leaks.</p>
+<h3 id="memory-errors">Memory Errors</h3>
+<p>The memory error is a red alert and should never be treated casually
+or ignored. We should keep in mind that errors are the primary concern.
+The most common memory errors are:</p>
 <ul>
-<li><p>Accessing memory you shouldn’t, e.g. overrunging and underrunning heap blocks, overrunging the top of the stack, and accessing memory after it has been freed.</p>
-</li>
-<li><p>Using undefined values, i.e. values that have not been initialised, or that have derived from other undefined values.</p>
-</li>
-<li><p>Incorrect freeing of heap memory, such as double-freeing blocks, or mismatched use of malloc/new/new[] versus free/delete/delete[].</p>
-</li>
-<li><p>Overlapping src and dst points in memcpy and related function</p>
-</li>
-<li><p>Passing a fishy (presumably negative) value to the size parameter of memory allocation function.</p>
-</li>
+<li><p>Accessing memory you shouldn't, e.g. overrunging and underrunning
+heap blocks, overrunging the top of the stack, and accessing memory
+after it has been freed.</p></li>
+<li><p>Using undefined values, i.e. values that have not been
+initialised, or that have derived from other undefined values.</p></li>
+<li><p>Incorrect freeing of heap memory, such as double-freeing blocks,
+or mismatched use of malloc/new/new[] versus
+free/delete/delete[].</p></li>
+<li><p>Overlapping src and dst points in memcpy and related
+function</p></li>
+<li><p>Passing a fishy (presumably negative) value to the size parameter
+of memory allocation function.</p></li>
 </ul>
-<h3 id="Memory-Leaks"><a href="#Memory-Leaks" class="headerlink" title="Memory Leaks"></a>Memory Leaks</h3><p>The memory leaks occur when you allocate heap memory (with new or malloc/calloc) but don’t free it. Valgrind categories leaks using these terms:</p>
+<h3 id="memory-leaks">Memory Leaks</h3>
+<p>The memory leaks occur when you allocate heap memory (with new or
+malloc/calloc) but don't free it. Valgrind categories leaks using these
+terms:</p>
 <ul>
-<li><p><strong>definitely lost</strong>: this means that no pointer to the block can be found. The block is classidied as “lost”, because the programmer could not possibly have freed it at program exit, since no pointer to it exists. This is likely a symptom of having lost the pointer at some earlier point in the program. Such cases should be fixed!</p>
-</li>
-<li><p><strong>indirectly lost</strong>: this means that the block is lost, not because there no pointers to it, but rather because all the blocks that point to it are themselves lost. The problem will disappear if the definitely lost blcok that point to it are themselves lost.</p>
-</li>
-<li><p><strong>possibly lost</strong>: this means that a chain of one or more pointers to the block has been found, but at least one of the pointers is an interior-pointer. This could just be a random value in memory that happens to point into a block.</p>
-</li>
-<li><p><strong>still reachable</strong>: a start-pointer or chain of start-pointers to the block is found. Since the block is still pointed at, you could have freed it before program exit.</p>
-</li>
+<li><p><strong>definitely lost</strong>: this means that no pointer to
+the block can be found. The block is classidied as "lost", because the
+programmer could not possibly have freed it at program exit, since no
+pointer to it exists. This is likely a symptom of having lost the
+pointer at some earlier point in the program. Such cases should be
+fixed!</p></li>
+<li><p><strong>indirectly lost</strong>: this means that the block is
+lost, not because there no pointers to it, but rather because all the
+blocks that point to it are themselves lost. The problem will disappear
+if the definitely lost blcok that point to it are themselves
+lost.</p></li>
+<li><p><strong>possibly lost</strong>: this means that a chain of one or
+more pointers to the block has been found, but at least one of the
+pointers is an interior-pointer. This could just be a random value in
+memory that happens to point into a block.</p></li>
+<li><p><strong>still reachable</strong>: a start-pointer or chain of
+start-pointers to the block is found. Since the block is still pointed
+at, you could have freed it before program exit.</p></li>
 </ul>
-<h3 id="Practice-An-Exception-Safe-Assignment-Operator"><a href="#Practice-An-Exception-Safe-Assignment-Operator" class="headerlink" title="Practice An Exception Safe Assignment Operator"></a>Practice An Exception Safe Assignment Operator</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;cstddef&gt;</span><br><span class="line">#include &lt;cstring&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">class String</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    String(const char* s = &quot;&quot;) : String(s, std::strlen(s) + 1) &#123;&#125;</span><br><span class="line">    String(const String&amp; other) : String(other.cstring) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    ~String() &#123; delete [] cstring; &#125;</span><br><span class="line"></span><br><span class="line">    // Copy Assignment Operator</span><br><span class="line">    String&amp; operator=(const String&amp; other)</span><br><span class="line">    &#123;</span><br><span class="line">        if (this == &amp;other) return *this;</span><br><span class="line"></span><br><span class="line">        // non-static data member with default member initializer</span><br><span class="line">        std::size_t n &#123; std::strlen(other.cstring) + 1 &#125;;</span><br><span class="line">        char * new_cstring = new char[n];           // allocate</span><br><span class="line">        std::memcpy(new_cstring, other.cstring, n); // populate array</span><br><span class="line">        delete[] cstring;                           // deallocate</span><br><span class="line">        cstring = new_cstring;</span><br><span class="line">        return *this;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Comparison operators</span><br><span class="line">    bool operator==(const String&amp; other) const</span><br><span class="line">    &#123;</span><br><span class="line">        if (std::strlen(cstring) != std::strlen(other.cstring)) return false;</span><br><span class="line">        for (std::size_t i = 0; i &lt; std::strlen(cstring); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            if (cstring[i] != other.cstring[i]) return false;</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    operator const char *() const &#123; return cstring; &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    String(const char* s, std::size_t n) : cstring(new char[n])</span><br><span class="line">    &#123;</span><br><span class="line">        std::memcpy(cstring, s, n);</span><br><span class="line">    &#125;</span><br><span class="line">    char * cstring;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    String str_1&#123;&quot;abcd&quot;&#125;;</span><br><span class="line">    String str_2&#123;&quot;def&quot;&#125;;</span><br><span class="line">    str_1 = str_2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Here is using Valgrind to check memory usage:</p>
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code class="hljs ruby"><span class="nb" style="font-size: 80%">louis@louis-VirtualBox:~/GitHub/Exeception_Saft_assignment$ valgrind --leak-check=full ./a.out
+<h3 id="practice-an-exception-safe-assignment-operator">Practice An
+Exception Safe Assignment Operator</h3>
+<p>In the following practice, we strictly follow allocate, populate and
+deallocate in the copy assignment operator to avoid heap blocks were not
+freed error.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;cstddef&gt;</span><br><span class="line">#include &lt;cstring&gt;</span><br><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">class String</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    String(const char* s = &quot;&quot;) : String(s, std::strlen(s) + 1) &#123;&#125;</span><br><span class="line">    String(const String&amp; other) : String(other.cstring) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    ~String() &#123; delete [] cstring; &#125;</span><br><span class="line"></span><br><span class="line">    // Copy Assignment Operator</span><br><span class="line">    String&amp; operator=(const String&amp; other)</span><br><span class="line">    &#123;</span><br><span class="line">        if (this == &amp;other) return *this;</span><br><span class="line"></span><br><span class="line">        // non-static data member with default member initializer</span><br><span class="line">        std::size_t n &#123; std::strlen(other.cstring) + 1 &#125;;</span><br><span class="line">        char * new_cstring = new char[n];           // allocate</span><br><span class="line">        std::memcpy(new_cstring, other.cstring, n); // populate array</span><br><span class="line">        delete[] cstring;                           // deallocate</span><br><span class="line">        cstring = new_cstring;</span><br><span class="line">        return *this;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Comparison operators</span><br><span class="line">    bool operator==(const String&amp; other) const</span><br><span class="line">    &#123;</span><br><span class="line">        if (std::strlen(cstring) != std::strlen(other.cstring)) return false;</span><br><span class="line">        for (std::size_t i = 0; i &lt; std::strlen(cstring); ++i)</span><br><span class="line">        &#123;</span><br><span class="line">            if (cstring[i] != other.cstring[i]) return false;</span><br><span class="line">        &#125;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    operator const char *() const &#123; return cstring; &#125;</span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    String(const char* s, std::size_t n) : cstring(new char[n])</span><br><span class="line">    &#123;</span><br><span class="line">        std::memcpy(cstring, s, n);</span><br><span class="line">    &#125;</span><br><span class="line">    char * cstring;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    String str_1&#123;&quot;abcd&quot;&#125;;</span><br><span class="line">    String str_2&#123;&quot;def&quot;&#125;;</span><br><span class="line">    str_1 = str_2;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+Here is using Valgrind to check memory usage:
+<div class="language-shell highlighter-rouge">
+<pre class="highlight"><code class="hljs ruby"><span class="nb" style="font-size: 80%">louis@louis-VirtualBox:~/GitHub/Exeception_Saft_assignment$ valgrind --leak-check=full ./a.out
 ==1186914== Memcheck, a memory error detector
 ==1186914== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
 ==1186914== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
@@ -376,15 +417,11 @@
 ==1186914== All heap blocks were freed -- no leaks are possible
 ==1186914==
 ==1186914== For lists of detected and suppressed errors, rerun with: -s
-==1186914== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)</span></code></pre></div>
-
-
-
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
-<li><p><a target="_blank" rel="noopener" href="https://valgrind.org/">Valgrind Developers</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Rule_of_three_%28C%2B%2B_programming%29">Wiki: Rule of three (C++ Programming)</a></p>
-</li>
+==1186914== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)</span></code></pre>
+</div>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://valgrind.org/">Valgrind Developers</a></li>
 </ul>
 
             
@@ -407,11 +444,14 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a
-                        class="post-action-btn btn btn--disabled"
-                        aria-hidden="true"
-                    >
-                        
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2023/01/04/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
+                >
+                    
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
                         <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                     </a>
@@ -421,9 +461,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2023/01/01/Welcome-to-the-new-Tranquilpeak/"
-                    data-tooltip="Welcome to Louis"
-                    aria-label="NEXT: Welcome to Louis"
+                    href="/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/"
+                    data-tooltip="How to Use Tmux and Set up Configuration on Ubuntu"
+                    aria-label="NEXT: How to Use Tmux and Set up Configuration on Ubuntu"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -521,11 +561,14 @@
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    <a
-                        class="post-action-btn btn btn--disabled"
-                        aria-hidden="true"
-                    >
-                        
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2023/01/04/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
+                >
+                    
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
                         <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                     </a>
@@ -535,9 +578,9 @@
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2023/01/01/Welcome-to-the-new-Tranquilpeak/"
-                    data-tooltip="Welcome to Louis"
-                    aria-label="NEXT: Welcome to Louis"
+                    href="/2022/12/30/How_to_Use_Tmux_and_Set_up_Configuration_on_Ubuntu/"
+                    data-tooltip="How to Use Tmux and Set up Configuration on Ubuntu"
+                    aria-label="NEXT: How to Use Tmux and Set up Configuration on Ubuntu"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -662,14 +705,16 @@
         
             <h4 id="about-card-name">ShiRong Liu</h4>
         
-            <div id="about-card-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub page, open-source, software development, Linux, and travels in my spare time.</p>
+            <div id="about-card-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub
+page, open-source, software development, Linux, and travels in my spare
+time.</p>
 </div>
         
         
             <div id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p> Embedded C/C++ Software Engineer</p>
+                <p>Embedded C/C++ Software Engineer</p>
 
             </div>
         
