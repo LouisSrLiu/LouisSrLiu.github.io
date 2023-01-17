@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Louis">
-    <title>Overview of Dynamic Memory and Smart Pointer - Louis</title>
+    <title>Welcome to Louis - Louis</title>
     <meta name="author" content="ShiRong Liu">
     
         <meta name="keywords" content="hexo,javascript,">
@@ -22,18 +22,18 @@
             <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
         
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"Smart pointers are used to make sure that an object is deleted if it\nis no longer used(referenced).\n\nIntorduction\nThe C++ language allows programmers to manually allocate/deallocate\nmemory by static allocation or dynamic allocation. The static memory is\nallocated from the stack and used for local static objects, for class\nstatic data members and for variables defined outside any function. The\ndynamic memory is allocated from the free store or heap and its\nallocation with new and delete. However, dynamically allocated memory is\nright runtime, known as memory leak, or free the memory when there are\nstill pointers referring to that memory. There is a way to avoid memory\nleak or manage dynamic allocation smartly by using smart pointer.\nIn this post, I would like to try going through the basic concept of\nsmart pointer std::unique_ptr, std::shared_ptr, and std::weak_ptr.\nSmart Pointers\nSmart pointer is nice for when dynamic allocation is necessary. Since\nany dynamic memory requires a delete, it's much easier, much safer, and\nmuch less error prone to let the smart pointer take care of the cleanup,\nrather than doing it manually. The C++ 11 library defines three kinds of\nsmart pointers that differ in how they manage their underlying\npointers.\nReference\n\nCppreference:\nsmart pointers\n\n","dateCreated":"2023-01-05T00:00:00+08:00","dateModified":"2023-01-06T19:34:20+08:00","datePublished":"2023-01-05T00:00:00+08:00","description":"Smart pointers are used to make sure that an object is deleted if it\nis no longer used(referenced).","headline":"Overview of Dynamic Memory and Smart Pointer","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/","keywords":"Tags"}</script>
-    <meta name="description" content="Smart pointers are used to make sure that an object is deleted if it is no longer used(referenced).">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"\nWho am IMy name is Shi-Rong Liu, and I am a Senior Engineer. My research and engineering interests are mainly in the area of open-source, general computer science, and user-friendly software engineering.\nAbout This SiteThis website was formally built in the Autumn of 2022, but migrating from Jekyll to Hexo and changing to this style.\nThe main purposes of this website are list here:\n\nDiscuss the technical details of user-friendly software engineering/tool, and computer sciences\nDocument the implementation of algorithms for solving real problems\nPresent my independent side projects\nRecord my personal achievements, and experiences\n\nIt should be noted that all the contents of this website are solely my own and do not express the views or opinions of my employer.\nContact MeIf you have any piece of advice or critical comments regarding my blog posts, please leave your comments under the blog post. If you have any questions regarding my GitHub open source projects, please open an issue ticket in the repository. This will be beneficial for all the readers and save our time for not answering duplicated questions. For private questions or private inquiry, please contact me via my personal email.","dateCreated":"2023-01-17T17:59:49+08:00","dateModified":"2023-01-17T17:59:49+08:00","datePublished":"2023-01-17T17:59:49+08:00","description":"\n\n\"No amount of genius can overcome a preoccupation with detail\" - Marion Levy Jr.","headline":"Welcome to Louis","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissriiu/saltlakecity-100.jpg","https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissriiu/saltlakecity-100.jpg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2023/01/17/Welcome-to-the-new-Tranquilpeak/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2023/01/17/Welcome-to-the-new-Tranquilpeak/","keywords":"hexo theme","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissriiu/saltlakecity-100.jpg"}</script>
+    <meta name="description" content="&quot;No amount of genius can overcome a preoccupation with detail&quot; - Marion Levy Jr.">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="Overview of Dynamic Memory and Smart Pointer">
-<meta property="og:url" content="https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/index.html">
+<meta property="og:title" content="Welcome to Louis">
+<meta property="og:url" content="https://louissrliu.github.io/2023/01/17/Welcome-to-the-new-Tranquilpeak/index.html">
 <meta property="og:site_name" content="Louis">
-<meta property="og:description" content="Smart pointers are used to make sure that an object is deleted if it is no longer used(referenced).">
-<meta property="og:locale">
-<meta property="article:published_time" content="2023-01-04T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-01-06T11:34:20.960Z">
+<meta property="og:description" content="&quot;No amount of genius can overcome a preoccupation with detail&quot; - Marion Levy Jr.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-01-17T09:59:49.423Z">
+<meta property="article:modified_time" content="2023-01-17T09:59:49.424Z">
 <meta property="article:author" content="ShiRong Liu">
-<meta property="article:tag" content="Tags">
+<meta property="article:tag" content="hexo theme">
 <meta name="twitter:card" content="summary">
     
     
@@ -43,6 +43,12 @@
         <meta property="og:image" content="https://avatars.githubusercontent.com/u/26519320?v=4"/>
     
     
+        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissriiu/saltlakecity-100.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissriiu/saltlakecity-100.jpg"/>
+    
+    
+        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissriiu/saltlakecity-100.jpg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissriiu/saltlakecity-100.jpg"/>
     
     
     <!--STYLES-->
@@ -122,7 +128,9 @@
                 </a>
                 <h4 class="sidebar-profile-name">ShiRong Liu</h4>
                 
-                    <h5 class="sidebar-profile-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub page, open-source, software development, Linux, and travels in my spare time.</p>
+                    <h5 class="sidebar-profile-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub
+page, open-source, software development, Linux, and travels in my spare
+time.</p>
 </h5>
                 
             </div>
@@ -290,73 +298,64 @@
 </nav>
 
             
+        <div class="post-header-cover
+                    text-center
+                    "
+             style="background-image:url('https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissriiu/saltlakecity-100.jpg');"
+             data-behavior="4">
+            
+                <div class="post-header main-content-wrap text-center">
+    
+        <h1 class="post-title">
+            Welcome to Louis
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2023-01-17T17:59:49+08:00">
+	
+		    Jan 17, 2023
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/releases/">releases</a>
+
+
+    
+    
+    
+</div>
+
+    
+</div>
+
+            
+        </div>
+
             <div id="main" data-behavior="4"
-                 class="
+                 class="hasCover
                         hasCoverMetaIn
                         ">
                 
 <article class="post">
     
     
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            Overview of Dynamic Memory and Smart Pointer
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2023-01-05T00:00:00+08:00">
-	
-		    Jan 05, 2023
-    	
-    </time>
-    
-        <span>in </span>
-        
-    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>
-
-
-    
-    
-    
-</div>
-
-    
-</div>
-
-    
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>Smart pointers are used to make sure that an object is deleted if it
-is no longer used(referenced).</p>
-<span id="more"></span>
-<h2 id="intorduction">Intorduction</h2>
-<p>The C++ language allows programmers to manually allocate/deallocate
-memory by static allocation or dynamic allocation. The static memory is
-allocated from the stack and used for local static objects, for class
-static data members and for variables defined outside any function. The
-dynamic memory is allocated from the free store or heap and its
-allocation with new and delete. However, dynamically allocated memory is
-right runtime, known as memory leak, or free the memory when there are
-still pointers referring to that memory. There is a way to avoid memory
-leak or manage dynamic allocation smartly by using smart pointer.</p>
-<p>In this post, I would like to try going through the basic concept of
-smart pointer std::unique_ptr, std::shared_ptr, and std::weak_ptr.</p>
-<h2 id="smart-pointers">Smart Pointers</h2>
-<p>Smart pointer is nice for when dynamic allocation is necessary. Since
-any dynamic memory requires a delete, it's much easier, much safer, and
-much less error prone to let the smart pointer take care of the cleanup,
-rather than doing it manually. The C++ 11 library defines three kinds of
-smart pointers that differ in how they manage their underlying
-pointers.</p>
-<h2 id="reference">Reference</h2>
+            <!-- excerpt --></p>
+<h2 id="Who-am-I"><a href="#Who-am-I" class="headerlink" title="Who am I"></a>Who am I</h2><p>My name is Shi-Rong Liu, and I am a Senior Engineer. My research and engineering interests are mainly in the area of open-source, general computer science, and user-friendly software engineering.</p>
+<h2 id="About-This-Site"><a href="#About-This-Site" class="headerlink" title="About This Site"></a>About This Site</h2><p>This website was formally built in the Autumn of 2022, but migrating from <a target="_blank" rel="noopener" href="http://louiscode00.com/" title="http://louiscode00.com/">Jekyll</a> to Hexo and changing to this style.</p>
+<p>The main purposes of this website are list here:</p>
 <ul>
-<li><a
-target="_blank" rel="noopener" href="https://en.cppreference.com/book/intro/smart_pointers">Cppreference:
-smart pointers</a></li>
+<li>Discuss the technical details of user-friendly software engineering/tool, and computer sciences</li>
+<li>Document the implementation of algorithms for solving real problems</li>
+<li>Present my independent side projects</li>
+<li>Record my personal achievements, and experiences</li>
 </ul>
-
+<p>It should be noted that all the contents of this website are solely my own and do not express the views or opinions of my employer.</p>
+<h2 id="Contact-Me"><a href="#Contact-Me" class="headerlink" title="Contact Me"></a>Contact Me</h2><p>If you have any piece of advice or critical comments regarding my blog posts, please leave your comments under the blog post. If you have any questions regarding my <a target="_blank" rel="noopener" href="https://github.com/s311354" title="https://github.com/s311354">GitHub</a> open source projects, please open an issue ticket in the repository. This will be beneficial for all the readers and save our time for not answering duplicated questions. For private questions or private inquiry, please contact me via my personal <a href="mailto:shirong0419@icloud.com">email</a>.</p>
             
 
 
@@ -367,7 +366,7 @@ smart pointers</a></li>
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">TAGGED IN</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/Tags/" rel="tag">Tags</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/hexo-theme/" rel="tag">hexo theme</a>
 
             </div>
         
@@ -391,9 +390,9 @@ smart pointers</a></li>
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2023/01/04/Welcome-to-the-new-Tranquilpeak/"
-                    data-tooltip="Welcome to Louis"
-                    aria-label="NEXT: Welcome to Louis"
+                    href="/2023/01/17/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
+                    data-tooltip="Overview of Dynamic Memory and Smart Pointer"
+                    aria-label="NEXT: Overview of Dynamic Memory and Smart Pointer"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -418,7 +417,7 @@ smart pointers</a></li>
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/17/Welcome-to-the-new-Tranquilpeak/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -431,7 +430,7 @@ smart pointers</a></li>
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/17/Welcome-to-the-new-Tranquilpeak/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -505,9 +504,9 @@ smart pointers</a></li>
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2023/01/04/Welcome-to-the-new-Tranquilpeak/"
-                    data-tooltip="Welcome to Louis"
-                    aria-label="NEXT: Welcome to Louis"
+                    href="/2023/01/17/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
+                    data-tooltip="Overview of Dynamic Memory and Smart Pointer"
+                    aria-label="NEXT: Overview of Dynamic Memory and Smart Pointer"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -532,7 +531,7 @@ smart pointers</a></li>
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/17/Welcome-to-the-new-Tranquilpeak/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -545,7 +544,7 @@ smart pointers</a></li>
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/17/Welcome-to-the-new-Tranquilpeak/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -589,7 +588,7 @@ smart pointers</a></li>
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/17/Welcome-to-the-new-Tranquilpeak/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -602,7 +601,7 @@ smart pointers</a></li>
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
+                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/17/Welcome-to-the-new-Tranquilpeak/"
                         aria-label="global.share_on_Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>global.share_on_Twitter</span>
@@ -632,14 +631,16 @@ smart pointers</a></li>
         
             <h4 id="about-card-name">ShiRong Liu</h4>
         
-            <div id="about-card-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub page, open-source, software development, Linux, and travels in my spare time.</p>
+            <div id="about-card-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub
+page, open-source, software development, Linux, and travels in my spare
+time.</p>
 </div>
         
         
             <div id="about-card-job">
                 <i class="fa fa-briefcase"></i>
                 <br/>
-                <p> Embedded C/C++ Software Engineer</p>
+                <p>Embedded C/C++ Software Engineer</p>
 
             </div>
         
@@ -954,9 +955,9 @@ page.</p></div>
     
         <script>
           var disqus_config = function() {
-            this.page.url = 'https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/';
+            this.page.url = 'https://louissrliu.github.io/2023/01/17/Welcome-to-the-new-Tranquilpeak/';
               
-            this.page.identifier = '2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/';
+            this.page.identifier = '2023/01/17/Welcome-to-the-new-Tranquilpeak/';
               
           };
           (function() {
