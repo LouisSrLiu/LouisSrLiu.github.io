@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Louis">
-    <title>Embed MapLibre Map for Website - Louis</title>
+    <title>Overview of Dynamic Memory and Smart Pointer - Louis</title>
     <meta name="author" content="ShiRong Liu">
     
         <meta name="keywords" content="hexo,javascript,">
@@ -22,19 +22,18 @@
             <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
         
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"In our daily life, most of us usually use Google Map or Apple Maps to help us to\nnavigate to a place. We can see traffic info, public transit and also\nchoose our mode of transportation.\n\nRecently, I was looking for ways to embed a Map to my website that\ncontains multiples of custom locations. There are varieties of\ntechnologies to choose, such as Amaxon location\nservice, Google Map API and MapLibre GL JS,\netc. In this post, I would like to discuss how to use MapLibre GL JS to\nembed and create custom dynamic maps on our websites mostly for\nfree.\nMapLibre GL JS\nMapLibre GL JS is\nan open-source library for publishing maps on your websites. The maps\nuses vector tileset source over GeoJSON data soruces when possible and\nare fast rendering in browser has become possible thanks to GPU.\nQuick Start\nBefore begining shortly, we have to register an account in Maptiler, get an default API Key\nto protect which is used for accessing maps, tiles, and data from your\naccount. Then, using the API key in code is shown below.\n1234567891011121314151617181920212223242526272829303132&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;title&gt;Add a default marker&lt;/title&gt;&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot; /&gt;&lt;script src=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js&quot;&gt;&lt;/script&gt;&lt;link href=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css&quot; rel=&quot;stylesheet&quot; /&gt;&lt;style&gt;\tbody &#123; margin: 0; padding: 0; &#125;\t#map &#123; position: absolute; top: 0; bottom: 0; width: 100%; &#125;&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=&quot;map&quot;&gt;&lt;/div&gt; &lt;script&gt;var map = new maplibregl.Map(&#123;    container: &#x27;map&#x27;,    style:    &#x27;https://api.maptiler.com/maps/streets/style.json?key=YOUR_OWN_MAPTILER_API&#x27;,    center: [12.550343, 55.665957],    zoom: 8&#125;); var marker = new maplibregl.Marker()    .setLngLat([12.550343, 55.665957])    .addTo(map);&lt;/script&gt; &lt;/body&gt;&lt;/html&gt;\nFuther copy the code, paste it into your favorite text editor, and\nsave it as .html file. (remember to replace YOUR_OWN_MAPTILER_API with\nyour actual API key). Next, we can ues iframe for integration with the\npost.\n123&lt;div style=&quot;overflow-x:auto;&quot;&gt;    &lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;&lt;/div&gt;\nSimple Example\nThe embedded map for this simple example looks like this.\n\n&lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;\n\nCustom Example\nWe can also customize the marker to a Map. Similar to the above\nexample, I created another custom example map with marked places where I\nhave visited recently nearby.\n\n&lt;iframe src=&quot;/javascript/maplibre/add-custom-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-custom-marker&quot;&gt;&lt;/iframe&gt;\n\nNow, we know how to simply embed the custom dynamic maps on our\nwebsites. Hope this post will be helpful.\nReference\n\nGoogle Maps\nPlatform\nOpen-source\nlibrary - MapLibre GL JS\nMapbox Docs -\nvector tiles\nMapbox\nDocs - Improve the performance of Mapbox GL JS maps\n\n\nThanks for reading! Feel free to leave the comments below or\nemail to me. Any pieces of\nadvice or discussions are always welcome. :)\n\n","dateCreated":"2022-09-28T00:00:00+08:00","dateModified":"2022-12-14T16:16:16+08:00","datePublished":"2022-09-28T00:00:00+08:00","description":"In our daily life, most of us usually use Google Map or Apple Maps to help us to\nnavigate to a place. We can see traffic info, public transit and also\nchoose our mode of transportation.","headline":"Embed MapLibre Map for Website","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/","keywords":"javascript, map","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"}</script>
-    <meta name="description" content="In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation.">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"Smart pointers are used to make sure that an object is deleted if it\nis no longer used(referenced).\n\nIntorduction\nThe C++ language allows programmers to manually allocate/deallocate\nmemory by static allocation or dynamic allocation. The static memory is\nallocated from the stack and used for local static objects, for class\nstatic data members and for variables defined outside any function. The\ndynamic memory is allocated from the free store or heap and its\nallocation with new and delete. However, dynamically allocated memory is\nright runtime, known as memory leak, or free the memory when there are\nstill pointers referring to that memory. There is a way to avoid memory\nleak or manage dynamic allocation smartly by using smart pointer.\nIn this post, I would like to try going through the basic concept of\nsmart pointer std::unique_ptr, std::shared_ptr, and std::weak_ptr.\nSmart Pointers\nSmart pointer is nice for when dynamic allocation is necessary. Since\nany dynamic memory requires a delete, it's much easier, much safer, and\nmuch less error prone to let the smart pointer take care of the cleanup,\nrather than doing it manually. The C++ 11 library defines three kinds of\nsmart pointers that differ in how they manage their underlying\npointers.\nReference\n\nCppreference:\nsmart pointers\n\n","dateCreated":"2023-01-05T00:00:00+08:00","dateModified":"2023-01-06T19:34:20+08:00","datePublished":"2023-01-05T00:00:00+08:00","description":"Smart pointers are used to make sure that an object is deleted if it\nis no longer used(referenced).","headline":"Overview of Dynamic Memory and Smart Pointer","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/","keywords":"Tags"}</script>
+    <meta name="description" content="Smart pointers are used to make sure that an object is deleted if it is no longer used(referenced).">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="Embed MapLibre Map for Website">
-<meta property="og:url" content="https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/index.html">
+<meta property="og:title" content="Overview of Dynamic Memory and Smart Pointer">
+<meta property="og:url" content="https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/index.html">
 <meta property="og:site_name" content="Louis">
-<meta property="og:description" content="In our daily life, most of us usually use Google Map or Apple Maps to help us to navigate to a place. We can see traffic info, public transit and also choose our mode of transportation.">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-09-27T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-12-14T08:16:16.000Z">
+<meta property="og:description" content="Smart pointers are used to make sure that an object is deleted if it is no longer used(referenced).">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-01-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-06T11:34:20.960Z">
 <meta property="article:author" content="ShiRong Liu">
-<meta property="article:tag" content="javascript">
-<meta property="article:tag" content="map">
+<meta property="article:tag" content="Tags">
 <meta name="twitter:card" content="summary">
     
     
@@ -43,9 +42,6 @@
     
         <meta property="og:image" content="https://avatars.githubusercontent.com/u/26519320?v=4"/>
     
-    
-        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/forest.jpeg"/>
     
     
     
@@ -305,20 +301,20 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            Embed MapLibre Map for Website
+            Overview of Dynamic Memory and Smart Pointer
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2022-09-28T00:00:00+08:00">
+    <time datetime="2023-01-05T00:00:00+08:00">
 	
-		    Sep 28, 2022
+		    Jan 05, 2023
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/features/">features</a>
+    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>
 
 
     
@@ -332,78 +328,34 @@
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>In our daily life, most of us usually use <a
-target="_blank" rel="noopener" href="https://www.google.com/maps/"
-title="https://www.google.com/maps/">Google Map</a> or <a
-target="_blank" rel="noopener" href="https://www.apple.com/maps/"
-title="https://www.apple.com/maps/">Apple Maps</a> to help us to
-navigate to a place. We can see traffic info, public transit and also
-choose our mode of transportation.</p>
+            <p>Smart pointers are used to make sure that an object is deleted if it
+is no longer used(referenced).</p>
 <span id="more"></span>
-<p>Recently, I was looking for ways to embed a Map to my website that
-contains multiples of custom locations. There are varieties of
-technologies to choose, such as <a
-target="_blank" rel="noopener" href="https://aws.amazon.com/location/?nc1=h_ls"
-title="https://aws.amazon.com/location/?nc1=h_ls">Amaxon location
-service</a>, <a target="_blank" rel="noopener" href="https://developers.google.com/maps"
-title="https://developers.google.com/maps">Google Map API</a> and <a
-target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js"
-title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a>,
-etc. In this post, I would like to discuss how to use <a
-target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js"
-title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a> to
-embed and create custom dynamic maps on our websites mostly for
-free.</p>
-<h3 id="maplibre-gl-js">MapLibre GL JS</h3>
-<p><a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js"
-title="https://github.com/maplibre/maplibre-gl-js">MapLibre GL JS</a> is
-an open-source library for publishing maps on your websites. The maps
-uses vector tileset source over GeoJSON data soruces when possible and
-are fast rendering in browser has become possible thanks to GPU.</p>
-<h3 id="quick-start">Quick Start</h3>
-<p>Before begining shortly, we have to register an account in <a
-target="_blank" rel="noopener" href="https://www.maptiler.com/"
-title="https://www.maptiler.com/">Maptiler</a>, get an default API Key
-to protect which is used for accessing maps, tiles, and data from your
-account. Then, using the API key in code is shown below.</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=&quot;utf-8&quot; /&gt;</span><br><span class="line">&lt;title&gt;Add a default marker&lt;/title&gt;</span><br><span class="line">&lt;meta name=&quot;viewport&quot; content=&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot; /&gt;</span><br><span class="line">&lt;script src=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js&quot;&gt;&lt;/script&gt;</span><br><span class="line">&lt;link href=&quot;https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css&quot; rel=&quot;stylesheet&quot; /&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">	body &#123; margin: 0; padding: 0; &#125;</span><br><span class="line">	#map &#123; position: absolute; top: 0; bottom: 0; width: 100%; &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;</span><br><span class="line"> </span><br><span class="line">&lt;script&gt;</span><br><span class="line">var map = new maplibregl.Map(&#123;</span><br><span class="line">    container: &#x27;map&#x27;,</span><br><span class="line">    style:</span><br><span class="line">    &#x27;https://api.maptiler.com/maps/streets/style.json?key=YOUR_OWN_MAPTILER_API&#x27;,</span><br><span class="line">    center: [12.550343, 55.665957],</span><br><span class="line">    zoom: 8</span><br><span class="line">&#125;);</span><br><span class="line"> </span><br><span class="line">var marker = new maplibregl.Marker()</span><br><span class="line">    .setLngLat([12.550343, 55.665957])</span><br><span class="line">    .addTo(map);</span><br><span class="line">&lt;/script&gt;</span><br><span class="line"> </span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<p>Futher copy the code, paste it into your favorite text editor, and
-save it as .html file. (remember to replace YOUR_OWN_MAPTILER_API with
-your actual API key). Next, we can ues iframe for integration with the
-post.</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div style=&quot;overflow-x:auto;&quot;&gt;</span><br><span class="line">    &lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="simple-example">Simple Example</h3>
-<p>The embedded map for this simple example looks like this.</p>
-<div style="overflow-x:auto;">
-<pre><code>&lt;iframe src=&quot;/javascript/maplibre/add-default-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;</code></pre>
-</div>
-<h3 id="custom-example">Custom Example</h3>
-<p>We can also customize the marker to a Map. Similar to the above
-example, I created another custom example map with marked places where I
-have visited recently nearby.</p>
-<div style="overflow-x:auto;">
-<pre><code>&lt;iframe src=&quot;/javascript/maplibre/add-custom-marker.html&quot; style=&quot;width:100%; height:512px&quot;, title=&quot;add-custom-marker&quot;&gt;&lt;/iframe&gt;</code></pre>
-</div>
-<p>Now, we know how to simply embed the custom dynamic maps on our
-websites. Hope this post will be helpful.</p>
+<h2 id="intorduction">Intorduction</h2>
+<p>The C++ language allows programmers to manually allocate/deallocate
+memory by static allocation or dynamic allocation. The static memory is
+allocated from the stack and used for local static objects, for class
+static data members and for variables defined outside any function. The
+dynamic memory is allocated from the free store or heap and its
+allocation with new and delete. However, dynamically allocated memory is
+right runtime, known as memory leak, or free the memory when there are
+still pointers referring to that memory. There is a way to avoid memory
+leak or manage dynamic allocation smartly by using smart pointer.</p>
+<p>In this post, I would like to try going through the basic concept of
+smart pointer std::unique_ptr, std::shared_ptr, and std::weak_ptr.</p>
+<h2 id="smart-pointers">Smart Pointers</h2>
+<p>Smart pointer is nice for when dynamic allocation is necessary. Since
+any dynamic memory requires a delete, it's much easier, much safer, and
+much less error prone to let the smart pointer take care of the cleanup,
+rather than doing it manually. The C++ 11 library defines three kinds of
+smart pointers that differ in how they manage their underlying
+pointers.</p>
 <h2 id="reference">Reference</h2>
 <ul>
-<li><p><a target="_blank" rel="noopener" href="https://developers.google.com/maps">Google Maps
-Platform</a></p></li>
-<li><p><a target="_blank" rel="noopener" href="https://github.com/maplibre/maplibre-gl-js">Open-source
-library - MapLibre GL JS</a></p></li>
-<li><p><a
-target="_blank" rel="noopener" href="https://docs.mapbox.com/help/glossary/vector-tiles/">Mapbox Docs -
-vector tiles</a></p></li>
-<li><p><a
-target="_blank" rel="noopener" href="https://docs.mapbox.com/help/troubleshooting/mapbox-gl-js-performance/">Mapbox
-Docs - Improve the performance of Mapbox GL JS maps</a></p></li>
+<li><a
+target="_blank" rel="noopener" href="https://en.cppreference.com/book/intro/smart_pointers">Cppreference:
+smart pointers</a></li>
 </ul>
-<p>
-Thanks for reading! Feel free to leave the comments below or
-<a href="mailto:shirong0419@icloud.com">email</a> to me. Any pieces of
-advice or discussions are always welcome. :)
-</p>
 
             
 
@@ -415,7 +367,7 @@ advice or discussions are always welcome. :)
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">TAGGED IN</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/javascript/" rel="tag">javascript</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/map/" rel="tag">map</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/Tags/" rel="tag">Tags</a>
 
             </div>
         
@@ -425,14 +377,11 @@ advice or discussions are always welcome. :)
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/08/%E7%94%9F%E6%B4%BB%E6%9C%AD%E8%A8%98-%E6%B5%B7%E7%B6%BF%E5%AF%B6%E5%AF%B6%E8%9F%B9%E5%A0%A1%E7%8E%8B%E9%A4%90%E5%BB%B3_SpongeBob_SquarePants/"
-                    data-tooltip="生活扎記 蟹堡王餐廳 Krusty Krab"
-                    aria-label="PREVIOUS: 生活扎記 蟹堡王餐廳 Krusty Krab"
-                >
-                    
+                    <a
+                        class="post-action-btn btn btn--disabled"
+                        aria-hidden="true"
+                    >
+                        
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
                         <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                     </a>
@@ -442,9 +391,9 @@ advice or discussions are always welcome. :)
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/09/01/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97-%E7%AA%AE%E6%9F%A5%E7%90%86%E7%9A%84%E6%99%AE%E9%80%9A%E5%B8%B8%E8%AD%98/"
-                    data-tooltip="閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
-                    aria-label="NEXT: 閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
+                    href="/2023/01/04/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="NEXT: Welcome to Louis"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -469,7 +418,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -482,7 +431,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -542,14 +491,11 @@ advice or discussions are always welcome. :)
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                <a
-                    class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/10/08/%E7%94%9F%E6%B4%BB%E6%9C%AD%E8%A8%98-%E6%B5%B7%E7%B6%BF%E5%AF%B6%E5%AF%B6%E8%9F%B9%E5%A0%A1%E7%8E%8B%E9%A4%90%E5%BB%B3_SpongeBob_SquarePants/"
-                    data-tooltip="生活扎記 蟹堡王餐廳 Krusty Krab"
-                    aria-label="PREVIOUS: 生活扎記 蟹堡王餐廳 Krusty Krab"
-                >
-                    
+                    <a
+                        class="post-action-btn btn btn--disabled"
+                        aria-hidden="true"
+                    >
+                        
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
                         <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
                     </a>
@@ -559,9 +505,9 @@ advice or discussions are always welcome. :)
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/09/01/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97-%E7%AA%AE%E6%9F%A5%E7%90%86%E7%9A%84%E6%99%AE%E9%80%9A%E5%B8%B8%E8%AD%98/"
-                    data-tooltip="閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
-                    aria-label="NEXT: 閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
+                    href="/2023/01/04/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="NEXT: Welcome to Louis"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -586,7 +532,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -599,7 +545,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -643,7 +589,7 @@ advice or discussions are always welcome. :)
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -656,7 +602,7 @@ advice or discussions are always welcome. :)
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
                         aria-label="global.share_on_Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>global.share_on_Twitter</span>
@@ -1008,9 +954,9 @@ page.</p></div>
     
         <script>
           var disqus_config = function() {
-            this.page.url = 'https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/';
+            this.page.url = 'https://louissrliu.github.io/2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/';
               
-            this.page.identifier = '2022/09/28/embed_maplibre_map_for_website/';
+            this.page.identifier = '2023/01/05/Overview_of_Dynamic_Memory_and_Smart_Pointer/';
               
           };
           (function() {
