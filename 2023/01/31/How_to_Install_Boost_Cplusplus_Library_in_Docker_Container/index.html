@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Louis">
-    <title>Drawing with Mouse and Touch Events on HTML - Louis</title>
+    <title>How to Install Boost C++ Library and Run CI/CD Workflow with Docker Container - Louis</title>
     <meta name="author" content="ShiRong Liu">
     
         <meta name="keywords" content="hexo,javascript,">
@@ -22,20 +22,25 @@
             <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
         
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"The HTML canvas can be used for sketching/drawing either by mouse or\nby touch. In the previous\npost, I quickly discuss how to use Canvas API to implement a canvas\nwith mouse sketching. In this post, I would like to describe how go\nabout implementing for sketching/drawing by mouse and touch.\n\nMouse and Touch Canvas\nThe belowing canvas can be used with any devices that use mouse or\ntouch screen:\n\n&lt;iframe src=&quot;/javascript/canvas/mouse_touch_canvas.html&quot; style=&quot;width:60%; height:460px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;\n\nSource Code\nThe source code was referring to Mozilla\ntouch-based drawing and was slightly modified with some feature\nenhancement.\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164&lt;style&gt;#canvas_div &#123;    text-align: center;    display: block;    margin-left: auto;    margin-right: auto;&#125;canvas &#123;  border: 2px solid black;&#125;&lt;/style&gt;&lt;div id=&quot;canvas_div&quot; style=&quot;overflow-x: auto;&quot;&gt;&lt;canvas id=&quot;canvas&quot; width=&quot;700&quot; height=&quot;360&quot;&gt;&lt;/canvas&gt;&lt;button onclick=&quot;javascript:clearArea();return false;&quot;&gt;Clear Area&lt;/button&gt;Line width : &lt;select id=&quot;selWidth&quot;&gt;    &lt;option value=&quot;5&quot; selected=&quot;selected&quot;&gt;5&lt;/option&gt;    &lt;option value=&quot;7&quot;&gt;7&lt;/option&gt;    &lt;option value=&quot;9&quot;&gt;9&lt;/option&gt;    &lt;option value=&quot;11&quot;&gt;11&lt;/option&gt;    &lt;option value=&quot;13&quot;&gt;13&lt;/option&gt;    &lt;option value=&quot;15&quot;&gt;15&lt;/option&gt;&lt;/select&gt;Color : &lt;select id=&quot;selColor&quot;&gt;    &lt;option value=&quot;black&quot;&gt;black&lt;/option&gt;    &lt;option value=&quot;blue&quot; selected=&quot;selected&quot;&gt;blue&lt;/option&gt;    &lt;option value=&quot;red&quot;&gt;red&lt;/option&gt;    &lt;option value=&quot;green&quot;&gt;green&lt;/option&gt;    &lt;option value=&quot;yellow&quot;&gt;yellow&lt;/option&gt;    &lt;option value=&quot;gray&quot;&gt;gray&lt;/option&gt;&lt;/select&gt;&lt;/div&gt;&lt;script&gt;// When true, moving the mouse draws on the canvaslet isDrawing = false;let x = 0;let y = 0;var offsetX;var offsetY;const canvas = document.getElementById(&#x27;canvas&#x27;);const context = canvas.getContext(&#x27;2d&#x27;);function startup() &#123;  canvas.addEventListener(&#x27;touchstart&#x27;, handleStart);  canvas.addEventListener(&#x27;touchend&#x27;, handleEnd);  canvas.addEventListener(&#x27;touchcancel&#x27;, handleCancel);  canvas.addEventListener(&#x27;touchmove&#x27;, handleMove);  canvas.addEventListener(&#x27;mousedown&#x27;, (e) =&gt; &#123;    x = e.offsetX;    y = e.offsetY;    isDrawing = true;  &#125;);  canvas.addEventListener(&#x27;mousemove&#x27;, (e) =&gt; &#123;    if (isDrawing) &#123;      drawLine(context, x, y, e.offsetX, e.offsetY);      x = e.offsetX;      y = e.offsetY;    &#125;  &#125;);  canvas.addEventListener(&#x27;mouseup&#x27;, (e) =&gt; &#123;    if(isDrawing) &#123;      drawLine(context, x, y, e.offsetX, e.offsetY);      x = 0;      y = 0;      isDrawing = false;    &#125;  &#125;);&#125;document.addEventListener(&quot;DOMContentLoaded&quot;, startup);const ongoingTouches = [];function handleStart(evt) &#123;  evt.preventDefault();  const touches = evt.changedTouches;  offsetX = canvas.getBoundingClientRect().left;  offsetY = canvas.getBoundingClientRect().top;  for (let i = 0; i &lt; touches.length; i++) &#123;    ongoingTouches.push(copyTouch(touches[i]));  &#125;&#125;function handleMove(evt) &#123;  evt.preventDefault();  const touches = evt.changedTouches;  for (let i = 0; i &lt; touches.length; i++) &#123;    const color = document.getElementById(&#x27;selColor&#x27;).value;    const idx = ongoingTouchIndexById(touches[i].identifier);    if (idx &gt;= 0) &#123;      context.beginPath();      context.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);      context.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);      context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;      context.strokeStyle = color;      context.lineJoin = &quot;round&quot;;      context.closePath();      context.stroke();      ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record    &#125;  &#125;&#125;function handleEnd(evt) &#123;  evt.preventDefault();  const touches = evt.changedTouches;  for (let i = 0; i &lt; touches.length; i++) &#123;    const color = document.getElementById(&#x27;selColor&#x27;).value;    let idx = ongoingTouchIndexById(touches[i].identifier);    if (idx &gt;= 0) &#123;      context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;      context.fillStyle = color;      ongoingTouches.splice(idx, 1); // remove it; we&#x27;re done    &#125;  &#125;&#125;function handleCancel(evt) &#123;  evt.preventDefault();  const touches = evt.changedTouches;  for (let i = 0; i &lt; touches.length; i++) &#123;    let idx = ongoingTouchIndexById(touches[i].identifier);    ongoingTouches.splice(idx, 1); // remove it; we&#x27;re done  &#125;&#125;function copyTouch(&#123; identifier, clientX, clientY &#125;) &#123;  return &#123; identifier, clientX, clientY &#125;;&#125;function ongoingTouchIndexById(idToFind) &#123;  for (let i = 0; i &lt; ongoingTouches.length; i++) &#123;    const id = ongoingTouches[i].identifier;    if (id === idToFind) &#123;      return i;    &#125;  &#125;  return -1; // not found&#125;function drawLine(context, x1, y1, x2, y2) &#123;  context.beginPath();  context.strokeStyle = document.getElementById(&#x27;selColor&#x27;).value;  context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;  context.lineJoin = &quot;round&quot;;  context.moveTo(x1, y1);  context.lineTo(x2, y2);  context.closePath();  context.stroke();&#125;function clearArea() &#123;    context.setTransform(1, 0, 0, 1, 0, 0);    context.clearRect(0, 0, context.canvas.width, context.canvas.height);&#125;&lt;/script&gt;\nNote: Touch events are similar to mouse events except they support\nsimultaneous touches and at different locations on the touch surface.\nThis example was extended the functionality of mouse events with touch\nevents, which uses ongoingTouches array for the track of the touches\nin-progress. When a touchstrat event occurs, indicating that a new touch\non the surface has occurred. After drawing the line, we call the\narray.splice() to replace the previous information about the touchpoint\nwith the current information into ongoingTouches array.\nRefereence\n\nGithub:\nTouch events API\nMozilla\nTouch events\n\n\nThanks for reading! Feel free to leave the comments below or\nemail to me. Any pieces of\nadvice or discussions are always welcome. :)\n\n","dateCreated":"2022-12-04T00:00:00+08:00","dateModified":"2023-01-03T09:40:50+08:00","datePublished":"2022-12-04T00:00:00+08:00","description":"The HTML canvas can be used for sketching/drawing either by mouse or\nby touch. In the previous\npost, I quickly discuss how to use Canvas API to implement a canvas\nwith mouse sketching. In this post, I would like to describe how go\nabout implementing for sketching/drawing by mouse and touch.","headline":"Drawing with Mouse and Touch Events on HTML","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/dock.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/","keywords":"html, javascript","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/dock.jpeg"}</script>
-    <meta name="description" content="The HTML canvas can be used for sketching&#x2F;drawing either by mouse or by touch. In the previous post, I quickly discuss how to use Canvas API to implement a canvas with mouse sketching. In this post, I">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"\"Docker is an open platform for developing, shipping, and running\napplications... A continer is a sandboxed process on our machine that is\nisolated from all other porcesses on the host machine....\"\n\nIntroduction\nDocker has worked to make the capabilities of kernal namespaces and\ncgroups, features approachable and easy to use. Because it can be run on\nlocal machines, virtual machines or deployed to the cloud, and also\nbuilds an image which is based on the ubuntu image, but installs the\nApache web server and our program or application, as well as the\nconfiguration details needed to make the program or application run.\nIn this post, I would like to go through how to create a container\nimage with custom filesystem and boost c++ library shortly. In addition,\nrunning simple examples using Boost.Regex\nin docker container, and setting up on continuous integration (CI) with\ndocker.\nDocker Overview\n\n\n\n\n\nDocker uses a client-server architecture. The Docker client talks to\nthe Docker daemon, which does the heavy lifting of building, running,\nand distributing your Docker containers. The Docker client and daemon\ncan run on the same system, or we can connect a Docker client to a\nremote Docker daemon. The Docker client and daemon communicate using a\nREST API, over UNIX sockets or a network interface. Another Docker\nclient is Docker Compose, that lets we work with applications consisting\nof a set of containers.\n\nIn order to build the container images, we can use certified DOCKER\nOFFICIAL IMAGE from Docker Hub or some third-party\nrepositories. For example, we would use the base Ubuntu\n16.04 image and build the image locally with following command.\n\n$ docker build -f Dockerfile -t ubuntu16.04:xenial\n\n\nSometimes, we want to check all the images created on the local\nmachine by following command.\nREPOSITORY              TAG                 IMAGE ID\nubuntu16.04             latest              025cee1ce57d\nubuntu16.04             xenial              025cee1ce57d\n...\nBuild Docker Image with\nBoost Library\nWe will use the other method to build the Ubuntu 16.04 LTS (Xenial\nXerus) image for Boost C++ libraries. The relevant Dockerfile and the\nBoost-CMake C++ examples are available on GitHub\nGist. We can build the following Dockerfile on x86-64 platform.\n1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950FROM ubuntu:16.04MAINTAINER Louis Liu &lt;s041978@hotmail.com&gt;WORKDIR /mnt/ARG DEBIAN_FRONTEND=noninteractiveARG CMAKE_VERSION=3.25.1# Install package dependenciesRUN apt-get update &amp;&amp;\\    apt-get install -y --no-install-recommends software-properties-common build-essential \\            autoconf libtool pkg-config ca-certificates libssl-dev pkg-config \\            git wget vim cppman \\            automake g++ gcc \\            gdb valgrind &amp;&amp; \\    apt-get clean# We pass the boost version as argumentARG BOOST_VERSIONARG NUM_JOBSENV NUM_JOBS=$&#123;NUM_JOBS&#125;# Install CMakeRUN cd /tmp &amp;&amp; \\    wget https://aus01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FKitware%2FCMake%2Freleases%2Fdownload%2Fv%24&amp;data=05%7C01%7C%7C0dca2689d18b42771ee808db012a764e%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638105054127172004%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Ba4bIIOdgEf5LVWjXRXsE%2BgAQeTF6MQnzTlmXS%2F4xxU%3D&amp;reserved=0&#123;CMAKE_VERSION&#125;/cmake-$&#123;CMAKE_VERSION&#125;.tar.gz &amp;&amp; \\    tar xzf cmake-$&#123;CMAKE_VERSION&#125;.tar.gz &amp;&amp; \\    cd cmake-$&#123;CMAKE_VERSION&#125; &amp;&amp; \\    ./bootstrap &amp;&amp; \\    make -j$&#123;NUM_JOBS&#125; &amp;&amp; \\    make install &amp;&amp; \\    rm -rf /tmp/*ENV BOOST_VERSION=$&#123;BOOST_VERSION&#125;ENV BOOST_ROOT=/usr/include/boost# Install BoostRUN cd /tmp &amp;&amp; \\    BOOST_VERSION_MOD=$(echo $BOOST_VERSION | tr . _) &amp;&amp; \\    wget https://aus01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fboostorg.jfrog.io%2Fartifactory%2Fmain%2Frelease%2F%24&amp;data=05%7C01%7C%7C0dca2689d18b42771ee808db012a764e%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638105054127172004%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=VWEW0PG7CmnLkqMMf%2FX3jXkKX2G4Jb8TvZqg8C8njD8%3D&amp;reserved=0&#123;BOOST_VERSION&#125;/source/boost_$&#123;BOOST_VERSION_MOD&#125;.tar.bz2 &amp;&amp; \\    tar --bzip2 -xf boost_$&#123;BOOST_VERSION_MOD&#125;.tar.bz2 &amp;&amp; \\    cd boost_$&#123;BOOST_VERSION_MOD&#125; &amp;&amp; \\    ./bootstrap.sh --prefix=/usr/local &amp;&amp; \\    ./b2 --prefix=/usr/local install &amp;&amp; \\    rm -rf /tmp/*RUN echo $&#123;BOOST_ROOT&#125;ENTRYPOINT /bin/bash\nTo build the Boost Docker image locally, we can run the following\ncommand. In this case, we will build Boost C++ library 1.80.0.\n$ BOOST_VERSION=1.80.0\n$ NUM_JOBS=4\n$ docker build . --build-arg BOOST_VERSION=$&#123;BOOST_VERSION&#125; --build-arg NUM_JOBS=$&#123;NUM_JOBS&#125; --tag=louissrliu/boost:$&#123;BOOST_VERSION&#125;\nAfter we build Docker images from above Dockerfile, we can also mount\na file or directory on the local machine into a container. The file or\ndirectory is referenced by its absolute path on the local (host)\nmachine. By contrast, when we use a volume, a new directory is created\nwithin Docker's storage directory on the local (host) machine, and\nDocker manages that directory's contents.\n\n\n\n\n\nWe can run the following command to specify the image, mount the\ndirectory, allocate a tty for the container process and interactive\nprocesses with the Docker container.\n$ docker run -it -v $(pwd)/examples:/mnt louissrliu/boost:$&#123;BOOST_VERSION&#125; bash\nIn addition, we can push/pull the above to a registry with following\ncommands.\n$ docker push louissrliu/boost:$&#123;BOOST_VERSION&#125;\n$ docker pull louissrliu/boost:$&#123;BOOST_VERSION&#125;\n\n\n\n\n\nBoost Examples\nTo show that the Boost C++ library we have built works inside the\nDocker container, we will build and run a example using Boost.Regex,\nand another C++ example in docker container, available on Boost-Docker repo,\nwhile allocating a tty for the container process and interactive\nprocesses. We we can run the following commands.\n$ cmake -B build\n$ cmake --build build --config Release --parallel\nThen, executting these two examples, which simply print log outputs\nas shown below\n$ # extractemail example\n$ ./build/extractemail/ExtractEmail  &lt; extractemail/data/tangled.txt \nGerman fairy tale\n\n$ # arraynexting example\n$ echo 1 2 3 4 |  ./build/arraynexting/ArrayNexting\nThe longest length of a set s[k] = &#123;nums[k], nums[nums[k]], nums[nums[nums[k]]], ... &#125; is : 1\nContinuous\nIntegration/Continuous Delivery (CI/CD) Workflow with Docker\nContinuous integration (CI) is the part of the developement procee\nwhere we're looking to get our code changes merged with the main branch\nof this boost docker build. GitHub Actions allows us to automate our\nbuild, test, and deployment pipeline. Here we create the following yaml\nfile and placed it in Boost-Docker repo to\nget started using Docker for building this image in CI.\n1234567891011121314151617181920212223242526272829303132333435name: Docker Image CIon:  push:    branches: [ &quot;main&quot; ]  pull_request:    branches: [ &quot;main&quot; ]jobs:  build:    runs-on: ubuntu-latest          steps:    - name: Checkout      uses: actions/checkout@v3        - name: Login to Docker Hub      uses: docker/login-action@v2      with:          username: $&#123;&#123; secrets.DOCKERHUB_USERNAME &#125;&#125;          password: $&#123;&#123; secrets.DOCKERHUB_TOKEN &#125;&#125;        - name: Set up Docker Buildx      uses: docker/setup-buildx-action@v2    - name: Build and push      uses: docker/build-push-action@v3      with:          context: .          file: ./Dockerfile          push: true          tags: $&#123;&#123; secrets.DOCKERHUB_USERNAME &#125;&#125;          build-args: BOOST_VERSION=1.80.0,NUM_JOBS=4\nReference\n\nDocker docs\nBoost C++ library\nIntroduction to\nGitHub Actions\nContinuous integration\nwith Docker\nPublishing\nDocker Images\n\n\nThanks for reading! Feel free to leave the comments below or\nemail to me. Any pieces of\nadvice or discussions are always welcome. :)\n\n","dateCreated":"2023-01-31T00:00:00+08:00","dateModified":"2023-01-31T00:16:56+08:00","datePublished":"2023-01-31T00:00:00+08:00","description":"\"Docker is an open platform for developing, shipping, and running\napplications... A continer is a sandboxed process on our machine that is\nisolated from all other porcesses on the host machine....\"","headline":"How to Install Boost C++ Library and Run CI/CD Workflow with Docker Container","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/river_bridge.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/","keywords":"programming, cpp, docker","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/river_bridge.jpeg"}</script>
+    <meta name="description" content="&quot;Docker is an open platform for developing, shipping, and running applications... A continer is a sandboxed process on our machine that is isolated from all other porcesses on the host machine....&quot;">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="Drawing with Mouse and Touch Events on HTML">
-<meta property="og:url" content="https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/index.html">
+<meta property="og:title" content="How to Install Boost C++ Library and Run CI&#x2F;CD Workflow with Docker Container">
+<meta property="og:url" content="https://louissrliu.github.io/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/index.html">
 <meta property="og:site_name" content="Louis">
-<meta property="og:description" content="The HTML canvas can be used for sketching&#x2F;drawing either by mouse or by touch. In the previous post, I quickly discuss how to use Canvas API to implement a canvas with mouse sketching. In this post, I">
-<meta property="og:locale">
-<meta property="article:published_time" content="2022-12-03T16:00:00.000Z">
-<meta property="article:modified_time" content="2023-01-03T01:40:50.989Z">
+<meta property="og:description" content="&quot;Docker is an open platform for developing, shipping, and running applications... A continer is a sandboxed process on our machine that is isolated from all other porcesses on the host machine....&quot;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://louissrliu.github.io/picture/docker.png">
+<meta property="og:image" content="https://louissrliu.github.io/picture/types-of-mounts-bind.png">
+<meta property="og:image" content="https://louissrliu.github.io/picture/dockerhub.png">
+<meta property="article:published_time" content="2023-01-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-01-30T16:16:56.127Z">
 <meta property="article:author" content="ShiRong Liu">
-<meta property="article:tag" content="html">
-<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="programming">
+<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://louissrliu.github.io/picture/docker.png">
     
     
         
@@ -44,8 +49,8 @@
         <meta property="og:image" content="https://avatars.githubusercontent.com/u/26519320?v=4"/>
     
     
-        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/dock.jpeg"/>
-        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/dock.jpeg"/>
+        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/river_bridge.jpeg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/river_bridge.jpeg"/>
     
     
     
@@ -307,20 +312,20 @@ time.</p>
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            Drawing with Mouse and Touch Events on HTML
+            How to Install Boost C++ Library and Run CI/CD Workflow with Docker Container
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2022-12-04T00:00:00+08:00">
+    <time datetime="2023-01-31T00:00:00+08:00">
 	
-		    Dec 04, 2022
+		    Jan 31, 2023
     	
     </time>
     
         <span>in </span>
         
-    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/miscellaneous/">miscellaneous</a>
+    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/features/">features</a>
 
 
     
@@ -334,43 +339,138 @@ time.</p>
     
     <div class="post-content markdown">
         <div class="main-content-wrap">
-            <p>The HTML canvas can be used for sketching/drawing either by mouse or
-by touch. In the <a
-href="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
-title="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/">previous
-post</a>, I quickly discuss how to use Canvas API to implement a canvas
-with mouse sketching. In this post, I would like to describe how go
-about implementing for sketching/drawing by mouse and touch.</p>
+            <p>"Docker is an open platform for developing, shipping, and running
+applications... A continer is a sandboxed process on our machine that is
+isolated from all other porcesses on the host machine...."</p>
 <span id="more"></span>
-<h2 id="mouse-and-touch-canvas">Mouse and Touch Canvas</h2>
-<p>The belowing canvas can be used with any devices that use mouse or
-touch screen:</p>
-<div style="overflow-x:auto;">
-<pre><code>&lt;iframe src=&quot;/javascript/canvas/mouse_touch_canvas.html&quot; style=&quot;width:60%; height:460px&quot;, title=&quot;add-default-marker&quot;&gt;&lt;/iframe&gt;</code></pre>
+<h2 id="introduction">Introduction</h2>
+<p>Docker has worked to make the capabilities of kernal namespaces and
+cgroups, features approachable and easy to use. Because it can be run on
+local machines, virtual machines or deployed to the cloud, and also
+builds an image which is based on the ubuntu image, but installs the
+Apache web server and our program or application, as well as the
+configuration details needed to make the program or application run.</p>
+<p>In this post, I would like to go through how to create a container
+image with custom filesystem and boost c++ library shortly. In addition,
+running simple examples using <a
+target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_81_0/libs/regex/doc/html/index.html"
+title="https://www.boost.org/doc/libs/1_81_0/libs/regex/doc/html/index.html">Boost.Regex</a>
+in docker container, and setting up on continuous integration (CI) with
+docker.</p>
+<h2 id="docker-overview">Docker Overview</h2>
+<figure>
+<center>
+<img src="/picture/docker.png" width="30%">
+</center>
+</figure>
+<blockquote><p>Docker uses a client-server architecture. The Docker client talks to
+the Docker daemon, which does the heavy lifting of building, running,
+and distributing your Docker containers. The Docker client and daemon
+can run on the same system, or we can connect a Docker client to a
+remote Docker daemon. The Docker client and daemon communicate using a
+REST API, over UNIX sockets or a network interface. Another Docker
+client is Docker Compose, that lets we work with applications consisting
+of a set of containers.</p>
+</blockquote>
+<p>In order to build the container images, we can use certified DOCKER
+OFFICIAL IMAGE from <a target="_blank" rel="noopener" href="https://hub.docker.com"
+title="https://hub.docker.com">Docker Hub</a> or some third-party
+repositories. For example, we would use the base <a
+target="_blank" rel="noopener" href="https://git.launchpad.net/cloud-images/+oci/ubuntu-base/tree/Dockerfile?h=refs/tags/dist-xenial-amd64-20210804&amp;id=45e83e2e11f641ba2fea381e705ededbd2778f16"
+title="https://git.launchpad.net/cloud-images/+oci/ubuntu-base/tree/Dockerfile?h=refs/tags/dist-xenial-amd64-20210804&amp;id=45e83e2e11f641ba2fea381e705ededbd2778f16">Ubuntu
+16.04</a> image and build the image locally with following command.</p>
+<div class="language-shell highlighter-rouge">
+<pre class="highlight"><code class="hljs ruby"><span class="nb" style="font-size: 100%">$ docker build -f Dockerfile -t ubuntu16.04:xenial
+</span></code></pre>
 </div>
-<h2 id="source-code">Source Code</h2>
-<p>The source code was referring to <a
-target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Touch_events"
-title="https://developer.mozilla.org/en-US/docs/Web/API/Touch_events">Mozilla
-touch-based drawing</a> and was slightly modified with some feature
-enhancement.</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">#canvas_div &#123;</span><br><span class="line">    text-align: center;</span><br><span class="line">    display: block;</span><br><span class="line">    margin-left: auto;</span><br><span class="line">    margin-right: auto;</span><br><span class="line">&#125;</span><br><span class="line">canvas &#123;</span><br><span class="line">  border: 2px solid black;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"></span><br><span class="line">&lt;div id=&quot;canvas_div&quot; style=&quot;overflow-x: auto;&quot;&gt;</span><br><span class="line">&lt;canvas id=&quot;canvas&quot; width=&quot;700&quot; height=&quot;360&quot;&gt;&lt;/canvas&gt;</span><br><span class="line">&lt;button onclick=&quot;javascript:clearArea();return false;&quot;&gt;Clear Area&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">Line width : &lt;select id=&quot;selWidth&quot;&gt;</span><br><span class="line">    &lt;option value=&quot;5&quot; selected=&quot;selected&quot;&gt;5&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;7&quot;&gt;7&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;9&quot;&gt;9&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;11&quot;&gt;11&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;13&quot;&gt;13&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;15&quot;&gt;15&lt;/option&gt;</span><br><span class="line">&lt;/select&gt;</span><br><span class="line"></span><br><span class="line">Color : &lt;select id=&quot;selColor&quot;&gt;</span><br><span class="line">    &lt;option value=&quot;black&quot;&gt;black&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;blue&quot; selected=&quot;selected&quot;&gt;blue&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;red&quot;&gt;red&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;green&quot;&gt;green&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;yellow&quot;&gt;yellow&lt;/option&gt;</span><br><span class="line">    &lt;option value=&quot;gray&quot;&gt;gray&lt;/option&gt;</span><br><span class="line">&lt;/select&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;script&gt;</span><br><span class="line">// When true, moving the mouse draws on the canvas</span><br><span class="line">let isDrawing = false;</span><br><span class="line">let x = 0;</span><br><span class="line">let y = 0;</span><br><span class="line">var offsetX;</span><br><span class="line">var offsetY;</span><br><span class="line"></span><br><span class="line">const canvas = document.getElementById(&#x27;canvas&#x27;);</span><br><span class="line">const context = canvas.getContext(&#x27;2d&#x27;);</span><br><span class="line"></span><br><span class="line">function startup() &#123;</span><br><span class="line">  canvas.addEventListener(&#x27;touchstart&#x27;, handleStart);</span><br><span class="line">  canvas.addEventListener(&#x27;touchend&#x27;, handleEnd);</span><br><span class="line">  canvas.addEventListener(&#x27;touchcancel&#x27;, handleCancel);</span><br><span class="line">  canvas.addEventListener(&#x27;touchmove&#x27;, handleMove);</span><br><span class="line">  canvas.addEventListener(&#x27;mousedown&#x27;, (e) =&gt; &#123;</span><br><span class="line">    x = e.offsetX;</span><br><span class="line">    y = e.offsetY;</span><br><span class="line">    isDrawing = true;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  canvas.addEventListener(&#x27;mousemove&#x27;, (e) =&gt; &#123;</span><br><span class="line">    if (isDrawing) &#123;</span><br><span class="line">      drawLine(context, x, y, e.offsetX, e.offsetY);</span><br><span class="line">      x = e.offsetX;</span><br><span class="line">      y = e.offsetY;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  canvas.addEventListener(&#x27;mouseup&#x27;, (e) =&gt; &#123;</span><br><span class="line">    if(isDrawing) &#123;</span><br><span class="line">      drawLine(context, x, y, e.offsetX, e.offsetY);</span><br><span class="line">      x = 0;</span><br><span class="line">      y = 0;</span><br><span class="line">      isDrawing = false;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">document.addEventListener(&quot;DOMContentLoaded&quot;, startup);</span><br><span class="line"></span><br><span class="line">const ongoingTouches = [];</span><br><span class="line"></span><br><span class="line">function handleStart(evt) &#123;</span><br><span class="line">  evt.preventDefault();</span><br><span class="line">  const touches = evt.changedTouches;</span><br><span class="line">  offsetX = canvas.getBoundingClientRect().left;</span><br><span class="line">  offsetY = canvas.getBoundingClientRect().top;</span><br><span class="line">  for (let i = 0; i &lt; touches.length; i++) &#123;</span><br><span class="line">    ongoingTouches.push(copyTouch(touches[i]));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function handleMove(evt) &#123;</span><br><span class="line">  evt.preventDefault();</span><br><span class="line">  const touches = evt.changedTouches;</span><br><span class="line">  for (let i = 0; i &lt; touches.length; i++) &#123;</span><br><span class="line">    const color = document.getElementById(&#x27;selColor&#x27;).value;</span><br><span class="line">    const idx = ongoingTouchIndexById(touches[i].identifier);</span><br><span class="line">    if (idx &gt;= 0) &#123;</span><br><span class="line">      context.beginPath();</span><br><span class="line">      context.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);</span><br><span class="line">      context.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);</span><br><span class="line">      context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;</span><br><span class="line">      context.strokeStyle = color;</span><br><span class="line">      context.lineJoin = &quot;round&quot;;</span><br><span class="line">      context.closePath();</span><br><span class="line">      context.stroke();</span><br><span class="line">      ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function handleEnd(evt) &#123;</span><br><span class="line">  evt.preventDefault();</span><br><span class="line">  const touches = evt.changedTouches;</span><br><span class="line">  for (let i = 0; i &lt; touches.length; i++) &#123;</span><br><span class="line">    const color = document.getElementById(&#x27;selColor&#x27;).value;</span><br><span class="line">    let idx = ongoingTouchIndexById(touches[i].identifier);</span><br><span class="line"></span><br><span class="line">    if (idx &gt;= 0) &#123;</span><br><span class="line">      context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;</span><br><span class="line">      context.fillStyle = color;</span><br><span class="line">      ongoingTouches.splice(idx, 1); // remove it; we&#x27;re done</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function handleCancel(evt) &#123;</span><br><span class="line">  evt.preventDefault();</span><br><span class="line">  const touches = evt.changedTouches;</span><br><span class="line">  for (let i = 0; i &lt; touches.length; i++) &#123;</span><br><span class="line">    let idx = ongoingTouchIndexById(touches[i].identifier);</span><br><span class="line">    ongoingTouches.splice(idx, 1); // remove it; we&#x27;re done</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function copyTouch(&#123; identifier, clientX, clientY &#125;) &#123;</span><br><span class="line">  return &#123; identifier, clientX, clientY &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function ongoingTouchIndexById(idToFind) &#123;</span><br><span class="line">  for (let i = 0; i &lt; ongoingTouches.length; i++) &#123;</span><br><span class="line">    const id = ongoingTouches[i].identifier;</span><br><span class="line">    if (id === idToFind) &#123;</span><br><span class="line">      return i;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return -1; // not found</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function drawLine(context, x1, y1, x2, y2) &#123;</span><br><span class="line">  context.beginPath();</span><br><span class="line">  context.strokeStyle = document.getElementById(&#x27;selColor&#x27;).value;</span><br><span class="line">  context.lineWidth = document.getElementById(&#x27;selWidth&#x27;).value;</span><br><span class="line">  context.lineJoin = &quot;round&quot;;</span><br><span class="line">  context.moveTo(x1, y1);</span><br><span class="line">  context.lineTo(x2, y2);</span><br><span class="line">  context.closePath();</span><br><span class="line">  context.stroke();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function clearArea() &#123;</span><br><span class="line">    context.setTransform(1, 0, 0, 1, 0, 0);</span><br><span class="line">    context.clearRect(0, 0, context.canvas.width, context.canvas.height);</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
-<p>Note: Touch events are similar to mouse events except they support
-simultaneous touches and at different locations on the touch surface.
-This example was extended the functionality of mouse events with touch
-events, which uses ongoingTouches array for the track of the touches
-in-progress. When a touchstrat event occurs, indicating that a new touch
-on the surface has occurred. After drawing the line, we call the
-array.splice() to replace the previous information about the touchpoint
-with the current information into ongoingTouches array.</p>
-<h2 id="refereence">Refereence</h2>
+<p>Sometimes, we want to check all the images created on the local
+machine by following command.</p>
+<pre><code>REPOSITORY              TAG                 IMAGE ID
+ubuntu16.04             latest              025cee1ce57d
+ubuntu16.04             xenial              025cee1ce57d
+...</code></pre>
+<h3 id="build-docker-image-with-boost-library">Build Docker Image with
+Boost Library</h3>
+<p>We will use the other method to build the Ubuntu 16.04 LTS (Xenial
+Xerus) image for Boost C++ libraries. The relevant Dockerfile and the
+Boost-CMake C++ examples are available on <a
+target="_blank" rel="noopener" href="https://gist.github.com/s311354/29c09cecf258d1435574b0148c107d18"
+title="https://gist.github.com/s311354/29c09cecf258d1435574b0148c107d18">GitHub
+Gist</a>. We can build the following Dockerfile on x86-64 platform.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">FROM ubuntu:16.04</span><br><span class="line"></span><br><span class="line">MAINTAINER Louis Liu &lt;s041978@hotmail.com&gt;</span><br><span class="line"></span><br><span class="line">WORKDIR /mnt/</span><br><span class="line"></span><br><span class="line">ARG DEBIAN_FRONTEND=noninteractive</span><br><span class="line"></span><br><span class="line">ARG CMAKE_VERSION=3.25.1</span><br><span class="line"></span><br><span class="line"># Install package dependencies</span><br><span class="line">RUN apt-get update &amp;&amp;\</span><br><span class="line">    apt-get install -y --no-install-recommends software-properties-common build-essential \</span><br><span class="line">            autoconf libtool pkg-config ca-certificates libssl-dev pkg-config \</span><br><span class="line">            git wget vim cppman \</span><br><span class="line">            automake g++ gcc \</span><br><span class="line">            gdb valgrind &amp;&amp; \</span><br><span class="line">    apt-get clean</span><br><span class="line"></span><br><span class="line"># We pass the boost version as argument</span><br><span class="line">ARG BOOST_VERSION</span><br><span class="line">ARG NUM_JOBS</span><br><span class="line"></span><br><span class="line">ENV NUM_JOBS=$&#123;NUM_JOBS&#125;</span><br><span class="line"></span><br><span class="line"># Install CMake</span><br><span class="line">RUN cd /tmp &amp;&amp; \</span><br><span class="line">    wget https://aus01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FKitware%2FCMake%2Freleases%2Fdownload%2Fv%24&amp;data=05%7C01%7C%7C0dca2689d18b42771ee808db012a764e%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638105054127172004%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Ba4bIIOdgEf5LVWjXRXsE%2BgAQeTF6MQnzTlmXS%2F4xxU%3D&amp;reserved=0&#123;CMAKE_VERSION&#125;/cmake-$&#123;CMAKE_VERSION&#125;.tar.gz &amp;&amp; \</span><br><span class="line">    tar xzf cmake-$&#123;CMAKE_VERSION&#125;.tar.gz &amp;&amp; \</span><br><span class="line">    cd cmake-$&#123;CMAKE_VERSION&#125; &amp;&amp; \</span><br><span class="line">    ./bootstrap &amp;&amp; \</span><br><span class="line">    make -j$&#123;NUM_JOBS&#125; &amp;&amp; \</span><br><span class="line">    make install &amp;&amp; \</span><br><span class="line">    rm -rf /tmp/*</span><br><span class="line"></span><br><span class="line">ENV BOOST_VERSION=$&#123;BOOST_VERSION&#125;</span><br><span class="line">ENV BOOST_ROOT=/usr/include/boost</span><br><span class="line"></span><br><span class="line"># Install Boost</span><br><span class="line">RUN cd /tmp &amp;&amp; \</span><br><span class="line">    BOOST_VERSION_MOD=$(echo $BOOST_VERSION | tr . _) &amp;&amp; \</span><br><span class="line">    wget https://aus01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fboostorg.jfrog.io%2Fartifactory%2Fmain%2Frelease%2F%24&amp;data=05%7C01%7C%7C0dca2689d18b42771ee808db012a764e%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638105054127172004%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=VWEW0PG7CmnLkqMMf%2FX3jXkKX2G4Jb8TvZqg8C8njD8%3D&amp;reserved=0&#123;BOOST_VERSION&#125;/source/boost_$&#123;BOOST_VERSION_MOD&#125;.tar.bz2 &amp;&amp; \</span><br><span class="line">    tar --bzip2 -xf boost_$&#123;BOOST_VERSION_MOD&#125;.tar.bz2 &amp;&amp; \</span><br><span class="line">    cd boost_$&#123;BOOST_VERSION_MOD&#125; &amp;&amp; \</span><br><span class="line">    ./bootstrap.sh --prefix=/usr/local &amp;&amp; \</span><br><span class="line">    ./b2 --prefix=/usr/local install &amp;&amp; \</span><br><span class="line">    rm -rf /tmp/*</span><br><span class="line"></span><br><span class="line">RUN echo $&#123;BOOST_ROOT&#125;</span><br><span class="line">ENTRYPOINT /bin/bash</span><br></pre></td></tr></table></figure>
+<p>To build the Boost Docker image locally, we can run the following
+command. In this case, we will build Boost C++ library 1.80.0.</p>
+<pre><code>$ BOOST_VERSION=1.80.0
+$ NUM_JOBS=4
+$ docker build . --build-arg BOOST_VERSION=$&#123;BOOST_VERSION&#125; --build-arg NUM_JOBS=$&#123;NUM_JOBS&#125; --tag=louissrliu/boost:$&#123;BOOST_VERSION&#125;</code></pre>
+<p>After we build Docker images from above Dockerfile, we can also mount
+a file or directory on the local machine into a container. The file or
+directory is referenced by its absolute path on the local (host)
+machine. By contrast, when we use a volume, a new directory is created
+within Docker's storage directory on the local (host) machine, and
+Docker manages that directory's contents.</p>
+<figure>
+<center>
+<img src="/picture/types-of-mounts-bind.png" width="20%">
+</center>
+</figure>
+<p>We can run the following command to specify the image, mount the
+directory, allocate a tty for the container process and interactive
+processes with the Docker container.</p>
+<pre><code>$ docker run -it -v $(pwd)/examples:/mnt louissrliu/boost:$&#123;BOOST_VERSION&#125; bash</code></pre>
+<p>In addition, we can push/pull the above to a registry with following
+commands.</p>
+<pre><code>$ docker push louissrliu/boost:$&#123;BOOST_VERSION&#125;
+$ docker pull louissrliu/boost:$&#123;BOOST_VERSION&#125;</code></pre>
+<figure>
+<center>
+<img src="/picture/dockerhub.png" width="30%">
+</center>
+</figure>
+<h3 id="boost-examples">Boost Examples</h3>
+<p>To show that the Boost C++ library we have built works inside the
+Docker container, we will build and run a example using <a
+target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_81_0/libs/regex/doc/html/index.html"
+title="https://www.boost.org/doc/libs/1_81_0/libs/regex/doc/html/index.html">Boost.Regex</a>,
+and another C++ example in docker container, available on <a
+target="_blank" rel="noopener" href="https://github.com/s311354/boost-docker"
+title="https://github.com/s311354/boost-docker">Boost-Docker repo</a>,
+while allocating a tty for the container process and interactive
+processes. We we can run the following commands.</p>
+<pre><code>$ cmake -B build
+$ cmake --build build --config Release --parallel</code></pre>
+<p>Then, executting these two examples, which simply print log outputs
+as shown below</p>
+<pre><code>$ # extractemail example
+$ ./build/extractemail/ExtractEmail  &lt; extractemail/data/tangled.txt 
+German fairy tale
+
+$ # arraynexting example
+$ echo 1 2 3 4 |  ./build/arraynexting/ArrayNexting
+The longest length of a set s[k] = &#123;nums[k], nums[nums[k]], nums[nums[nums[k]]], ... &#125; is : 1</code></pre>
+<h3
+id="continuous-integrationcontinuous-delivery-cicd-workflow-with-docker">Continuous
+Integration/Continuous Delivery (CI/CD) Workflow with Docker</h3>
+<p>Continuous integration (CI) is the part of the developement procee
+where we're looking to get our code changes merged with the main branch
+of this boost docker build. GitHub Actions allows us to automate our
+build, test, and deployment pipeline. Here we create the following yaml
+file and placed it in <a target="_blank" rel="noopener" href="https://github.com/s311354/boost-docker"
+title="https://github.com/s311354/boost-docker">Boost-Docker repo</a> to
+get started using Docker for building this image in CI.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">name: Docker Image CI</span><br><span class="line"></span><br><span class="line">on:</span><br><span class="line">  push:</span><br><span class="line">    branches: [ &quot;main&quot; ]</span><br><span class="line">  pull_request:</span><br><span class="line">    branches: [ &quot;main&quot; ]</span><br><span class="line"></span><br><span class="line">jobs:</span><br><span class="line"></span><br><span class="line">  build:</span><br><span class="line"></span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">      </span><br><span class="line">    steps:</span><br><span class="line">    - name: Checkout</span><br><span class="line">      uses: actions/checkout@v3</span><br><span class="line">    </span><br><span class="line">    - name: Login to Docker Hub</span><br><span class="line">      uses: docker/login-action@v2</span><br><span class="line">      with:</span><br><span class="line">          username: $&#123;&#123; secrets.DOCKERHUB_USERNAME &#125;&#125;</span><br><span class="line">          password: $&#123;&#123; secrets.DOCKERHUB_TOKEN &#125;&#125;</span><br><span class="line">    </span><br><span class="line">    - name: Set up Docker Buildx</span><br><span class="line">      uses: docker/setup-buildx-action@v2</span><br><span class="line"></span><br><span class="line">    - name: Build and push</span><br><span class="line">      uses: docker/build-push-action@v3</span><br><span class="line">      with:</span><br><span class="line">          context: .</span><br><span class="line">          file: ./Dockerfile</span><br><span class="line">          push: true</span><br><span class="line">          tags: $&#123;&#123; secrets.DOCKERHUB_USERNAME &#125;&#125;</span><br><span class="line">          build-args: BOOST_VERSION=1.80.0,NUM_JOBS=4</span><br></pre></td></tr></table></figure>
+<h2 id="reference">Reference</h2>
 <ul>
-<li><p><a
-target="_blank" rel="noopener" href="https://github.com/mdn/content/blob/main/files/en-us/web/api/touch_events/index.md?plain=1">Github:
-Touch events API</a></p></li>
-<li><p><a
-target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Touch_events">Mozilla
-Touch events</a></p></li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/get-started">Docker docs</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.boost.org">Boost C++ library</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.docker.com/build/ci/github-actions/">Introduction to
+GitHub Actions</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.docker.com/build/ci/">Continuous integration
+with Docker</a></li>
+<li><a
+target="_blank" rel="noopener" href="https://docs.github.com/en/actions/publishing-packages/publishing-docker-images">Publishing
+Docker Images</a></li>
 </ul>
 <p>
 Thanks for reading! Feel free to leave the comments below or
@@ -388,7 +488,7 @@ advice or discussions are always welcome. :)
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">TAGGED IN</span><br/>
                 
-    <a class="tag tag--primary tag--small t-none-link" href="/tags/html/" rel="tag">html</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/javascript/" rel="tag">javascript</a>
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/cpp/" rel="tag">cpp</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/docker/" rel="tag">docker</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/programming/" rel="tag">programming</a>
 
             </div>
         
@@ -401,9 +501,9 @@ advice or discussions are always welcome. :)
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/12/12/Introduction_of_Hamming_Code/"
-                    data-tooltip="Introduction of Hamming Code"
-                    aria-label="PREVIOUS: Introduction of Hamming Code"
+                    href="/2023/01/31/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -415,9 +515,9 @@ advice or discussions are always welcome. :)
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/11/19/%E7%94%9F%E6%B4%BB%E6%89%8E%E8%A8%98-%E9%A3%9B%E9%BE%8D%E6%B1%A0%E6%AD%A5%E9%81%93%E5%81%A5%E8%A1%8C/"
-                    data-tooltip="生活札記 飛龍池步道健行"
-                    aria-label="NEXT: 生活札記 飛龍池步道健行"
+                    href="/2023/01/17/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
+                    data-tooltip="Overview of Dynamic Memory and Smart Pointer"
+                    aria-label="NEXT: Overview of Dynamic Memory and Smart Pointer"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -442,7 +542,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -455,7 +555,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -518,9 +618,9 @@ advice or discussions are always welcome. :)
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/12/12/Introduction_of_Hamming_Code/"
-                    data-tooltip="Introduction of Hamming Code"
-                    aria-label="PREVIOUS: Introduction of Hamming Code"
+                    href="/2023/01/31/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
                 >
                     
                         <i class="fa fa-angle-left" aria-hidden="true"></i>
@@ -532,9 +632,9 @@ advice or discussions are always welcome. :)
                     
                 <a
                     class="post-action-btn btn btn--default tooltip--top"
-                    href="/2022/11/19/%E7%94%9F%E6%B4%BB%E6%89%8E%E8%A8%98-%E9%A3%9B%E9%BE%8D%E6%B1%A0%E6%AD%A5%E9%81%93%E5%81%A5%E8%A1%8C/"
-                    data-tooltip="生活札記 飛龍池步道健行"
-                    aria-label="NEXT: 生活札記 飛龍池步道健行"
+                    href="/2023/01/17/Overview_of_Dynamic_Memory_and_Smart_Pointer/"
+                    data-tooltip="Overview of Dynamic Memory and Smart Pointer"
+                    aria-label="NEXT: Overview of Dynamic Memory and Smart Pointer"
                 >
                     
                         <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
@@ -559,7 +659,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/"
                     title="Share on Facebook"
                     aria-label="Share on Facebook"
                 >
@@ -572,7 +672,7 @@ advice or discussions are always welcome. :)
             <li class="post-action hide-xs">
                 <a
                     class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/"
                     title="global.share_on_Twitter"
                     aria-label="global.share_on_Twitter"
                 >
@@ -616,7 +716,7 @@ advice or discussions are always welcome. :)
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/"
                         aria-label="Share on Facebook"
                     >
                         <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
@@ -629,7 +729,7 @@ advice or discussions are always welcome. :)
                     <a
                         class="share-option-btn"
                         target="new"
-                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
+                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/"
                         aria-label="global.share_on_Twitter"
                     >
                         <i class="fab fa-twitter" aria-hidden="true"></i><span>global.share_on_Twitter</span>
@@ -983,9 +1083,9 @@ page.</p></div>
     
         <script>
           var disqus_config = function() {
-            this.page.url = 'https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/';
+            this.page.url = 'https://louissrliu.github.io/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/';
               
-            this.page.identifier = '2022/12/04/Drawing_with_mouse_and_touch_events_on_html/';
+            this.page.identifier = '2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/';
               
           };
           (function() {
