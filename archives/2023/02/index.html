@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Louis">
-    <title> - Louis</title>
+    <title>Archives: 2023/2 - Louis</title>
     <meta name="author" content="ShiRong Liu">
     
         <meta name="keywords" content="hexo,javascript,">
@@ -22,16 +22,14 @@
             <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
         
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","@id":"https://LouisSrLiu.github.io","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"name":"Louis","description":"Hello and wellcome to the internet home of Louis blog. (That’s me!)","url":"https://LouisSrLiu.github.io","keywords":"hexo, javascript"}</script>
-    <meta name="description" content="#canvas_div {     text-align: center;     display: block;     margin-left: auto;     margin-right: auto; } canvas {   border: 2px solid black; }     Clear Area  Line width :      5     7     9     11">
+    <script type="application/ld+json">{}</script>
+    <meta name="description" content="Hello and wellcome to the internet home of Louis blog. (That’s me!)">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="Louis">
-<meta property="og:url" content="https://louissrliu.github.io/javascript/canvas/mouse_touch_canvas.html">
+<meta property="og:url" content="https://louissrliu.github.io/archives/2023/02/index.html">
 <meta property="og:site_name" content="Louis">
-<meta property="og:description" content="#canvas_div {     text-align: center;     display: block;     margin-left: auto;     margin-right: auto; } canvas {   border: 2px solid black; }     Clear Area  Line width :      5     7     9     11">
+<meta property="og:description" content="Hello and wellcome to the internet home of Louis blog. (That’s me!)">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-01-03T01:48:43.321Z">
-<meta property="article:modified_time" content="2023-01-03T01:48:43.321Z">
 <meta property="article:author" content="ShiRong Liu">
 <meta property="article:tag" content="hexo">
 <meta property="article:tag" content="javascript">
@@ -64,8 +62,6 @@
 
     
 
-    
-        
     
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
@@ -296,305 +292,147 @@
                         hasCoverMetaIn
                         ">
                 
-<article class="post">
+    <section class="postShorten-group main-content-wrap">
     
     
-        <div class="post-header main-content-wrap text-left">
-    
-        <h1 class="post-title">
-            (no title)
-        </h1>
-    
-    
-        <div class="post-meta">
-    <time datetime="2023-01-03T09:48:43+08:00">
+    <article class="postShorten postShorten--thumbnailimg-bottom">
+        <div class="postShorten-wrap">
+            
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2023/02/09/Welcome-to-the-new-Tranquilpeak/"
+                            aria-label=": Welcome to Louis"
+                        >
+                            Welcome to Louis
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2023-02-09T09:02:53+08:00">
 	
-		    Jan 03, 2023
+		    Feb 09, 2023
     	
     </time>
     
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/releases/">releases</a>
+
+
+    
     
     
 </div>
 
-    
-</div>
-
-    
-    <div class="post-content markdown">
-        <div class="main-content-wrap">
-            <style>
-#canvas_div {
-    text-align: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-canvas {
-  border: 2px solid black;
-}
-</style>
-
-<div id="canvas_div" style="overflow-x: auto;">
-<canvas id="canvas" width="700" height="360"></canvas>
-<button onclick="javascript:clearArea();return false;">Clear Area</button>
-
-Line width : <select id="selWidth">
-    <option value="5" selected="selected">5</option>
-    <option value="7">7</option>
-    <option value="9">9</option>
-    <option value="11">11</option>
-    <option value="13">13</option>
-    <option value="15">15</option>
-</select>
-
-Color : <select id="selColor">
-    <option value="black">black</option>
-    <option value="blue" selected="selected">blue</option>
-    <option value="red">red</option>
-    <option value="green">green</option>
-    <option value="yellow">yellow</option>
-    <option value="gray">gray</option>
-</select>
-</div>
-
-<script>
-// When true, moving the mouse draws on the canvas
-let isDrawing = false;
-let x = 0;
-let y = 0;
-var offsetX;
-var offsetY;
-
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-
-function startup() {
-  canvas.addEventListener('touchstart', handleStart);
-  canvas.addEventListener('touchend', handleEnd);
-  canvas.addEventListener('touchcancel', handleCancel);
-  canvas.addEventListener('touchmove', handleMove);
-  canvas.addEventListener('mousedown', (e) => {
-    x = e.offsetX;
-    y = e.offsetY;
-    isDrawing = true;
-  });
-
-  canvas.addEventListener('mousemove', (e) => {
-    if (isDrawing) {
-      drawLine(context, x, y, e.offsetX, e.offsetY);
-      x = e.offsetX;
-      y = e.offsetY;
-    }
-  });
-
-
-  canvas.addEventListener('mouseup', (e) => {
-    if(isDrawing) {
-      drawLine(context, x, y, e.offsetX, e.offsetY);
-      x = 0;
-      y = 0;
-      isDrawing = false;
-    }
-  });
-}
-
-document.addEventListener("DOMContentLoaded", startup);
-
-const ongoingTouches = [];
-
-function handleStart(evt) {
-  evt.preventDefault();
-  const touches = evt.changedTouches;
-  offsetX = canvas.getBoundingClientRect().left;
-  offsetY = canvas.getBoundingClientRect().top;
-  for (let i = 0; i < touches.length; i++) {
-    ongoingTouches.push(copyTouch(touches[i]));
-  }
-}
-
-function handleMove(evt) {
-  evt.preventDefault();
-  const touches = evt.changedTouches;
-  for (let i = 0; i < touches.length; i++) {
-    const color = document.getElementById('selColor').value;
-    const idx = ongoingTouchIndexById(touches[i].identifier);
-    if (idx >= 0) {
-      context.beginPath();
-      context.moveTo(ongoingTouches[idx].clientX - offsetX, ongoingTouches[idx].clientY - offsetY);
-      context.lineTo(touches[i].clientX - offsetX, touches[i].clientY - offsetY);
-      context.lineWidth = document.getElementById('selWidth').value;
-      context.strokeStyle = color;
-      context.lineJoin = "round";
-      context.closePath();
-      context.stroke();
-      ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record
-    }
-  }
-}
-
-function handleEnd(evt) {
-  evt.preventDefault();
-  const touches = evt.changedTouches;
-  for (let i = 0; i < touches.length; i++) {
-    const color = document.getElementById('selColor').value;
-    let idx = ongoingTouchIndexById(touches[i].identifier);
-
-    if (idx >= 0) {
-      context.lineWidth = document.getElementById('selWidth').value;
-      context.fillStyle = color;
-      ongoingTouches.splice(idx, 1); // remove it; we're done
-    }
-  }
-}
-
-function handleCancel(evt) {
-  evt.preventDefault();
-  const touches = evt.changedTouches;
-  for (let i = 0; i < touches.length; i++) {
-    let idx = ongoingTouchIndexById(touches[i].identifier);
-    ongoingTouches.splice(idx, 1); // remove it; we're done
-  }
-}
-
-function copyTouch({ identifier, clientX, clientY }) {
-  return { identifier, clientX, clientY };
-}
-
-function ongoingTouchIndexById(idToFind) {
-  for (let i = 0; i < ongoingTouches.length; i++) {
-    const id = ongoingTouches[i].identifier;
-    if (id === idToFind) {
-      return i;
-    }
-  }
-  return -1; // not found
-}
-
-function drawLine(context, x1, y1, x2, y2) {
-  context.beginPath();
-  context.strokeStyle = document.getElementById('selColor').value;
-  context.lineWidth = document.getElementById('selWidth').value;
-  context.lineJoin = "round";
-  context.moveTo(x1, y1);
-  context.lineTo(x2, y2);
-  context.closePath();
-  context.stroke();
-}
-
-function clearArea() {
-    context.setTransform(1, 0, 0, 1, 0, 0);
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-}
-</script>
-
+            </div>
             
-
-
+                <div class="postShorten-excerpt">
+                    <!-- Quote  -->
+<p class="message" style="font-family:cursive">
+<q> "No amount of genius can overcome a preoccupation with detail" -
+Marion Levy Jr.</q>
+</p>
+                    
+                        <a
+                            href="/2023/02/09/Welcome-to-the-new-Tranquilpeak/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": Welcome to Louis"
+                        >
+                            Continue reading
+                        </a>
+                        
+                    
+                </div>
+            
         </div>
-    </div>
-    <div id="post-footer" class="post-footer main-content-wrap">
         
-        
-            <div class="post-actions-wrap">
-    <nav>
-        <ul class="post-actions post-action-nav">
-            <li class="post-action">
-                
-                    <a
-                        class="post-action-btn btn btn--disabled"
-                        aria-hidden="true"
-                    >
-                        
-                        <i class="fa fa-angle-left" aria-hidden="true"></i>
-                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
-                    </a>
-            </li>
-            <li class="post-action">
-                
-                    <a
-                        class="post-action-btn btn btn--disabled"
-                        aria-hidden="true"
-                    >
-                        
-                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-            </li>
-        </ul>
-    </nav>
-    <ul class="post-actions post-action-share">
-        <li class="post-action hide-lg hide-md hide-sm">
             <a
-                class="post-action-btn btn btn--default btn-open-shareoptions"
-                href="#btn-open-shareoptions"
-                aria-label="Share this post"
+                href="/2023/02/09/Welcome-to-the-new-Tranquilpeak/"
+                aria-label=": Welcome to Louis"
             >
-                <i class="fa fa-share-alt" aria-hidden="true"></i>
+                <div class="postShorten-thumbnailimg">
+                    <img alt="" src="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissriiu/saltlakecity-100.jpg"/>
+                </div>
             </a>
-        </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/javascript/canvas/mouse_touch_canvas.html"
-                    title="Share on Facebook"
-                    aria-label="Share on Facebook"
-                >
-                    <i class="fab fa-facebook" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-            
-            
-            <li class="post-action hide-xs">
-                <a
-                    class="post-action-btn btn btn--default"
-                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/javascript/canvas/mouse_touch_canvas.html"
-                    title="global.share_on_Twitter"
-                    aria-label="global.share_on_Twitter"
-                >
-                    <i class="fab fa-twitter" aria-hidden="true"></i>
-                </a>
-            </li>
-        
-        
-            
-                <li class="post-action">
-                    <a
-                        class="post-action-btn btn btn--default"
-                        href="#disqus_thread"
-                        aria-label="Leave a comment"
-                    >
-                        <i class="fa fa-comment"></i>
-                    </a>
-                </li>
             
         
-        <li class="post-action">
+    </article>
+    
+    
+    <article class="postShorten postShorten--thumbnailimg-left">
+        <div class="postShorten-wrap">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            <div class="postShorten-header">
+                <h1 class="postShorten-title">
+                    
+                        <a
+                            class="link-unstyled"
+                            href="/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"
+                            aria-label=": How to Setup Gdb and Debug Program in Docker Container"
+                        >
+                            How to Setup Gdb and Debug Program in Docker Container
+                        </a>
+                    
+                </h1>
+                <div class="postShorten-meta">
+    <time datetime="2023-02-09T00:00:00+08:00">
+	
+		    Feb 09, 2023
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/features/">features</a>
+
+
+    
+    
+    
+</div>
+
+            </div>
             
-                <i class="fa fa-list" aria-hidden="true"></i>
+                <div class="postShorten-excerpt">
+                    <p>“The GNU Debugger (GDB) is a portable debugger that runs on many Unix-like systems and works for many programming languages, including C, C++, … and partially others.”</p>
+                    
+                        <a
+                            href="/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"
+                            class="postShorten-excerpt_link link"
+                            aria-label=": How to Setup Gdb and Debug Program in Docker Container"
+                        >
+                            Continue reading
+                        </a>
+                        
+                    
+                </div>
+            
+        </div>
+        
+            <a
+                href="/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"
+                aria-label=": How to Setup Gdb and Debug Program in Docker Container"
+            >
+                <div class="postShorten-thumbnailimg">
+                    <img alt="" src="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/lake.jpeg"/>
+                </div>
             </a>
-        </li>
+            
+        
+    </article>
+    
+    <div class="pagination-bar">
+    <ul class="pagination">
+        
+        
+        <li class="pagination-number">page 1 of 1</li>
     </ul>
 </div>
 
-
-        
-        
-            
-                <div id="disqus_thread">
-    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-
-            
-        
-    </div>
-</article>
+</section>
 
 
 
@@ -936,25 +774,6 @@ page.</p></div>
 <!--SCRIPTS END-->
 <script src="/assets/js/lazysizes.js"></script>
 
-
-    
-        <script>
-          var disqus_config = function() {
-            this.page.url = 'https://louissrliu.github.io/javascript/canvas/mouse_touch_canvas.html';
-              
-            this.page.identifier = 'javascript/canvas/mouse_touch_canvas.html';
-              
-          };
-          (function() {
-            var d = document, s = d.createElement('script');
-            var disqus_shortname = 'shirongliu';
-            s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-          })();
-        </script>
-    
 
 
 

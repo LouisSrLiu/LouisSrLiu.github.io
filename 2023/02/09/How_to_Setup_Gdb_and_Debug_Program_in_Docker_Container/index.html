@@ -1,0 +1,982 @@
+
+<!DOCTYPE html>
+<html lang="en,zh-tw,default">
+    
+<head>
+    <!-- Google Adsense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7510696744137436"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Louis">
+    <title>How to Setup Gdb and Debug Program in Docker Container - Louis</title>
+    <meta name="author" content="ShiRong Liu">
+    
+        <meta name="keywords" content="hexo,javascript,">
+    
+    
+        <link rel="icon" href="https://LouisSrLiu.github.io/assets/images/logo.jpg">
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"“The GNU Debugger (GDB) is a portable debugger that runs on many Unix-like systems and works for many programming languages, including C, C++, … and partially others.”\n\nBrieflyFor software development, there are several usual debugging toolbox on Linux, such as strace, perf and gdb. These are used to inspect behaviour of newly launched programs or of the already running ones. In this post, I would like to go through how to debug C/C++ programs for logic errors, segmentation faults and memory leaks on Docker container shortly.\nDocker ContainerThe C/C++ examples and Dockerfile with gdb tool could be found in gdb-debug-docker on GitHub.\nBuild and Run interact with Docker ImageTo build the image with cmake and gdb1docker build . -t cpp-debug:0.0.1\nTo run and interact with above built image1docker run -it -v $(pwd)/examples:/mnt cpp-debug:0.0.1 bash\nDebug Examples in Docker ContainerTo build examples programs1234$ mkdir build$ cd build$ cmake ..$ make\nLogical ErrorWhen we run this logicalError program, which caculates the series value with following formula, we observated that the result did not return the expected value. First, we was well done indeed for using gdb to trace down problems.\n123$ ./logicalError This program is used to compute the value of the following series :(x^0)/0! + (x^1)/1! + (x^2)/2! + (x^3)/3! + (x^4)/4! + ........ + (x^n)/n!\nIn gdb, at this point, enter the commands: break, run, next, step, print, and backtrace. It will look something like this:\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455This is free software: you are free to change and redistribute it.There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;and &quot;show warranty&quot; for details.This GDB was configured as &quot;x86_64-linux-gnu&quot;.Type &quot;show configuration&quot; for configuration details.For bug reporting instructions, please see:&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fbugs%2F&amp;data=05%7C01%7C%7Ce9e0213a90144c1ddbad08db0a65526b%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115202533025083%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Subavd2vT%2Fo8zcWSni%2BlMco76RBwK%2FeydL49Lo8iDBY%3D&amp;reserved=0&gt;.Find the GDB manual and other documentation resources online at:&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fdocumentation%2F&amp;data=05%7C01%7C%7Ce9e0213a90144c1ddbad08db0a65526b%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115202533025083%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=62EKXX2x7RQD3KrFX7ql9hW3p6%2B1t7ysSk0N2VYnLp8%3D&amp;reserved=0&gt;.For help, type &quot;help&quot;.Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...Reading symbols from build/logicalError...done.(gdb) b ComputeSeriesValueBreakpoint 1 at 0xc4f: file /mnt/header.cpp, line 20.(gdb) rStarting program: /mnt/build/logicalErrorwarning: Error disabling address space randomization: Operation not permittedThis program is used to compute the value of the following series :(x^0)/0! + (x^1)/1! + (x^2)/2! + (x^3)/3! + (x^4)/4! + .... + (x^n)/n!Please enter the value of x : 2Please enter an integer value for n :3Breakpoint 1, ComputeSeriesValue (x=2, n=3) at /mnt/header.cpp:2020          double seriesValue = 0.0;(gdb) n21          double xpow = 1;(gdb)23          for (int k = 0; k&lt;=n; k ++) &#123;(gdb)24              seriesValue += xpow / ComputeFactorial(k);(gdb)25              xpow = xpow * x;(gdb)23          for (int k = 0; k&lt;=n; k ++) &#123;(gdb)24              seriesValue += xpow / ComputeFactorial(k);(gdb) stepComputeFactorial (number=1) at /mnt/header.cpp:77           int fact = 0;(gdb) print fact$1 = 0(gdb) n12          for (int j = 1; j &lt;= number; j ++) &#123;(gdb)13              fact = fact * j;(gdb)12          for (int j = 1; j &lt;= number; j ++) &#123;(gdb)16          return fact;(gdb) bt#0  ComputeFactorial (number=1) at /mnt/header.cpp:16#1  0x000055adafea6c7e in ComputeSeriesValue (x=2, n=3) at /mnt/header.cpp:24#2  0x000055adafea6b4b in main () at /mnt/logicalError.cpp:26\nBy viewing the stack using backtrace, the root cause of unexpected value is pointed to the ComputeSeriesValue function. We can see the value of fact remains to be 0 before it is returned.\nSegmentation Fault (core dumped)When we run this coreDumped program, We can use gdb to trace segmentation fault step-by-step.\n12345678910111213141516171819202122232425root@a2c941bd0212:/mnt# gdb build/coreDumpedGNU gdb (Ubuntu 8.1.1-0ubuntu1) 8.1.1Copyright (C) 2018 Free Software Foundation, Inc.License GPLv3+: GNU GPL version 3 or later &lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fgnu.org%2Flicenses%2Fgpl.html&amp;data=05%7C01%7C%7Cd30dce7b66124f88a92408db0a4df50e%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115102207439948%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=M1MI65ZgzOErPVwQosQYnV8c%2F0oZQ2exGqFQZIbVmCg%3D&amp;reserved=0&gt;This is free software: you are free to change and redistribute it.There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;and &quot;show warranty&quot; for details.This GDB was configured as &quot;x86_64-linux-gnu&quot;.Type &quot;show configuration&quot; for configuration details.For bug reporting instructions, please see:&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fbugs%2F&amp;data=05%7C01%7C%7Cd30dce7b66124f88a92408db0a4df50e%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115102207439948%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=MlRYNTm67tKwpHDOpil3knX6D8pMf47I2dq2RElUT0c%3D&amp;reserved=0&gt;.Find the GDB manual and other documentation resources online at:&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fdocumentation%2F&amp;data=05%7C01%7C%7Cd30dce7b66124f88a92408db0a4df50e%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115102207439948%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=LRjiiVsGME0jH6Mc3WaBm%2B2iy3ZlEzGzBpUi3WfknLA%3D&amp;reserved=0&gt;.For help, type &quot;help&quot;.Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...Reading symbols from build/coreDumped...done.(gdb) rStarting program: /mnt/build/coreDumpedwarning: Error disabling address space randomization: Operation not permittedProgram received signal SIGSEGV, Segmentation fault.0x00005598e28b166c in main () at /mnt/coreDumped.cpp:1515          temp[3] = &#x27;F&#x27;;(gdb) bt#0  0x00005598e28b166c in main () at /mnt/coreDumped.cpp:15\nBy viewing the stack using backtrace, the root cause of segmentation fault is indicated in the line 15 of coreDumped.cpp.\nHere’s we can also get the stack for every thread with following command in gdb\n1234567891011121314151617181920212223242526272829root@a2c941bd0212:/mnt# gdb build/coreDumpedGNU gdb (Ubuntu 8.1.1-0ubuntu1) 8.1.1Copyright (C) 2018 Free Software Foundation, Inc.License GPLv3+: GNU GPL version 3 or later &lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fgnu.org%2Flicenses%2Fgpl.html&amp;data=05%7C01%7C%7C0e6f594d56b5424c1a3608db0a5d5767%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115168250069764%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=m5pT5Xk7qABFXqzZlvRymdmE84Ch%2B7xEmDXxMWhtkRM%3D&amp;reserved=0&gt;This is free software: you are free to change and redistribute it.There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;and &quot;show warranty&quot; for details.This GDB was configured as &quot;x86_64-linux-gnu&quot;.Type &quot;show configuration&quot; for configuration details.For bug reporting instructions, please see:&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fbugs%2F&amp;data=05%7C01%7C%7C0e6f594d56b5424c1a3608db0a5d5767%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115168250225996%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Tbppnhv8PByr%2FVyergRvhIQru2dMm7U53IJUZp%2B%2BVgY%3D&amp;reserved=0&gt;.Find the GDB manual and other documentation resources online at:&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fdocumentation%2F&amp;data=05%7C01%7C%7C0e6f594d56b5424c1a3608db0a5d5767%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115168250225996%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=GFGVaYMO1d8T2dcSXJfJwJWRKoQuOtjaYLW2EO2oPQE%3D&amp;reserved=0&gt;.For help, type &quot;help&quot;.Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...Reading symbols from build/coreDumped...done.(gdb) rStarting program: /mnt/build/coreDumpedwarning: Error disabling address space randomization: Operation not permittedProgram received signal SIGSEGV, Segmentation fault.0x00005579a99a866c in main () at /mnt/coreDumped.cpp:1515          temp[3] = &#x27;F&#x27;;(gdb) thread apply all bt fullThread 1 (process 209):#0  0x00005579a99a866c in main () at /mnt/coreDumped.cpp:15        temp = 0x5579a99a8734 &quot;Paras&quot;        i = 0\nBy viewing the above stack using backtrace, the root cause of segmentation fault is also indicated in the line 15 of coreDumped.cpp and show every thread in gdb.\nMemory LeakWhen we run this memoryLeak program, gdb is not able to point out the memory leak issue. However, we don’t need to do anything special to use valgrind, just call it for a build of program with an argument —leak-check=yes to see whether there are potential risks of memory leak, taken from C++ Assignment Overloading and Valgrind Memcheck.\n123456789101112131415161718192021222324root@a2c941bd0212:/mnt# valgrind --leak-check=yes build/memoryLeak==206== Memcheck, a memory error detector==206== Copyright (C) 2002-2017, and GNU GPL&#x27;d, by Julian Seward et al.==206== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info==206== Command: build/memoryLeak==206====206====206== HEAP SUMMARY:==206==     in use at exit: 12 bytes in 1 blocks==206==   total heap usage: 2 allocs, 1 frees, 72,716 bytes allocated==206====206== 12 bytes in 1 blocks are definitely lost in loss record 1 of 1==206==    at 0x4C3289F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)==206==    by 0x10868B: main (memoryLeak.cpp:3)==206====206== LEAK SUMMARY:==206==    definitely lost: 12 bytes in 1 blocks==206==    indirectly lost: 0 bytes in 0 blocks==206==      possibly lost: 0 bytes in 0 blocks==206==    still reachable: 0 bytes in 0 blocks==206==         suppressed: 0 bytes in 0 blocks==206====206== For counts of detected and suppressed errors, rerun with: -v==206== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)\nBy viewing the memory profile from valgrind, it identifies the bottlenecks of definitely lost in the line 3 of memoryLeak.cpp.\nThanks for reading! Feel free to leave the comments below or email to me. Any pieces of advice or discussions are always welcome. :)\n","dateCreated":"2023-02-09T00:00:00+08:00","dateModified":"2023-02-09T15:12:57+08:00","datePublished":"2023-02-09T00:00:00+08:00","description":"“The GNU Debugger (GDB) is a portable debugger that runs on many Unix-like systems and works for many programming languages, including C, C++, … and partially others.”","headline":"How to Setup Gdb and Debug Program in Docker Container","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/lake.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/","keywords":"cpp, docker, gdb","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/lake.jpeg"}</script>
+    <meta name="description" content="“The GNU Debugger (GDB) is a portable debugger that runs on many Unix-like systems and works for many programming languages, including C, C++, … and partially others.”">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="How to Setup Gdb and Debug Program in Docker Container">
+<meta property="og:url" content="https://louissrliu.github.io/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/index.html">
+<meta property="og:site_name" content="Louis">
+<meta property="og:description" content="“The GNU Debugger (GDB) is a portable debugger that runs on many Unix-like systems and works for many programming languages, including C, C++, … and partially others.”">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-02-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-02-09T07:12:57.044Z">
+<meta property="article:author" content="ShiRong Liu">
+<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="gdb">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://avatars.githubusercontent.com/u/26519320?v=4"/>
+    
+    
+        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/lake.jpeg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/lake.jpeg"/>
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-ua8mv97snbccvky9cf8kiikycgkc8zmg8mrk5bqztlbbcs7b2vsqjsfvcw1i.min.css">
+
+    <!--STYLES END-->
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125815034-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-125815034-1');
+    </script>
+
+
+    
+
+    
+        
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Louis
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-icon open-algolia-search"
+                href="#search"
+                aria-label="Open the link: /#search"
+            >
+        
+        
+            <i class="fa fa-search fa-lg"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="Read more about the author"
+                >
+                    <img class="sidebar-profile-picture" src="https://avatars.githubusercontent.com/u/26519320?v=4" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">ShiRong Liu</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub page, open-source, software development, Linux, and travels in my spare time.</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/s311354"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/in/shirongliu/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:qazqazqaz850@gmail.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            How to Setup Gdb and Debug Program in Docker Container
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2023-02-09T00:00:00+08:00">
+	
+		    Feb 09, 2023
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/features/">features</a>
+
+
+    
+    
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>“The GNU Debugger (GDB) is a portable debugger that runs on many Unix-like systems and works for many programming languages, including C, C++, … and partially others.”</p>
+<span id="more"></span>
+<h2 id="Briefly"><a href="#Briefly" class="headerlink" title="Briefly"></a>Briefly</h2><p>For software development, there are several usual debugging toolbox on Linux, such as <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Strace" title="https://en.wikipedia.org/wiki/Strace">strace</a>, <a target="_blank" rel="noopener" href="https://perf.wiki.kernel.org/index.php/Main_Page" title="https://perf.wiki.kernel.org/index.php/Main_Page">perf</a> and <a target="_blank" rel="noopener" href="https://www.sourceware.org/gdb/" title="https://www.sourceware.org/gdb/">gdb</a>. These are used to inspect behaviour of newly launched programs or of the already running ones. In this post, I would like to go through how to debug C/C++ programs for logic errors, segmentation faults and memory leaks on Docker container shortly.</p>
+<h2 id="Docker-Container"><a href="#Docker-Container" class="headerlink" title="Docker Container"></a>Docker Container</h2><p>The C/C++ examples and Dockerfile with gdb tool could be found in <a target="_blank" rel="noopener" href="https://github.com/s311354/gdb-debug-docker" title="https://github.com/s311354/gdb-debug-docker">gdb-debug-docker</a> on GitHub.</p>
+<h3 id="Build-and-Run-interact-with-Docker-Image"><a href="#Build-and-Run-interact-with-Docker-Image" class="headerlink" title="Build and Run interact with Docker Image"></a>Build and Run interact with Docker Image</h3><p>To build the image with cmake and gdb<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build . -t cpp-debug:0.0.1</span><br></pre></td></tr></table></figure></p>
+<p>To run and interact with above built image<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it -v $(pwd)/examples:/mnt cpp-debug:0.0.1 bash</span><br></pre></td></tr></table></figure></p>
+<h3 id="Debug-Examples-in-Docker-Container"><a href="#Debug-Examples-in-Docker-Container" class="headerlink" title="Debug Examples in Docker Container"></a>Debug Examples in Docker Container</h3><p>To build examples programs<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir build</span><br><span class="line">$ cd build</span><br><span class="line">$ cmake ..</span><br><span class="line">$ make</span><br></pre></td></tr></table></figure></p>
+<h4 id="Logical-Error"><a href="#Logical-Error" class="headerlink" title="Logical Error"></a>Logical Error</h4><p>When we run this logicalError program, which caculates the series value with following formula, we observated that the result did not return the expected value. First, we was well done indeed for using gdb to trace down problems.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ./logicalError </span><br><span class="line">This program is used to compute the value of the following series :</span><br><span class="line">(x^0)/0! + (x^1)/1! + (x^2)/2! + (x^3)/3! + (x^4)/4! + ........ + (x^n)/n!</span><br></pre></td></tr></table></figure>
+<p>In gdb, at this point, enter the commands: break, run, next, step, print, and backtrace. It will look something like this:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;</span><br><span class="line">and &quot;show warranty&quot; for details.</span><br><span class="line">This GDB was configured as &quot;x86_64-linux-gnu&quot;.</span><br><span class="line">Type &quot;show configuration&quot; for configuration details.</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fbugs%2F&amp;data=05%7C01%7C%7Ce9e0213a90144c1ddbad08db0a65526b%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115202533025083%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Subavd2vT%2Fo8zcWSni%2BlMco76RBwK%2FeydL49Lo8iDBY%3D&amp;reserved=0&gt;.</span><br><span class="line">Find the GDB manual and other documentation resources online at:</span><br><span class="line">&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fdocumentation%2F&amp;data=05%7C01%7C%7Ce9e0213a90144c1ddbad08db0a65526b%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115202533025083%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=62EKXX2x7RQD3KrFX7ql9hW3p6%2B1t7ysSk0N2VYnLp8%3D&amp;reserved=0&gt;.</span><br><span class="line">For help, type &quot;help&quot;.</span><br><span class="line">Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...</span><br><span class="line">Reading symbols from build/logicalError...done.</span><br><span class="line">(gdb) b ComputeSeriesValue</span><br><span class="line">Breakpoint 1 at 0xc4f: file /mnt/header.cpp, line 20.</span><br><span class="line">(gdb) r</span><br><span class="line">Starting program: /mnt/build/logicalError</span><br><span class="line">warning: Error disabling address space randomization: Operation not permitted</span><br><span class="line">This program is used to compute the value of the following series :</span><br><span class="line">(x^0)/0! + (x^1)/1! + (x^2)/2! + (x^3)/3! + (x^4)/4! + .... + (x^n)/n!</span><br><span class="line">Please enter the value of x : 2</span><br><span class="line"></span><br><span class="line">Please enter an integer value for n :3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Breakpoint 1, ComputeSeriesValue (x=2, n=3) at /mnt/header.cpp:20</span><br><span class="line">20          double seriesValue = 0.0;</span><br><span class="line">(gdb) n</span><br><span class="line">21          double xpow = 1;</span><br><span class="line">(gdb)</span><br><span class="line">23          for (int k = 0; k&lt;=n; k ++) &#123;</span><br><span class="line">(gdb)</span><br><span class="line">24              seriesValue += xpow / ComputeFactorial(k);</span><br><span class="line">(gdb)</span><br><span class="line">25              xpow = xpow * x;</span><br><span class="line">(gdb)</span><br><span class="line">23          for (int k = 0; k&lt;=n; k ++) &#123;</span><br><span class="line">(gdb)</span><br><span class="line">24              seriesValue += xpow / ComputeFactorial(k);</span><br><span class="line">(gdb) step</span><br><span class="line">ComputeFactorial (number=1) at /mnt/header.cpp:7</span><br><span class="line">7           int fact = 0;</span><br><span class="line">(gdb) print fact</span><br><span class="line">$1 = 0</span><br><span class="line">(gdb) n</span><br><span class="line">12          for (int j = 1; j &lt;= number; j ++) &#123;</span><br><span class="line">(gdb)</span><br><span class="line">13              fact = fact * j;</span><br><span class="line">(gdb)</span><br><span class="line">12          for (int j = 1; j &lt;= number; j ++) &#123;</span><br><span class="line">(gdb)</span><br><span class="line">16          return fact;</span><br><span class="line">(gdb) bt</span><br><span class="line">#0  ComputeFactorial (number=1) at /mnt/header.cpp:16</span><br><span class="line">#1  0x000055adafea6c7e in ComputeSeriesValue (x=2, n=3) at /mnt/header.cpp:24</span><br><span class="line">#2  0x000055adafea6b4b in main () at /mnt/logicalError.cpp:26</span><br></pre></td></tr></table></figure>
+<p>By viewing the stack using backtrace, the root cause of unexpected value is pointed to the ComputeSeriesValue function. We can see the value of fact remains to be 0 before it is returned.</p>
+<h4 id="Segmentation-Fault-core-dumped"><a href="#Segmentation-Fault-core-dumped" class="headerlink" title="Segmentation Fault (core dumped)"></a>Segmentation Fault (core dumped)</h4><p>When we run this coreDumped program, We can use gdb to trace segmentation fault step-by-step.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">root@a2c941bd0212:/mnt# gdb build/coreDumped</span><br><span class="line">GNU gdb (Ubuntu 8.1.1-0ubuntu1) 8.1.1</span><br><span class="line">Copyright (C) 2018 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fgnu.org%2Flicenses%2Fgpl.html&amp;data=05%7C01%7C%7Cd30dce7b66124f88a92408db0a4df50e%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115102207439948%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=M1MI65ZgzOErPVwQosQYnV8c%2F0oZQ2exGqFQZIbVmCg%3D&amp;reserved=0&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;</span><br><span class="line">and &quot;show warranty&quot; for details.</span><br><span class="line">This GDB was configured as &quot;x86_64-linux-gnu&quot;.</span><br><span class="line">Type &quot;show configuration&quot; for configuration details.</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fbugs%2F&amp;data=05%7C01%7C%7Cd30dce7b66124f88a92408db0a4df50e%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115102207439948%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=MlRYNTm67tKwpHDOpil3knX6D8pMf47I2dq2RElUT0c%3D&amp;reserved=0&gt;.</span><br><span class="line">Find the GDB manual and other documentation resources online at:</span><br><span class="line">&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fdocumentation%2F&amp;data=05%7C01%7C%7Cd30dce7b66124f88a92408db0a4df50e%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115102207439948%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=LRjiiVsGME0jH6Mc3WaBm%2B2iy3ZlEzGzBpUi3WfknLA%3D&amp;reserved=0&gt;.</span><br><span class="line">For help, type &quot;help&quot;.</span><br><span class="line">Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...</span><br><span class="line">Reading symbols from build/coreDumped...done.</span><br><span class="line">(gdb) r</span><br><span class="line">Starting program: /mnt/build/coreDumped</span><br><span class="line">warning: Error disabling address space randomization: Operation not permitted</span><br><span class="line"></span><br><span class="line">Program received signal SIGSEGV, Segmentation fault.</span><br><span class="line">0x00005598e28b166c in main () at /mnt/coreDumped.cpp:15</span><br><span class="line">15          temp[3] = &#x27;F&#x27;;</span><br><span class="line">(gdb) bt</span><br><span class="line">#0  0x00005598e28b166c in main () at /mnt/coreDumped.cpp:15</span><br></pre></td></tr></table></figure>
+<p>By viewing the stack using backtrace, the root cause of segmentation fault is indicated in the line 15 of coreDumped.cpp.</p>
+<p>Here’s we can also get the stack for every thread with following command in gdb</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">root@a2c941bd0212:/mnt# gdb build/coreDumped</span><br><span class="line">GNU gdb (Ubuntu 8.1.1-0ubuntu1) 8.1.1</span><br><span class="line">Copyright (C) 2018 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fgnu.org%2Flicenses%2Fgpl.html&amp;data=05%7C01%7C%7C0e6f594d56b5424c1a3608db0a5d5767%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115168250069764%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=m5pT5Xk7qABFXqzZlvRymdmE84Ch%2B7xEmDXxMWhtkRM%3D&amp;reserved=0&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;</span><br><span class="line">and &quot;show warranty&quot; for details.</span><br><span class="line">This GDB was configured as &quot;x86_64-linux-gnu&quot;.</span><br><span class="line">Type &quot;show configuration&quot; for configuration details.</span><br><span class="line">For bug reporting instructions, please see:</span><br><span class="line">&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fbugs%2F&amp;data=05%7C01%7C%7C0e6f594d56b5424c1a3608db0a5d5767%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115168250225996%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Tbppnhv8PByr%2FVyergRvhIQru2dMm7U53IJUZp%2B%2BVgY%3D&amp;reserved=0&gt;.</span><br><span class="line">Find the GDB manual and other documentation resources online at:</span><br><span class="line">&lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.gnu.org%2Fsoftware%2Fgdb%2Fdocumentation%2F&amp;data=05%7C01%7C%7C0e6f594d56b5424c1a3608db0a5d5767%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638115168250225996%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=GFGVaYMO1d8T2dcSXJfJwJWRKoQuOtjaYLW2EO2oPQE%3D&amp;reserved=0&gt;.</span><br><span class="line">For help, type &quot;help&quot;.</span><br><span class="line">Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...</span><br><span class="line">Reading symbols from build/coreDumped...done.</span><br><span class="line">(gdb) r</span><br><span class="line">Starting program: /mnt/build/coreDumped</span><br><span class="line">warning: Error disabling address space randomization: Operation not permitted</span><br><span class="line"></span><br><span class="line">Program received signal SIGSEGV, Segmentation fault.</span><br><span class="line">0x00005579a99a866c in main () at /mnt/coreDumped.cpp:15</span><br><span class="line">15          temp[3] = &#x27;F&#x27;;</span><br><span class="line">(gdb) thread apply all bt full</span><br><span class="line"></span><br><span class="line">Thread 1 (process 209):</span><br><span class="line">#0  0x00005579a99a866c in main () at /mnt/coreDumped.cpp:15</span><br><span class="line">        temp = 0x5579a99a8734 &quot;Paras&quot;</span><br><span class="line">        i = 0</span><br></pre></td></tr></table></figure>
+<p>By viewing the above stack using backtrace, the root cause of segmentation fault is also indicated in the line 15 of coreDumped.cpp and show every thread in gdb.</p>
+<h4 id="Memory-Leak"><a href="#Memory-Leak" class="headerlink" title="Memory Leak"></a>Memory Leak</h4><p>When we run this memoryLeak program, gdb is not able to point out the memory leak issue. However, we don’t need to do anything special to use valgrind, just call it for a build of program with an argument —leak-check=yes to see whether there are potential risks of memory leak, taken from <a href="https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/" title="https://louissrliu.github.io/2023/01/04/Cpp_assignment_overloading_and_valgrind_memcheck/">C++ Assignment Overloading and Valgrind Memcheck</a>.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">root@a2c941bd0212:/mnt# valgrind --leak-check=yes build/memoryLeak</span><br><span class="line">==206== Memcheck, a memory error detector</span><br><span class="line">==206== Copyright (C) 2002-2017, and GNU GPL&#x27;d, by Julian Seward et al.</span><br><span class="line">==206== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info</span><br><span class="line">==206== Command: build/memoryLeak</span><br><span class="line">==206==</span><br><span class="line">==206==</span><br><span class="line">==206== HEAP SUMMARY:</span><br><span class="line">==206==     in use at exit: 12 bytes in 1 blocks</span><br><span class="line">==206==   total heap usage: 2 allocs, 1 frees, 72,716 bytes allocated</span><br><span class="line">==206==</span><br><span class="line">==206== 12 bytes in 1 blocks are definitely lost in loss record 1 of 1</span><br><span class="line">==206==    at 0x4C3289F: operator new[](unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)</span><br><span class="line">==206==    by 0x10868B: main (memoryLeak.cpp:3)</span><br><span class="line">==206==</span><br><span class="line">==206== LEAK SUMMARY:</span><br><span class="line">==206==    definitely lost: 12 bytes in 1 blocks</span><br><span class="line">==206==    indirectly lost: 0 bytes in 0 blocks</span><br><span class="line">==206==      possibly lost: 0 bytes in 0 blocks</span><br><span class="line">==206==    still reachable: 0 bytes in 0 blocks</span><br><span class="line">==206==         suppressed: 0 bytes in 0 blocks</span><br><span class="line">==206==</span><br><span class="line">==206== For counts of detected and suppressed errors, rerun with: -v</span><br><span class="line">==206== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)</span><br></pre></td></tr></table></figure>
+<p>By viewing the memory profile from valgrind, it identifies the bottlenecks of definitely lost in the line 3 of memoryLeak.cpp.</p>
+<p>Thanks for reading! Feel free to leave the comments below or <a href="mailto:shirong0419@icloud.com">email</a> to me. Any pieces of advice or discussions are always welcome. :)</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/cpp/" rel="tag">cpp</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/docker/" rel="tag">docker</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/gdb/" rel="tag">gdb</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2023/02/09/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/"
+                    data-tooltip="How to Install Boost C++ Library and Run CI/CD Workflow with Docker Container"
+                    aria-label="NEXT: How to Install Boost C++ Library and Run CI/CD Workflow with Docker Container"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"
+                    title="global.share_on_Twitter"
+                    aria-label="global.share_on_Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#disqus_thread"
+                        aria-label="Leave a comment"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 ShiRong Liu. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2023/02/09/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2023/01/31/How_to_Install_Boost_Cplusplus_Library_in_Docker_Container/"
+                    data-tooltip="How to Install Boost C++ Library and Run CI/CD Workflow with Docker Container"
+                    aria-label="NEXT: How to Install Boost C++ Library and Run CI/CD Workflow with Docker Container"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"
+                    title="global.share_on_Twitter"
+                    aria-label="global.share_on_Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#disqus_thread"
+                        aria-label="Leave a comment"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"
+                        aria-label="global.share_on_Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>global.share_on_Twitter</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://avatars.githubusercontent.com/u/26519320?v=4" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">ShiRong Liu</h4>
+        
+            <div id="about-card-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub page, open-source, software development, Linux, and travels in my spare time.</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p> Embedded C/C++ Software Engineer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Taiwan
+            </div>
+        
+    </div>
+</div>
+
+        
+            <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-times"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="/assets/images/logo-algolia-nebula-blue-full.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"
+                            aria-label=": 中文測試"
+                        >
+                            <h3 class="media-heading">中文測試</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Oct 2, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>This is a chinese test post to show you how chinese is displayed.</div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2018/10/02/Git-Handbook/"
+                            aria-label=": A Beginner&#39;s Guide - Git Handbook"
+                        >
+                            <h3 class="media-heading">A Beginner&#39;s Guide - Git Handbook</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Oct 2, 2018
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Due to the most time on my job, we need to type many git command
+lines. So that this article is used to sort several git commands
+frequently used for easily searching.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/09/01/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97-%E7%AA%AE%E6%9F%A5%E7%90%86%E7%9A%84%E6%99%AE%E9%80%9A%E5%B8%B8%E8%AD%98/"
+                            aria-label=": 閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
+                        >
+                            <h3 class="media-heading">閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Sep 1, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>"Most players gain pleasure from feeling accepted or belonging to the
+group. The good player however, gains pleasure from his ability to cope
+with the realities of the game"</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                            aria-label=": Embed MapLibre Map for Website"
+                        >
+                            <h3 class="media-heading">Embed MapLibre Map for Website</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Sep 28, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>In our daily life, most of us usually use <a
+target="_blank" rel="noopener" href="https://www.google.com/maps/"
+title="https://www.google.com/maps/">Google Map</a> or <a
+target="_blank" rel="noopener" href="https://www.apple.com/maps/"
+title="https://www.apple.com/maps/">Apple Maps</a> to help us to
+navigate to a place. We can see traffic info, public transit and also
+choose our mode of transportation.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/10/08/%E7%94%9F%E6%B4%BB%E6%9C%AD%E8%A8%98-%E6%B5%B7%E7%B6%BF%E5%AF%B6%E5%AF%B6%E8%9F%B9%E5%A0%A1%E7%8E%8B%E9%A4%90%E5%BB%B3_SpongeBob_SquarePants/"
+                            aria-label=": 生活扎記 蟹堡王餐廳 Krusty Krab"
+                        >
+                            <h3 class="media-heading">生活扎記 蟹堡王餐廳 Krusty Krab</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Oct 8, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>"After going on your life-changing journey, you now realize that you
+don’t want what you thought you wanted. What you really wanted was
+inside you all along."</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
+                            aria-label=": Drawing with Mouse Events on HTML"
+                        >
+                            <h3 class="media-heading">Drawing with Mouse Events on HTML</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Nov 6, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching/drawing by mouse. The
+canvas API provides a means for drawing graphics via JavaScript and the
+HTML element. It largely focuses on 2D graphics. In this post, I would
+like to describe how to quickly go about implementing this.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/11/19/%E7%94%9F%E6%B4%BB%E6%89%8E%E8%A8%98-%E9%A3%9B%E9%BE%8D%E6%B1%A0%E6%AD%A5%E9%81%93%E5%81%A5%E8%A1%8C/"
+                            aria-label=": 生活札記 飛龍池步道健行"
+                        >
+                            <h3 class="media-heading">生活札記 飛龍池步道健行</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Nov 19, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>這週末來到位於新竹縣新埔鎮的<a
+target="_blank" rel="noopener" href="https://hiking.biji.co/index.php?q=trail&amp;act=detail&amp;id=1663"
+title="https://hiking.biji.co/index.php?q=trail&amp;act=detail&amp;id=1663">飛龍池登山步道</a>輕鬆健行。這區域內的步道蜿蜒圍繞著山區，古道串連著龍頭公園、忘憂谷、運動公園、三聖宮、採茶古道....。從新竹高鐵區開車到這，距離不遠，人潮也沒有很多，幽靜宜人，而且該區域並不需要申請以及預約即可進入，所以適合週末安排的時段前來健行。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
+                            aria-label=": Drawing with Mouse and Touch Events on HTML"
+                        >
+                            <h3 class="media-heading">Drawing with Mouse and Touch Events on HTML</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Dec 4, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching/drawing either by mouse or by touch. In the <a href="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/" title="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/">previous post</a>, I quickly discuss how to use Canvas API to implement a canvas with mouse sketching. In this post, I would like to describe how go about implementing for sketching/drawing by mouse and touch.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/12/12/Introduction_of_Hamming_Code/"
+                            aria-label=": Introduction of Hamming Code"
+                        >
+                            <h3 class="media-heading">Introduction of Hamming Code</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Dec 12, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Either computer data storage or telecommunication, regardless of the
+data storages and transmission, is non-zero probabilities that the data
+could be changed while it's being stored or transmitted. There is always
+a code-word with block length without free bit-errors. That means the
+data probably could be changed while it is being processed or
+transmitted. If the machine can't locate the position of the error and
+correct it, the information might be lost forever.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/"
+                            aria-label=": Overview of Basic Graph Traversal Algorithm"
+                        >
+                            <h3 class="media-heading">Overview of Basic Graph Traversal Algorithm</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Dec 14, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>"Graph theory is the study of graphs, which are mathematical
+structures used to model pairwise relations between objects. A graph in
+this context is made up of vertices (also called nodes or points) which
+are connected by edges (also called links or lines). Graphs are one of
+the principal objects of study in discrete mathematics." ... from Wiki
+page.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                17 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/silvergrass.png');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-r3twrubdwx6ajodzglgougec7dsaq3wcjvqfhxesxnmxypo3rtev43r1skdt.min.js"></script>
+
+<!--SCRIPTS END-->
+<script src="/assets/js/lazysizes.js"></script>
+
+
+    
+        <script>
+          var disqus_config = function() {
+            this.page.url = 'https://louissrliu.github.io/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/';
+              
+            this.page.identifier = '2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/';
+              
+          };
+          (function() {
+            var d = document, s = d.createElement('script');
+            var disqus_shortname = 'shirongliu';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+          })();
+        </script>
+    
+
+
+
+    <script>
+      var appId = 'N2INP4C5YH'
+      var apiKey = 'a254c6a4e95825bd7c2c6eb46f8e9bc3'
+      var indexName = 'dev_louissriiu'
+    </script>
+
+
+    </body>
+</html>
