@@ -1,0 +1,1023 @@
+
+<!DOCTYPE html>
+<html lang="en,zh-tw,default">
+    
+<head>
+    <!-- Google Adsense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7510696744137436"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Louis">
+    <title>How to Setup Environment Variable and Run Boost Thread Program in Docker Container - Louis</title>
+    <meta name="author" content="ShiRong Liu">
+    
+        <meta name="keywords" content="hexo,javascript,">
+    
+    
+        <link rel="icon" href="https://LouisSrLiu.github.io/assets/images/logo.jpg">
+    
+    
+        
+            <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4"},"articleBody":"\"Boost.Thread enables the use of multiple threads of execution with\nshared data in portable C++ code. It provides classes and functions for\nmanaging the threads themselves, along with others for synchronizing\ndata between the threads or providing separate copies of data specific\nto individual threads.\"\n\nBriefly\nIn concurrent computing, it can perform multiple tasks\nsimultaneously. Boost.Thread is a famous library in the Boost C++\nlibraries that provides a platform-independent interface to threading\nand synchronization facilities. It provides a wide range of facilities\nfor managing threads.\nIn this post, I would try passing through the modeling a bank account\nclass that supports simultaneously deposits and withdrawals from\nmultiple locations. Also, setup libboost_thread.so.1.80.0 environment in\na Docker container to build boost concurrent execution of a\ncomponent.\nBoost Thread Docker\nContainer\nThe Dockfile and the Boost.Thread CMake are available on boost\nthreads example.\nHere is the CMakeLists.txt file allows us to build Boost.Thread\nexecution.\n1234567891011cmake_minimum_required(VERSION 3.0.0)project(BankAccount VERSION 0.0.1 LANGUAGES CXX)find_package(Boost REQUIRED COMPONENTS thread)set(CMAKE_CXX_STANDARD 14)include_directories($&#123;Boost_INCLUDE_DIRS&#125;)add_executable($&#123;PROJECT_NAME&#125; bankaccount.cpp)target_link_libraries(BankAccount Boost::thread)\nBuild Boost Thread Example\nThis is an example of moduling a bank account class that supports\nsimultaneously deposits and withdrawals from multiple locations object\nimplementation.\n12345678910111213141516171819202122232425262728BankAccount JoesAccount;void bankAgent()&#123;    for (int i = 10; i &gt; 0; i --) &#123;        JoesAccount.Deposit(500);    &#125;&#125;void Joe() &#123;    for (int i = 10; i &gt; 0; --i) &#123;       // error: void value not ignored as it ought to be       // int mypocket = JoesAccount.Withdraw(100);       // The correct way       JoesAccount.Withdraw(100);       int mypocket = JoesAccount.GetBalance();       std::cout &lt;&lt; mypocket &lt;&lt; std::endl;    &#125;&#125;int main() &#123;    boost::thread thread1(bankAgent); // start concurrent execution of bankAgent    boost::thread thread2(Joe);       // start concurrent execution of Joe    thread1.join();    thread2.join();    return 0;&#125;\nTo build the boost thread example using CMake, we can run the\nfollowing command.\n12$ cmake -B build$ cmake --build build\nView the Stack for Every\nThreads\nBy viewing the stack for every threads, it shows how the balance in\nbank account changes from time to time.\nHere we set the breakpints where bankAgent deposits and where Joe\nwithdraws from bank account. 12345678910111213141516171819root@0518fede6045:/mnt# gdb build/boost_threads/BankAccountGNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1Copyright (C) 2016 Free Software Foundation, Inc.License GPLv3+: GNU GPL version 3 or later &lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fgnu.org%2Flicenses%2Fgpl.html&amp;data=05%7C01%7C%7C05bc8a5436354e8ec9a508db0d8577e3%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638118639120585581%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=w1lRuyMBTUmuRsKkUaKnlOw2TeVmIAraujdPQmCsuzA%3D&amp;reserved=0&gt;This is free software: you are free to change and redistribute it.There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;and &quot;show warranty&quot; for details.This GDB was configured as &quot;x86_64-linux-gnu&quot;.Type &quot;show configuration&quot; for configuration details....For help, type &quot;help&quot;.Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...Reading symbols from build/boost_threads/BankAccount...(no debugging symbols found)...done.(gdb) b BankAccount::DepositBreakpoint 1 at 0x41249e(gdb) b BankAccount::WithdrawBreakpoint 2 at 0x4124dc...\nHere we can type thread apply all backtrace full, which display the\nbacktrace for all the threads; this is helpful for observing a core dump\nof a multi-threaded program.\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990(gdb) rStarting program: /mnt/build/boost_threads/BankAccountwarning: Error disabling address space randomization: Operation not permitted[Thread debugging using libthread_db enabled]Using host libthread_db library &quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;.[New Thread 0x7f5140c35700 (LWP 18)][New Thread 0x7f5140434700 (LWP 19)][Switching to Thread 0x7f5140c35700 (LWP 18)]Thread 2 &quot;BankAccount&quot; hit Breakpoint 1, 0x000000000041249e in BankAccount::Deposit(int) ()(gdb) nSingle stepping until exit from function _ZN11BankAccount7DepositEi,which has no line number information.[Switching to Thread 0x7f5140434700 (LWP 19)]Thread 3 &quot;BankAccount&quot; hit Breakpoint 2, 0x00000000004124dc in BankAccount::Withdraw(int) ()(gdb)Single stepping until exit from function _ZN11BankAccount8WithdrawEi,which has no line number information.[Switching to Thread 0x7f5140c35700 (LWP 18)]Thread 2 &quot;BankAccount&quot; hit Breakpoint 1, 0x000000000041249e in BankAccount::Deposit(int) ()(gdb)Single stepping until exit from function _ZN11BankAccount7DepositEi,which has no line number information.400[Switching to Thread 0x7f5140434700 (LWP 19)]Thread 3 &quot;BankAccount&quot; hit Breakpoint 2, 0x00000000004124dc in BankAccount::Withdraw(int) ()(gdb) thread apply all bt fullThread 3 (Thread 0x7f5140434700 (LWP 19)):#0  0x00000000004124dc in BankAccount::Withdraw(int) ()No symbol table info available.#1  0x000000000040f807 in Joe() ()No symbol table info available.#2  0x0000000000415301 in boost::detail::thread_data&lt;void (*)()&gt;::run() ()No symbol table info available.#3  0x00007f5141ac7075 in thread_proxy () from /usr/local/lib/libboost_thread.so.1.80.0No symbol table info available.#4  0x00007f51418a86ba in start_thread (arg=0x7f5140434700) at pthread_create.c:333        __res = &lt;optimized out&gt;        pd = 0x7f5140434700        now = &lt;optimized out&gt;        unwind_buf = &#123;cancel_jmp_buf = &#123;&#123;jmp_buf = &#123;139986947229440, 6099298229468553489, 0, 140737064342143, 139986947230144, 0, -6194824523399536367,                -6194828308583128815&#125;, mask_was_saved = 0&#125;&#125;, priv = &#123;pad = &#123;0x0, 0x0, 0x0, 0x0&#125;, data = &#123;prev = 0x0, cleanup = 0x0, canceltype = 0&#125;&#125;&#125;        not_first_call = &lt;optimized out&gt;        pagesize_m1 = &lt;optimized out&gt;        sp = &lt;optimized out&gt;        freesize = &lt;optimized out&gt;        __PRETTY_FUNCTION__ = &quot;start_thread&quot;#5  0x00007f514104651d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:109No locals.Thread 2 (Thread 0x7f5140c35700 (LWP 18)):#0  0x00000000004124a2 in BankAccount::Deposit(int) ()No symbol table info available.#1  0x000000000040f7da in bankAgent() ()No symbol table info available.#2  0x0000000000415301 in boost::detail::thread_data&lt;void (*)()&gt;::run() ()No symbol table info available.#3  0x00007f5141ac7075 in thread_proxy () from /usr/local/lib/libboost_thread.so.1.80.0No symbol table info available.#4  0x00007f51418a86ba in start_thread (arg=0x7f5140c35700) at pthread_create.c:333        __res = &lt;optimized out&gt;        pd = 0x7f5140c35700        now = &lt;optimized out&gt;        unwind_buf = &#123;cancel_jmp_buf = &#123;&#123;jmp_buf = &#123;139986955622144, 6099298229468553489, 0, 140737064342143, 139986955622848, 0, -6194825626669260527,                -6194828308583128815&#125;, mask_was_saved = 0&#125;&#125;, priv = &#123;pad = &#123;0x0, 0x0, 0x0, 0x0&#125;, data = &#123;prev = 0x0, cleanup = 0x0, canceltype = 0&#125;&#125;&#125;        not_first_call = &lt;optimized out&gt;        pagesize_m1 = &lt;optimized out&gt;        sp = &lt;optimized out&gt;        freesize = &lt;optimized out&gt;        __PRETTY_FUNCTION__ = &quot;start_thread&quot;#5  0x00007f514104651d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:109No locals.Thread 1 (Thread 0x7f5141ef2740 (LWP 14)):#0  pthread_cond_wait@@GLIBC_2.3.2 () at ../sysdeps/unix/sysv/linux/x86_64/pthread_cond_wait.S:185No locals.#1  0x00007f5141accd4b in boost::condition_variable::wait(boost::unique_lock&lt;boost::mutex&gt;&amp;) () from /usr/local/lib/libboost_thread.so.1.80.0No symbol table info available.#2  0x00007f5141ac71c4 in boost::thread::join_noexcept() () from /usr/local/lib/libboost_thread.so.1.80.0No symbol table info available.#3  0x0000000000412220 in boost::thread::join() ()---Type &lt;return&gt; to continue, or q &lt;return&gt; to quit---No symbol table info available.#4  0x000000000040f87f in main ()No symbol table info available....\nSo from running the code, this stack shows that the bankAgent and Joe\nare executed concurrently.\n12345678910111213141516171819202122232425262728293031323334...Thread 2 &quot;BankAccount&quot; hit Breakpoint 1, 0x000000000041249e in BankAccount::Deposit(int) ()(gdb)Single stepping until exit from function _ZN11BankAccount7DepositEi,which has no line number information.3200[Switching to Thread 0x7f5140434700 (LWP 19)]Thread 3 &quot;BankAccount&quot; hit Breakpoint 2, 0x00000000004124dc in BankAccount::Withdraw(int) ()(gdb)Single stepping until exit from function _ZN11BankAccount8WithdrawEi,which has no line number information.[Switching to Thread 0x7f5140c35700 (LWP 18)]Thread 2 &quot;BankAccount&quot; hit Breakpoint 1, 0x000000000041249e in BankAccount::Deposit(int) ()(gdb)Single stepping until exit from function _ZN11BankAccount7DepositEi,which has no line number information.3600[Switching to Thread 0x7f5140434700 (LWP 19)]Thread 3 &quot;BankAccount&quot; hit Breakpoint 2, 0x00000000004124dc in BankAccount::Withdraw(int) ()(gdb)Single stepping until exit from function _ZN11BankAccount8WithdrawEi,which has no line number information.[Thread 0x7f5140c35700 (LWP 18) exited]0x000000000040f807 in Joe() ()(gdb)Single stepping until exit from function _Z3Joev,which has no line number information.40000x0000000000415301 in boost::detail::thread_data&lt;void (*)()&gt;::run() ()(gdb)...\nReference\n\nBoost\nSynchronization\nOpenai Chat\n\n\nThanks for reading! Feel free to leave the comments below or\nemail to me. Any pieces of\nadvice or discussions are always welcome. :)\n\n","dateCreated":"2023-02-10T00:00:00+08:00","dateModified":"2023-02-13T14:28:40+08:00","datePublished":"2023-02-10T00:00:00+08:00","description":"\"Boost.Thread enables the use of multiple threads of execution with\nshared data in portable C++ code. It provides classes and functions for\nmanaging the threads themselves, along with others for synchronizing\ndata between the threads or providing separate copies of data specific\nto individual threads.\"","headline":"How to Setup Environment Variable and Run Boost Thread Program in Docker Container","image":["https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/lake_scene.jpeg"],"mainEntityOfPage":{"@type":"WebPage","@id":"https://louissrliu.github.io/2023/02/10/How_to_Setup_Environment_Variable_and_Run_Boost_Thread_Program_in_Docker_Container/"},"publisher":{"@type":"Organization","name":"ShiRong Liu","sameAs":["https://github.com/s311354","https://www.linkedin.com/in/shirongliu/","mailto:qazqazqaz850@gmail.com"],"image":"https://avatars.githubusercontent.com/u/26519320?v=4","logo":{"@type":"ImageObject","url":"https://avatars.githubusercontent.com/u/26519320?v=4"}},"url":"https://louissrliu.github.io/2023/02/10/How_to_Setup_Environment_Variable_and_Run_Boost_Thread_Program_in_Docker_Container/","keywords":"cpp, docker, boost","thumbnailUrl":"https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/lake_scene.jpeg"}</script>
+    <meta name="description" content="&quot;Boost.Thread enables the use of multiple threads of execution with shared data in portable C++ code. It provides classes and functions for managing the threads themselves, along with others for synch">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="How to Setup Environment Variable and Run Boost Thread Program in Docker Container">
+<meta property="og:url" content="https://louissrliu.github.io/2023/02/10/How_to_Setup_Environment_Variable_and_Run_Boost_Thread_Program_in_Docker_Container/index.html">
+<meta property="og:site_name" content="Louis">
+<meta property="og:description" content="&quot;Boost.Thread enables the use of multiple threads of execution with shared data in portable C++ code. It provides classes and functions for managing the threads themselves, along with others for synch">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-02-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-02-13T06:28:40.986Z">
+<meta property="article:author" content="ShiRong Liu">
+<meta property="article:tag" content="cpp">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="boost">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://avatars.githubusercontent.com/u/26519320?v=4"/>
+    
+    
+        <meta property="og:image" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/lake_scene.jpeg"/>
+        <meta class="swiftype" name="image" data-type="enum" content="https://d3p3tllh95j94n.cloudfront.net/wellcome-to-louissrliu/lake_scene.jpeg"/>
+    
+    
+    
+    <!--STYLES-->
+    
+<link rel="stylesheet" href="/assets/css/style-ua8mv97snbccvky9cf8kiikycgkc8zmg8mrk5bqztlbbcs7b2vsqjsfvcw1i.min.css">
+
+    <!--STYLES END-->
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125815034-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-125815034-1');
+    </script>
+
+
+    
+
+    
+        
+    
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a
+            class="header-title-link"
+            href="/"
+            aria-label=""
+        >
+            Louis
+        </a>
+    </div>
+    
+        
+            <a
+                class="header-right-icon open-algolia-search"
+                href="#search"
+                aria-label="Open the link: /#search"
+            >
+        
+        
+            <i class="fa fa-search fa-lg"></i>
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a
+                    href="/#about"
+                    aria-label="Read more about the author"
+                >
+                    <img class="sidebar-profile-picture" src="https://avatars.githubusercontent.com/u/26519320?v=4" alt="Author&#39;s picture"/>
+                </a>
+                <h4 class="sidebar-profile-name">ShiRong Liu</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub
+page, open-source, software development, Linux, and travels in my spare
+time.</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/"
+                            
+                            rel="noopener"
+                            title="Home"
+                        >
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Home</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-categories"
+                            
+                            rel="noopener"
+                            title="Categories"
+                        >
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Categories</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-tags"
+                            
+                            rel="noopener"
+                            title="Tags"
+                        >
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Tags</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/all-archives"
+                            
+                            rel="noopener"
+                            title="Archives"
+                        >
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Archives</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link open-algolia-search"
+                            href="#search"
+                            
+                            rel="noopener"
+                            title="Search"
+                        >
+                        <i class="sidebar-button-icon fa fa-search" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Search</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="#about"
+                            
+                            rel="noopener"
+                            title="About"
+                        >
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">About</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://github.com/s311354"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="GitHub"
+                        >
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="https://www.linkedin.com/in/shirongliu/"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="LinkedIn"
+                        >
+                        <i class="sidebar-button-icon fab fa-linkedin" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">LinkedIn</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="mailto:qazqazqaz850@gmail.com"
+                            
+                                target="_blank"
+                            
+                            rel="noopener"
+                            title="Mail"
+                        >
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">Mail</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a
+                            class="sidebar-button-link "
+                            href="/atom.xml"
+                            
+                            rel="noopener"
+                            title="RSS"
+                        >
+                        <i class="sidebar-button-icon fa fa-rss" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">RSS</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            How to Setup Environment Variable and Run Boost Thread Program in Docker Container
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2023-02-10T00:00:00+08:00">
+	
+		    Feb 10, 2023
+    	
+    </time>
+    
+        <span>in </span>
+        
+    <a class="category-link" href="/categories/louissrliu/">louissrliu</a>, <a class="category-link" href="/categories/louissrliu/features/">features</a>
+
+
+    
+    
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            <p>"Boost.Thread enables the use of multiple threads of execution with
+shared data in portable C++ code. It provides classes and functions for
+managing the threads themselves, along with others for synchronizing
+data between the threads or providing separate copies of data specific
+to individual threads."</p>
+<span id="more"></span>
+<h2 id="briefly">Briefly</h2>
+<p>In concurrent computing, it can perform multiple tasks
+simultaneously. Boost.Thread is a famous library in the Boost C++
+libraries that provides a platform-independent interface to threading
+and synchronization facilities. It provides a wide range of facilities
+for managing threads.</p>
+<p>In this post, I would try passing through the modeling a bank account
+class that supports simultaneously deposits and withdrawals from
+multiple locations. Also, setup libboost_thread.so.1.80.0 environment in
+a Docker container to build boost concurrent execution of a
+component.</p>
+<h2 id="boost-thread-docker-container">Boost Thread Docker
+Container</h2>
+<p>The Dockfile and the Boost.Thread CMake are available on <a
+target="_blank" rel="noopener" href="https://github.com/s311354/boost-docker/tree/main/examples/boost_threads"
+title="https://github.com/s311354/boost-docker/tree/main/examples/boost_threads">boost
+threads example</a>.</p>
+<p>Here is the CMakeLists.txt file allows us to build Boost.Thread
+execution.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.0.0)</span><br><span class="line"></span><br><span class="line">project(BankAccount VERSION 0.0.1 LANGUAGES CXX)</span><br><span class="line"></span><br><span class="line">find_package(Boost REQUIRED COMPONENTS thread)</span><br><span class="line"></span><br><span class="line">set(CMAKE_CXX_STANDARD 14)</span><br><span class="line"></span><br><span class="line">include_directories($&#123;Boost_INCLUDE_DIRS&#125;)</span><br><span class="line">add_executable($&#123;PROJECT_NAME&#125; bankaccount.cpp)</span><br><span class="line">target_link_libraries(BankAccount Boost::thread)</span><br></pre></td></tr></table></figure>
+<h3 id="build-boost-thread-example">Build Boost Thread Example</h3>
+<p>This is an example of moduling a bank account class that supports
+simultaneously deposits and withdrawals from multiple locations object
+implementation.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">BankAccount JoesAccount;</span><br><span class="line"></span><br><span class="line">void bankAgent()</span><br><span class="line">&#123;</span><br><span class="line">    for (int i = 10; i &gt; 0; i --) &#123;</span><br><span class="line">        JoesAccount.Deposit(500);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void Joe() &#123;</span><br><span class="line">    for (int i = 10; i &gt; 0; --i) &#123;</span><br><span class="line">       // error: void value not ignored as it ought to be</span><br><span class="line">       // int mypocket = JoesAccount.Withdraw(100);</span><br><span class="line"></span><br><span class="line">       // The correct way</span><br><span class="line">       JoesAccount.Withdraw(100);</span><br><span class="line">       int mypocket = JoesAccount.GetBalance();</span><br><span class="line">       std::cout &lt;&lt; mypocket &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    boost::thread thread1(bankAgent); // start concurrent execution of bankAgent</span><br><span class="line">    boost::thread thread2(Joe);       // start concurrent execution of Joe</span><br><span class="line">    thread1.join();</span><br><span class="line">    thread2.join();</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>To build the boost thread example using CMake, we can run the
+following command.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cmake -B build</span><br><span class="line">$ cmake --build build</span><br></pre></td></tr></table></figure>
+<h3 id="view-the-stack-for-every-threads">View the Stack for Every
+Threads</h3>
+<p>By viewing the stack for every threads, it shows how the balance in
+bank account changes from time to time.</p>
+<p>Here we set the breakpints where bankAgent deposits and where Joe
+withdraws from bank account. <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">root@0518fede6045:/mnt# gdb build/boost_threads/BankAccount</span><br><span class="line">GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1</span><br><span class="line">Copyright (C) 2016 Free Software Foundation, Inc.</span><br><span class="line">License GPLv3+: GNU GPL version 3 or later &lt;https://aus01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fgnu.org%2Flicenses%2Fgpl.html&amp;data=05%7C01%7C%7C05bc8a5436354e8ec9a508db0d8577e3%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C638118639120585581%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=w1lRuyMBTUmuRsKkUaKnlOw2TeVmIAraujdPQmCsuzA%3D&amp;reserved=0&gt;</span><br><span class="line">This is free software: you are free to change and redistribute it.</span><br><span class="line">There is NO WARRANTY, to the extent permitted by law.  Type &quot;show copying&quot;</span><br><span class="line">and &quot;show warranty&quot; for details.</span><br><span class="line">This GDB was configured as &quot;x86_64-linux-gnu&quot;.</span><br><span class="line">Type &quot;show configuration&quot; for configuration details.</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">For help, type &quot;help&quot;.</span><br><span class="line">Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...</span><br><span class="line">Reading symbols from build/boost_threads/BankAccount...(no debugging symbols found)...done.</span><br><span class="line">(gdb) b BankAccount::Deposit</span><br><span class="line">Breakpoint 1 at 0x41249e</span><br><span class="line">(gdb) b BankAccount::Withdraw</span><br><span class="line">Breakpoint 2 at 0x4124dc</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>Here we can type thread apply all backtrace full, which display the
+backtrace for all the threads; this is helpful for observing a core dump
+of a multi-threaded program.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">(gdb) r</span><br><span class="line">Starting program: /mnt/build/boost_threads/BankAccount</span><br><span class="line">warning: Error disabling address space randomization: Operation not permitted</span><br><span class="line">[Thread debugging using libthread_db enabled]</span><br><span class="line">Using host libthread_db library &quot;/lib/x86_64-linux-gnu/libthread_db.so.1&quot;.</span><br><span class="line">[New Thread 0x7f5140c35700 (LWP 18)]</span><br><span class="line">[New Thread 0x7f5140434700 (LWP 19)]</span><br><span class="line">[Switching to Thread 0x7f5140c35700 (LWP 18)]</span><br><span class="line"></span><br><span class="line">Thread 2 &quot;BankAccount&quot; hit Breakpoint 1, 0x000000000041249e in BankAccount::Deposit(int) ()</span><br><span class="line">(gdb) n</span><br><span class="line">Single stepping until exit from function _ZN11BankAccount7DepositEi,</span><br><span class="line">which has no line number information.</span><br><span class="line">[Switching to Thread 0x7f5140434700 (LWP 19)]</span><br><span class="line"></span><br><span class="line">Thread 3 &quot;BankAccount&quot; hit Breakpoint 2, 0x00000000004124dc in BankAccount::Withdraw(int) ()</span><br><span class="line">(gdb)</span><br><span class="line">Single stepping until exit from function _ZN11BankAccount8WithdrawEi,</span><br><span class="line">which has no line number information.</span><br><span class="line">[Switching to Thread 0x7f5140c35700 (LWP 18)]</span><br><span class="line"></span><br><span class="line">Thread 2 &quot;BankAccount&quot; hit Breakpoint 1, 0x000000000041249e in BankAccount::Deposit(int) ()</span><br><span class="line">(gdb)</span><br><span class="line">Single stepping until exit from function _ZN11BankAccount7DepositEi,</span><br><span class="line">which has no line number information.</span><br><span class="line">400</span><br><span class="line">[Switching to Thread 0x7f5140434700 (LWP 19)]</span><br><span class="line"></span><br><span class="line">Thread 3 &quot;BankAccount&quot; hit Breakpoint 2, 0x00000000004124dc in BankAccount::Withdraw(int) ()</span><br><span class="line">(gdb) thread apply all bt full</span><br><span class="line"></span><br><span class="line">Thread 3 (Thread 0x7f5140434700 (LWP 19)):</span><br><span class="line">#0  0x00000000004124dc in BankAccount::Withdraw(int) ()</span><br><span class="line">No symbol table info available.</span><br><span class="line">#1  0x000000000040f807 in Joe() ()</span><br><span class="line">No symbol table info available.</span><br><span class="line">#2  0x0000000000415301 in boost::detail::thread_data&lt;void (*)()&gt;::run() ()</span><br><span class="line">No symbol table info available.</span><br><span class="line">#3  0x00007f5141ac7075 in thread_proxy () from /usr/local/lib/libboost_thread.so.1.80.0</span><br><span class="line">No symbol table info available.</span><br><span class="line">#4  0x00007f51418a86ba in start_thread (arg=0x7f5140434700) at pthread_create.c:333</span><br><span class="line">        __res = &lt;optimized out&gt;</span><br><span class="line">        pd = 0x7f5140434700</span><br><span class="line">        now = &lt;optimized out&gt;</span><br><span class="line">        unwind_buf = &#123;cancel_jmp_buf = &#123;&#123;jmp_buf = &#123;139986947229440, 6099298229468553489, 0, 140737064342143, 139986947230144, 0, -6194824523399536367,</span><br><span class="line">                -6194828308583128815&#125;, mask_was_saved = 0&#125;&#125;, priv = &#123;pad = &#123;0x0, 0x0, 0x0, 0x0&#125;, data = &#123;prev = 0x0, cleanup = 0x0, canceltype = 0&#125;&#125;&#125;</span><br><span class="line">        not_first_call = &lt;optimized out&gt;</span><br><span class="line">        pagesize_m1 = &lt;optimized out&gt;</span><br><span class="line">        sp = &lt;optimized out&gt;</span><br><span class="line">        freesize = &lt;optimized out&gt;</span><br><span class="line">        __PRETTY_FUNCTION__ = &quot;start_thread&quot;</span><br><span class="line">#5  0x00007f514104651d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:109</span><br><span class="line">No locals.</span><br><span class="line"></span><br><span class="line">Thread 2 (Thread 0x7f5140c35700 (LWP 18)):</span><br><span class="line">#0  0x00000000004124a2 in BankAccount::Deposit(int) ()</span><br><span class="line">No symbol table info available.</span><br><span class="line">#1  0x000000000040f7da in bankAgent() ()</span><br><span class="line">No symbol table info available.</span><br><span class="line">#2  0x0000000000415301 in boost::detail::thread_data&lt;void (*)()&gt;::run() ()</span><br><span class="line">No symbol table info available.</span><br><span class="line">#3  0x00007f5141ac7075 in thread_proxy () from /usr/local/lib/libboost_thread.so.1.80.0</span><br><span class="line">No symbol table info available.</span><br><span class="line">#4  0x00007f51418a86ba in start_thread (arg=0x7f5140c35700) at pthread_create.c:333</span><br><span class="line">        __res = &lt;optimized out&gt;</span><br><span class="line">        pd = 0x7f5140c35700</span><br><span class="line">        now = &lt;optimized out&gt;</span><br><span class="line">        unwind_buf = &#123;cancel_jmp_buf = &#123;&#123;jmp_buf = &#123;139986955622144, 6099298229468553489, 0, 140737064342143, 139986955622848, 0, -6194825626669260527,</span><br><span class="line">                -6194828308583128815&#125;, mask_was_saved = 0&#125;&#125;, priv = &#123;pad = &#123;0x0, 0x0, 0x0, 0x0&#125;, data = &#123;prev = 0x0, cleanup = 0x0, canceltype = 0&#125;&#125;&#125;</span><br><span class="line">        not_first_call = &lt;optimized out&gt;</span><br><span class="line">        pagesize_m1 = &lt;optimized out&gt;</span><br><span class="line">        sp = &lt;optimized out&gt;</span><br><span class="line">        freesize = &lt;optimized out&gt;</span><br><span class="line">        __PRETTY_FUNCTION__ = &quot;start_thread&quot;</span><br><span class="line">#5  0x00007f514104651d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:109</span><br><span class="line">No locals.</span><br><span class="line"></span><br><span class="line">Thread 1 (Thread 0x7f5141ef2740 (LWP 14)):</span><br><span class="line">#0  pthread_cond_wait@@GLIBC_2.3.2 () at ../sysdeps/unix/sysv/linux/x86_64/pthread_cond_wait.S:185</span><br><span class="line">No locals.</span><br><span class="line">#1  0x00007f5141accd4b in boost::condition_variable::wait(boost::unique_lock&lt;boost::mutex&gt;&amp;) () from /usr/local/lib/libboost_thread.so.1.80.0</span><br><span class="line">No symbol table info available.</span><br><span class="line">#2  0x00007f5141ac71c4 in boost::thread::join_noexcept() () from /usr/local/lib/libboost_thread.so.1.80.0</span><br><span class="line">No symbol table info available.</span><br><span class="line">#3  0x0000000000412220 in boost::thread::join() ()</span><br><span class="line">---Type &lt;return&gt; to continue, or q &lt;return&gt; to quit---</span><br><span class="line">No symbol table info available.</span><br><span class="line">#4  0x000000000040f87f in main ()</span><br><span class="line">No symbol table info available.</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>So from running the code, this stack shows that the bankAgent and Joe
+are executed concurrently.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">Thread 2 &quot;BankAccount&quot; hit Breakpoint 1, 0x000000000041249e in BankAccount::Deposit(int) ()</span><br><span class="line">(gdb)</span><br><span class="line">Single stepping until exit from function _ZN11BankAccount7DepositEi,</span><br><span class="line">which has no line number information.</span><br><span class="line">3200</span><br><span class="line">[Switching to Thread 0x7f5140434700 (LWP 19)]</span><br><span class="line"></span><br><span class="line">Thread 3 &quot;BankAccount&quot; hit Breakpoint 2, 0x00000000004124dc in BankAccount::Withdraw(int) ()</span><br><span class="line">(gdb)</span><br><span class="line">Single stepping until exit from function _ZN11BankAccount8WithdrawEi,</span><br><span class="line">which has no line number information.</span><br><span class="line">[Switching to Thread 0x7f5140c35700 (LWP 18)]</span><br><span class="line"></span><br><span class="line">Thread 2 &quot;BankAccount&quot; hit Breakpoint 1, 0x000000000041249e in BankAccount::Deposit(int) ()</span><br><span class="line">(gdb)</span><br><span class="line">Single stepping until exit from function _ZN11BankAccount7DepositEi,</span><br><span class="line">which has no line number information.</span><br><span class="line">3600</span><br><span class="line">[Switching to Thread 0x7f5140434700 (LWP 19)]</span><br><span class="line"></span><br><span class="line">Thread 3 &quot;BankAccount&quot; hit Breakpoint 2, 0x00000000004124dc in BankAccount::Withdraw(int) ()</span><br><span class="line">(gdb)</span><br><span class="line">Single stepping until exit from function _ZN11BankAccount8WithdrawEi,</span><br><span class="line">which has no line number information.</span><br><span class="line">[Thread 0x7f5140c35700 (LWP 18) exited]</span><br><span class="line">0x000000000040f807 in Joe() ()</span><br><span class="line">(gdb)</span><br><span class="line">Single stepping until exit from function _Z3Joev,</span><br><span class="line">which has no line number information.</span><br><span class="line">4000</span><br><span class="line">0x0000000000415301 in boost::detail::thread_data&lt;void (*)()&gt;::run() ()</span><br><span class="line">(gdb)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><p><a
+target="_blank" rel="noopener" href="https://www.boost.org/doc/libs/1_81_0/doc/html/thread/synchronization.html">Boost
+Synchronization</a></p></li>
+<li><p><a target="_blank" rel="noopener" href="https://chat.openai.com/chat">Openai Chat</a></p></li>
+</ul>
+<p>
+Thanks for reading! Feel free to leave the comments below or
+<a href="mailto:shirong0419@icloud.com">email</a> to me. Any pieces of
+advice or discussions are always welcome. :)
+</p>
+
+            
+
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">TAGGED IN</span><br/>
+                
+    <a class="tag tag--primary tag--small t-none-link" href="/tags/boost/" rel="tag">boost</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/cpp/" rel="tag">cpp</a> <a class="tag tag--primary tag--small t-none-link" href="/tags/docker/" rel="tag">docker</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2023/02/10/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"
+                    data-tooltip="How to Setup Gdb and Debug Program in Docker Container"
+                    aria-label="NEXT: How to Setup Gdb and Debug Program in Docker Container"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/02/10/How_to_Setup_Environment_Variable_and_Run_Boost_Thread_Program_in_Docker_Container/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/02/10/How_to_Setup_Environment_Variable_and_Run_Boost_Thread_Program_in_Docker_Container/"
+                    title="global.share_on_Twitter"
+                    aria-label="global.share_on_Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#disqus_thread"
+                        aria-label="Leave a comment"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+            
+        
+    </div>
+</article>
+
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2023 ShiRong Liu. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2023/02/10/Welcome-to-the-new-Tranquilpeak/"
+                    data-tooltip="Welcome to Louis"
+                    aria-label="PREVIOUS: Welcome to Louis"
+                >
+                    
+                        <i class="fa fa-angle-left" aria-hidden="true"></i>
+                        <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                    </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                <a
+                    class="post-action-btn btn btn--default tooltip--top"
+                    href="/2023/02/09/How_to_Setup_Gdb_and_Debug_Program_in_Docker_Container/"
+                    data-tooltip="How to Setup Gdb and Debug Program in Docker Container"
+                    aria-label="NEXT: How to Setup Gdb and Debug Program in Docker Container"
+                >
+                    
+                        <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a
+                class="post-action-btn btn btn--default btn-open-shareoptions"
+                href="#btn-open-shareoptions"
+                aria-label="Share this post"
+            >
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/02/10/How_to_Setup_Environment_Variable_and_Run_Boost_Thread_Program_in_Docker_Container/"
+                    title="Share on Facebook"
+                    aria-label="Share on Facebook"
+                >
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a
+                    class="post-action-btn btn btn--default"
+                    target="new" href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/02/10/How_to_Setup_Environment_Variable_and_Run_Boost_Thread_Program_in_Docker_Container/"
+                    title="global.share_on_Twitter"
+                    aria-label="global.share_on_Twitter"
+                >
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+                <li class="post-action">
+                    <a
+                        class="post-action-btn btn btn--default"
+                        href="#disqus_thread"
+                        aria-label="Leave a comment"
+                    >
+                        <i class="fa fa-comment"></i>
+                    </a>
+                </li>
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="Back to top">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                
+    <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+        <i id="btn-close-shareoptions" class="fa fa-times"></i>
+        <ul class="share-options">
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://www.facebook.com/sharer/sharer.php?u=https://louissrliu.github.io/2023/02/10/How_to_Setup_Environment_Variable_and_Run_Boost_Thread_Program_in_Docker_Container/"
+                        aria-label="Share on Facebook"
+                    >
+                        <i class="fab fa-facebook" aria-hidden="true"></i><span>Share on Facebook</span>
+                    </a>
+                </li>
+            
+                
+                
+                <li class="share-option">
+                    <a
+                        class="share-option-btn"
+                        target="new"
+                        href="https://twitter.com/intent/tweet?text=https://louissrliu.github.io/2023/02/10/How_to_Setup_Environment_Variable_and_Run_Boost_Thread_Program_in_Docker_Container/"
+                        aria-label="global.share_on_Twitter"
+                    >
+                        <i class="fab fa-twitter" aria-hidden="true"></i><span>global.share_on_Twitter</span>
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
+
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="https://avatars.githubusercontent.com/u/26519320?v=4" alt="Author&#39;s picture"/>
+        
+            <h4 id="about-card-name">ShiRong Liu</h4>
+        
+            <div id="about-card-bio"><p>I occasionally write on my website. <br/> I also dabble in GitHub
+page, open-source, software development, Linux, and travels in my spare
+time.</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br/>
+                <p>Embedded C/C++ Software Engineer</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br/>
+                Taiwan
+            </div>
+        
+    </div>
+</div>
+
+        
+            <div id="algolia-search-modal" class="modal-container">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="close-button"><i class="fa fa-times"></i></span>
+            <a href="https://algolia.com" target="_blank" rel="noopener" class="searchby-algolia text-color-light link-unstyled">
+                <span class="searchby-algolia-text text-color-light text-small">by</span>
+                <img class="searchby-algolia-logo" src="/assets/images/logo-algolia-nebula-blue-full.svg">
+            </a>
+            <i class="search-icon fa fa-search"></i>
+            <form id="algolia-search-form">
+                <input type="text" id="algolia-search-input" name="search"
+                    class="form-control input--large search-input" placeholder="Search "
+                    />
+            </form>
+        </div>
+        <div class="modal-body">
+            <div class="no-result text-color-light text-center">no post found</div>
+            <div class="results">
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2013/10/02/%E4%B8%AD%E6%96%87%E6%B8%AC%E8%A9%A6/"
+                            aria-label=": 中文測試"
+                        >
+                            <h3 class="media-heading">中文測試</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Oct 2, 2013
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>This is a chinese test post to show you how chinese is displayed.</div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2018/10/02/Git-Handbook/"
+                            aria-label=": A Beginner&#39;s Guide - Git Handbook"
+                        >
+                            <h3 class="media-heading">A Beginner&#39;s Guide - Git Handbook</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Oct 2, 2018
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Due to the most time on my job, we need to type many git command
+lines. So that this article is used to sort several git commands
+frequently used for easily searching.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/09/01/%E9%96%B1%E8%AE%80%E5%BF%83%E5%BE%97-%E7%AA%AE%E6%9F%A5%E7%90%86%E7%9A%84%E6%99%AE%E9%80%9A%E5%B8%B8%E8%AD%98/"
+                            aria-label=": 閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方"
+                        >
+                            <h3 class="media-heading">閱讀心得 POOR CHARlIE&#39;s ALMANACK - 保證生活悲慘的處方</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Sep 1, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>"Most players gain pleasure from feeling accepted or belonging to the
+group. The good player however, gains pleasure from his ability to cope
+with the realities of the game"</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/09/28/embed_maplibre_map_for_website/"
+                            aria-label=": Embed MapLibre Map for Website"
+                        >
+                            <h3 class="media-heading">Embed MapLibre Map for Website</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Sep 28, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>In our daily life, most of us usually use <a
+target="_blank" rel="noopener" href="https://www.google.com/maps/"
+title="https://www.google.com/maps/">Google Map</a> or <a
+target="_blank" rel="noopener" href="https://www.apple.com/maps/"
+title="https://www.apple.com/maps/">Apple Maps</a> to help us to
+navigate to a place. We can see traffic info, public transit and also
+choose our mode of transportation.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/10/08/%E7%94%9F%E6%B4%BB%E6%9C%AD%E8%A8%98-%E6%B5%B7%E7%B6%BF%E5%AF%B6%E5%AF%B6%E8%9F%B9%E5%A0%A1%E7%8E%8B%E9%A4%90%E5%BB%B3_SpongeBob_SquarePants/"
+                            aria-label=": 生活扎記 蟹堡王餐廳 Krusty Krab"
+                        >
+                            <h3 class="media-heading">生活扎記 蟹堡王餐廳 Krusty Krab</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Oct 8, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>"After going on your life-changing journey, you now realize that you
+don’t want what you thought you wanted. What you really wanted was
+inside you all along."</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/"
+                            aria-label=": Drawing with Mouse Events on HTML"
+                        >
+                            <h3 class="media-heading">Drawing with Mouse Events on HTML</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Nov 6, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching/drawing by mouse. The
+canvas API provides a means for drawing graphics via JavaScript and the
+HTML element. It largely focuses on 2D graphics. In this post, I would
+like to describe how to quickly go about implementing this.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/11/19/%E7%94%9F%E6%B4%BB%E6%89%8E%E8%A8%98-%E9%A3%9B%E9%BE%8D%E6%B1%A0%E6%AD%A5%E9%81%93%E5%81%A5%E8%A1%8C/"
+                            aria-label=": 生活札記 飛龍池步道健行"
+                        >
+                            <h3 class="media-heading">生活札記 飛龍池步道健行</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Nov 19, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>這週末來到位於新竹縣新埔鎮的<a
+target="_blank" rel="noopener" href="https://hiking.biji.co/index.php?q=trail&amp;act=detail&amp;id=1663"
+title="https://hiking.biji.co/index.php?q=trail&amp;act=detail&amp;id=1663">飛龍池登山步道</a>輕鬆健行。這區域內的步道蜿蜒圍繞著山區，古道串連著龍頭公園、忘憂谷、運動公園、三聖宮、採茶古道....。從新竹高鐵區開車到這，距離不遠，人潮也沒有很多，幽靜宜人，而且該區域並不需要申請以及預約即可進入，所以適合週末安排的時段前來健行。</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/12/04/Drawing_with_mouse_and_touch_events_on_html/"
+                            aria-label=": Drawing with Mouse and Touch Events on HTML"
+                        >
+                            <h3 class="media-heading">Drawing with Mouse and Touch Events on HTML</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Dec 4, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>The HTML canvas can be used for sketching/drawing either by mouse or by touch. In the <a href="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/" title="https://louissrliu.github.io/2022/11/06/Drawing_with_mouse_events_on_html/">previous post</a>, I quickly discuss how to use Canvas API to implement a canvas with mouse sketching. In this post, I would like to describe how go about implementing for sketching/drawing by mouse and touch.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/12/12/Introduction_of_Hamming_Code/"
+                            aria-label=": Introduction of Hamming Code"
+                        >
+                            <h3 class="media-heading">Introduction of Hamming Code</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Dec 12, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>Either computer data storage or telecommunication, regardless of the
+data storages and transmission, is non-zero probabilities that the data
+could be changed while it's being stored or transmitted. There is always
+a code-word with block length without free bit-errors. That means the
+data probably could be changed while it is being processed or
+transmitted. If the machine can't locate the position of the error and
+correct it, the information might be lost forever.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+                <div class="media">
+                    <div class="media-body">
+                        <a
+                            class="link-unstyled"
+                            href="https://louissrliu.github.io/2022/12/14/Overview_of_Basic_Graph_Traversal_Algorithm/"
+                            aria-label=": Overview of Basic Graph Traversal Algorithm"
+                        >
+                            <h3 class="media-heading">Overview of Basic Graph Traversal Algorithm</h3>
+                        </a>
+                        <span class="media-meta">
+                            <span class="media-date text-small">
+                                
+                                    Dec 14, 2022
+                                
+                            </span>
+                        </span>
+                        <div class="media-content hide-xs font-merryweather"><p>"Graph theory is the study of graphs, which are mathematical
+structures used to model pairwise relations between objects. A graph in
+this context is made up of vertices (also called nodes or points) which
+are connected by edges (also called links or lines). Graphs are one of
+the principal objects of study in discrete mathematics." ... from Wiki
+page.</p></div>
+                    </div>
+                    <div style="clear:both;"></div>
+                    <hr>
+                </div>
+                
+            </div>
+        </div>
+        <div class="modal-footer">
+            <p class="results-count text-medium"
+                data-message-zero="no post found"
+                data-message-one="1 post found"
+                data-message-other="{n} posts found">
+                18 posts found
+            </p>
+        </div>
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/silvergrass.png');"></div>
+        <!--SCRIPTS-->
+
+<script src="/assets/js/script-r3twrubdwx6ajodzglgougec7dsaq3wcjvqfhxesxnmxypo3rtev43r1skdt.min.js"></script>
+
+<!--SCRIPTS END-->
+<script src="/assets/js/lazysizes.js"></script>
+
+
+    
+        <script>
+          var disqus_config = function() {
+            this.page.url = 'https://louissrliu.github.io/2023/02/10/How_to_Setup_Environment_Variable_and_Run_Boost_Thread_Program_in_Docker_Container/';
+              
+            this.page.identifier = '2023/02/10/How_to_Setup_Environment_Variable_and_Run_Boost_Thread_Program_in_Docker_Container/';
+              
+          };
+          (function() {
+            var d = document, s = d.createElement('script');
+            var disqus_shortname = 'shirongliu';
+            s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+          })();
+        </script>
+    
+
+
+
+    <script>
+      var appId = 'N2INP4C5YH'
+      var apiKey = 'a254c6a4e95825bd7c2c6eb46f8e9bc3'
+      var indexName = 'dev_louissriiu'
+    </script>
+
+
+    </body>
+</html>
